@@ -13,10 +13,117 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="源文件\imgui">
+      <UniqueIdentifier>{baced667-9fd1-4778-abb3-148dddbb2c4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\keyboard">
+      <UniqueIdentifier>{10400ecb-8971-43c9-945f-5b02aa089911}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\keyboard">
+      <UniqueIdentifier>{7ccbb037-3ec3-48ed-aef2-2c90b262624a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\imgui\extension">
+      <UniqueIdentifier>{5e3ee3f3-edc0-42f0-b7d6-e28ab395c6fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\sequencer">
+      <UniqueIdentifier>{e195f6b4-fce5-42fd-9da1-33b43e824a48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\common">
+      <UniqueIdentifier>{55b70074-2ac0-44cb-8800-da77101d0391}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\glad">
+      <UniqueIdentifier>{7a45fa38-9062-47f9-8edb-593e91cb6523}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\menu">
+      <UniqueIdentifier>{74016833-b78f-4e43-8cfe-f25d8699f176}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\function">
+      <UniqueIdentifier>{afa59c5e-35ba-4089-9c50-a4192a28b959}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\settings">
+      <UniqueIdentifier>{4672e547-fd90-4243-85a0-bf5b16b6ff3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\light">
+      <UniqueIdentifier>{b82a4def-057f-40c0-8da7-4ef1a2bd75dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\common\imgui\backends\imgui_impl_opengl3.cpp">
+      <Filter>源文件\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\imgui\backends\imgui_impl_win32.cpp">
+      <Filter>源文件\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\imgui\imgui_tables.cpp">
+      <Filter>源文件\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\imgui\imgui_widgets.cpp">
+      <Filter>源文件\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\imgui\imgui.cpp">
+      <Filter>源文件\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\imgui\imgui_demo.cpp">
+      <Filter>源文件\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\imgui\imgui_draw.cpp">
+      <Filter>源文件\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="keyboard\keyboard.cpp">
+      <Filter>源文件\keyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\imgui\extensions\ImSequencer.cpp">
+      <Filter>源文件\imgui\extension</Filter>
+    </ClCompile>
+    <ClCompile Include="sequencer\ingseq.cpp">
+      <Filter>源文件\sequencer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\util\utils.cpp">
+      <Filter>源文件\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\util\aes.cpp">
+      <Filter>源文件\common</Filter>
+    </ClCompile>
+    <ClCompile Include="glad\glad.c">
+      <Filter>源文件\glad</Filter>
+    </ClCompile>
+    <ClCompile Include="menu\menu.cpp">
+      <Filter>源文件\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="function\function.cpp">
+      <Filter>源文件\function</Filter>
+    </ClCompile>
+    <ClCompile Include="layout.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="light\light.cpp">
+      <Filter>源文件\light</Filter>
+    </ClCompile>
+    <ClCompile Include="settings\settings.cpp">
+      <Filter>源文件\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="resources.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="keyboard\keyboard.h">
+      <Filter>头文件\keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="sequencer\ingseq.h">
+      <Filter>源文件\sequencer</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="settings\settings.h">
+      <Filter>源文件\settings</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

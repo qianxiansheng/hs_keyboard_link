@@ -1,0 +1,1 @@
+python D:\myResource\work\c++\gl3w_stripped-gl3w_stripped\gl3w_gen.py --output ./imgui_impl_opengl3_loader.h --ref ./common/imgui/backends/imgui_impl_opengl3.cpp ./common/learnopengl/shader_m.h
