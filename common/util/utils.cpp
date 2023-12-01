@@ -71,7 +71,6 @@ void utils::AlertEx(bool* show, const char* title, const char* text)
 	}
 }
 
-
 bool utils::Confirm(bool show, const char* title, const char* text)
 {
 	if (show)
@@ -103,7 +102,6 @@ bool utils::Confirm(bool show, const char* title, const char* text)
 	}
 	return result;
 }
-
 
 void utils::readFileData(std::filesystem::path path, void* out_data)
 {

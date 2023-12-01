@@ -46,6 +46,9 @@
     <Filter Include="源文件\light">
       <UniqueIdentifier>{b82a4def-057f-40c0-8da7-4ef1a2bd75dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\configuration">
+      <UniqueIdentifier>{9b2fecb3-354b-4aab-8820-b1a826772bc7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -107,6 +110,18 @@
     </ClCompile>
     <ClCompile Include="resources.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="configuration\assignment_config.cpp">
+      <Filter>源文件\configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_win32_gl3.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="svgloader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\imgui\extensions\ImFileDialog.cpp">
+      <Filter>源文件\imgui\extension</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
