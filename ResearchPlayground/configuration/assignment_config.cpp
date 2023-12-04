@@ -17,7 +17,7 @@ void SaveAssignedConfig()
 }
 
 
-bool MyButton(const char* vgname, ImVec2 size)
+static bool MyButton(const char* vgname, ImVec2 size)
 {
 	auto imageManager = KLImageManager::GetInstance();
 	auto& io = ImGui::GetIO();
@@ -97,12 +97,7 @@ void ShowAssignmentConfigManagerWindow(bool* p_open)
 	}
 	if (utils::ConfirmEx(&show_del_confirm, u8"É¾³ýÅäÖÃ", u8"ÊÇ·ñÈ·ÈÏÉ¾³ý")) {
 		configManager->SetCurrentConfig(0);
-		for (auto it = configManager->m_ConfigList.begin(); it != configManager->m_ConfigList.end(); ++it) {
-			if (it->name == configManager->GetCurrentConfig().name) {
-				configManager->m_ConfigList.erase(it);
-				break;
-			}
-		}
+		configManager->RemoveCurrentConfig();
 	}
 
 	ImGui::SameLine();

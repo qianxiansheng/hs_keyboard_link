@@ -171,6 +171,7 @@
     <ClCompile Include="..\common\util\aes.cpp" />
     <ClCompile Include="..\common\util\utils.cpp" />
     <ClCompile Include="configuration\assignment_config.cpp" />
+    <ClCompile Include="configuration\macro_config.cpp" />
     <ClCompile Include="function\function.cpp" />
     <ClCompile Include="glad\glad.c" />
     <ClCompile Include="gui_win32_gl3.cpp" />
@@ -181,6 +182,7 @@
     <ClCompile Include="menu\menu.cpp" />
     <ClCompile Include="resources.cpp" />
     <ClCompile Include="sequencer\ingseq.cpp" />
+    <ClCompile Include="sequencer\macro_view.cpp" />
     <ClCompile Include="settings\settings.cpp" />
     <ClCompile Include="svgloader.cpp" />
   </ItemGroup>

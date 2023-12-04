@@ -19,6 +19,8 @@
 #include "light/light.h"
 #include "settings/settings.h"
 #include "configuration/assignment_config.h"
+#include "configuration/macro_config.h"
+#include "sequencer/macro_view.h"
 
 #define IMIDTEXT(name, i) ((std::string(name) + std::to_string(i)).c_str())
 
@@ -74,6 +76,8 @@ bool main_init(int argc, char* argv[])
 	KLWindowInfo sett_win_info(WINNAME_SETTINGS, ShowSettingsWindow);
 	KLWindowInfo light_win_info(WINNAME_LIGHT, ShowLightWindow);
 	KLWindowInfo assign_cfg_mgr_win_info(WINNAME_ASSIGN_CONFIG_MGR, ShowAssignmentConfigManagerWindow);
+	KLWindowInfo macro_cfg_mgr_win_info(WINNAME_MACRO_CONFIG_MGR, ShowMacroConfigManagerWindow);
+	KLWindowInfo macro_view_win_info(WINNAME_MACRO_VIEW, ShowMacroViewWindow);
 
 	auto layoutManager = KLWindowLayoutManager::GetInstance();
 
@@ -94,12 +98,15 @@ bool main_init(int argc, char* argv[])
 
 	// macro
 	layoutManager->KLRegisterLayout(KL_LAYOUT_MACRO, menu_win_info);
-	layoutManager->KLRegisterLayout(KL_LAYOUT_MACRO, sequ_win_info);
+	layoutManager->KLRegisterLayout(KL_LAYOUT_MACRO, sequ_win_info); 
+	layoutManager->KLRegisterLayout(KL_LAYOUT_MACRO, macro_view_win_info);
+	layoutManager->KLRegisterLayout(KL_LAYOUT_MACRO, macro_cfg_mgr_win_info);
 	
 	mySequence.mFrameMin = 0;
 	mySequence.mFrameMax = 50000;
 
 	InitFunctionWindow();
+	InitMacroConfigWindow();
 
     return true;
 }

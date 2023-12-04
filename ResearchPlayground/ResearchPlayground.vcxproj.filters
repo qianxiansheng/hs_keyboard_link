@@ -123,6 +123,12 @@
     <ClCompile Include="..\common\imgui\extensions\ImFileDialog.cpp">
       <Filter>源文件\imgui\extension</Filter>
     </ClCompile>
+    <ClCompile Include="configuration\macro_config.cpp">
+      <Filter>源文件\configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="sequencer\macro_view.cpp">
+      <Filter>源文件\sequencer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="keyboard\keyboard.h">

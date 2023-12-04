@@ -17,6 +17,7 @@
 #define WINNAME_MACRO "macro"
 #define WINNAME_ASSIGN_CONFIG_MGR "assign_config"
 #define WINNAME_MACRO_CONFIG_MGR "macro_config"
+#define WINNAME_MACRO_VIEW "macro_view"
 
 
 #define KL_CONFIG_MAX_NAME_SIZE 32

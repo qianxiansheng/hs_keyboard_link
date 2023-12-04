@@ -29,6 +29,22 @@ bool KLFunctionConfigManager::IsConfigExists(const char* name)
 	return false;
 }
 
+bool KLFunctionConfigManager::RemoveCurrentConfig()
+{
+	return RemoveConfig(GetCurrentConfig().name.c_str());
+}
+
+bool KLFunctionConfigManager::RemoveConfig(const char* name)
+{
+	for (auto it = m_ConfigList.begin(); it != m_ConfigList.end(); ++it) {
+		if (it->name == name) {
+			m_ConfigList.erase(it);
+			break;
+		}
+	}
+	return true;
+}
+
 KLFunctionLayout::KLFunctionLayout(KLFunctionID id, const char* name, ImVec4 param, KLFunctionLayoutFlags flagbits)
 {
 	this->id = id;
@@ -397,7 +413,7 @@ KLFunctionLayout functionLayout[] = {
 uint32_t functionLayoutSize = sizeof(functionLayout) / sizeof(functionLayout[0]);
 
 
-KLFunction FindFunctionByFunctionID(KLFunctionID id)
+KLFunction& FindFunctionByFunctionID(KLFunctionID id)
 {
 	return function_map[id];
 }
@@ -426,6 +442,7 @@ void InitDefaultConfig(KLFunctionConfig& temp_config)
 		}
 	}
 }
+
 void InitFunctionWindow()
 {
 	auto configManager = KLFunctionConfigManager::GetInstance();

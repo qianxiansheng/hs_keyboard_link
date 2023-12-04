@@ -184,6 +184,7 @@ HWND hwnd;
 extern KeyboardGLContext kbv_draw_ctx;
 
 HHOOK g_hook;
+bool g_hook_enabled = false;
 
 LRESULT KeyProc(int code, WPARAM wParam, LPARAM lParam)
 {
@@ -215,6 +216,9 @@ LRESULT KeyProc(int code, WPARAM wParam, LPARAM lParam)
 
 void EnableKeyHook(bool enable)
 {
+    if (g_hook_enabled == enable)
+        return;
+
     if (enable)
     {
         g_hook = SetWindowsHookEx(13, KeyProc, 0, 0);
@@ -223,6 +227,7 @@ void EnableKeyHook(bool enable)
     {
         UnhookWindowsHookEx(g_hook);
     }
+    g_hook_enabled = enable;
 }
 
 bool main_init(int argc, char* argv[]);

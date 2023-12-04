@@ -238,8 +238,7 @@ struct KLFunction
 	}
 };
 
-KLFunction FindFunctionByFunctionID(KLFunctionID id);
-KLFunction FindFunctionByHID(uint16_t hid);
+KLFunction& FindFunctionByFunctionID(KLFunctionID id);
 KLFunctionID FindFunctionIDByMapID(KEY_MapId_t id);
 
 
@@ -263,6 +262,8 @@ public:
 	void AddConfig(const char* name);
 
 	bool IsConfigExists(const char* name);
+	bool RemoveCurrentConfig();
+	bool RemoveConfig(const char* name);
 
 	void SetCurrentConfig(uint32_t i)
 	{

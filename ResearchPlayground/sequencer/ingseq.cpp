@@ -8,6 +8,10 @@
 #include "util/utils.h"
 #include "function/function.h"
 
+#include "configuration/macro_config.h"
+
+#include "gui_win32_gl3.h"
+
 int MySequence::GetFrameMin() const {
 	return mFrameMin;
 }
@@ -86,6 +90,8 @@ static int firstFrame = 0;
 
 static long long timeBase = 0;
 static bool is1st = true;
+static bool recording = false;
+
 
 std::unordered_map<KLFunctionID, MySequence::MySequenceItem> key_down_stack;
 
@@ -97,8 +103,29 @@ void StartRecord()
 	}
 }
 
+
+bool IsRecording()
+{
+	return recording;
+}
+
+void BeginRecord()
+{
+	mySequence.myItems.clear();
+	is1st = true;
+	recording = true;
+}
+
+void EndRecord()
+{
+	recording = false;
+}
+
 void UserInputKeyDown(KLFunction& function)
 {
+	if (!recording)
+		return;
+
 	StartRecord();
 	int64_t timePoint = utils::get_current_system_time_ms() - timeBase;
 	if (function.id == KLF_NONE)
@@ -115,6 +142,9 @@ void UserInputKeyDown(KLFunction& function)
 
 void UserInputKeyUp(KLFunction& function)
 {
+	if (!recording)
+		return;
+
 	int64_t timePoint = utils::get_current_system_time_ms() - timeBase;
 	if (function.id == KLF_NONE)
 		return;
@@ -130,6 +160,8 @@ void UserInputKeyUp(KLFunction& function)
 }
 
 
+
+
 void ShowINGSequencerWindow(bool* p_open)
 {
 	ImGuiWindowFlags window_flags = 0;
@@ -138,8 +170,41 @@ void ShowINGSequencerWindow(bool* p_open)
 		return;
 	}
 
-	ImGui::Text(utils::gbk_to_utf8("宏录制器").c_str());
-	ImGui::Text(utils::gbk_to_utf8("输入任意键开始录制").c_str());
+	auto configManager = KLMacroConfigManager::GetInstance();
+
+	if (!IsRecording()) {
+		if (ImGui::Button(u8"开始录制")) {
+			BeginRecord();
+		}
+	}
+	else
+	{
+		if (ImGui::Button(u8"结束录制")) {
+			EndRecord();
+		}
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button(u8"保存"))
+	{
+		auto& config = configManager->GetCurrentConfig();
+
+		config.pair_actions.clear();
+		
+		for (uint32_t i = 0; i < mySequence.myItems.size(); ++i)
+		{
+			KLMacroActionPairInfo info = {};
+			info.mFrameStart = mySequence.myItems[i].mFrameStart;
+			info.mFrameEnd = mySequence.myItems[i].mFrameEnd;
+			info.mFunctionID = mySequence.myItems[i].mFunction.id;
+
+			config.pair_actions.push_back(info);
+		}
+
+		SyncActionsFromPairInfo(config);
+	}
+
 	//ImGui::PushItemWidth(130);
 	//ImGui::InputInt("Frame Min", &mySequence.mFrameMin);
 	//ImGui::SameLine();
@@ -148,6 +213,7 @@ void ShowINGSequencerWindow(bool* p_open)
 	//ImGui::InputInt("Frame Max", &mySequence.mFrameMax);
 	//ImGui::PopItemWidth();
 	//ImGui::InputInt("First Frame", &firstFrame);
+	EnableKeyHook(true);
 	ImSequencer::Sequencer(&mySequence, &expanded, &selectedEntry, &firstFrame, ImSequencer::SEQUENCER_EDIT_STARTEND | ImSequencer::SEQUENCER_ADD | ImSequencer::SEQUENCER_DEL | ImSequencer::SEQUENCER_COPYPASTE | ImSequencer::SEQUENCER_CHANGE_FRAME);
 
 
