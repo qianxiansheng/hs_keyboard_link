@@ -14,6 +14,7 @@
 #define WINNAME_FUNCTION "function"
 #define WINNAME_SETTINGS "settings"
 #define WINNAME_LIGHT "light"
+#define WINNAME_LIGHT_MODIFY "light_modify"
 #define WINNAME_MACRO "macro"
 #define WINNAME_ASSIGN_CONFIG_MGR "assign_config"
 #define WINNAME_MACRO_CONFIG_MGR "macro_config"

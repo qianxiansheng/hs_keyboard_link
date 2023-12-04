@@ -178,6 +178,7 @@
     <ClCompile Include="keyboard\keyboard.cpp" />
     <ClCompile Include="layout.cpp" />
     <ClCompile Include="light\light.cpp" />
+    <ClCompile Include="light\light_modify.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu\menu.cpp" />
     <ClCompile Include="resources.cpp" />

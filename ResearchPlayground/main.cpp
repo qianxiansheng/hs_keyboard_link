@@ -17,6 +17,7 @@
 #include "menu/menu.h"
 #include "function/function.h"
 #include "light/light.h"
+#include "light/light_modify.h"
 #include "settings/settings.h"
 #include "configuration/assignment_config.h"
 #include "configuration/macro_config.h"
@@ -75,6 +76,7 @@ bool main_init(int argc, char* argv[])
 	KLWindowInfo func_win_info(WINNAME_FUNCTION, ShowFunctionWindow);
 	KLWindowInfo sett_win_info(WINNAME_SETTINGS, ShowSettingsWindow);
 	KLWindowInfo light_win_info(WINNAME_LIGHT, ShowLightWindow);
+	KLWindowInfo light_modeify_win_info(WINNAME_LIGHT_MODIFY, ShowLightModifyWindow);
 	KLWindowInfo assign_cfg_mgr_win_info(WINNAME_ASSIGN_CONFIG_MGR, ShowAssignmentConfigManagerWindow);
 	KLWindowInfo macro_cfg_mgr_win_info(WINNAME_MACRO_CONFIG_MGR, ShowMacroConfigManagerWindow);
 	KLWindowInfo macro_view_win_info(WINNAME_MACRO_VIEW, ShowMacroViewWindow);
@@ -95,6 +97,7 @@ bool main_init(int argc, char* argv[])
 	layoutManager->KLRegisterLayout(KL_LAYOUT_LIGHT, menu_win_info);
 	layoutManager->KLRegisterLayout(KL_LAYOUT_LIGHT, kbod_win_info);
 	layoutManager->KLRegisterLayout(KL_LAYOUT_LIGHT, light_win_info);
+	layoutManager->KLRegisterLayout(KL_LAYOUT_LIGHT, light_modeify_win_info);
 
 	// macro
 	layoutManager->KLRegisterLayout(KL_LAYOUT_MACRO, menu_win_info);

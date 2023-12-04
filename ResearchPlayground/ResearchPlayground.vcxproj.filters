@@ -129,6 +129,9 @@
     <ClCompile Include="sequencer\macro_view.cpp">
       <Filter>源文件\sequencer</Filter>
     </ClCompile>
+    <ClCompile Include="light\light_modify.cpp">
+      <Filter>源文件\light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="keyboard\keyboard.h">
