@@ -8,7 +8,6 @@
 #include "util/utils.h"
 #include "function/function.h"
 
-#include "configuration/macro_config.h"
 
 #include "gui_win32_gl3.h"
 
@@ -159,7 +158,25 @@ void UserInputKeyUp(KLFunction& function)
 	}
 }
 
+void ReloadMacroConfig(KLMacro& config)
+{
+	EndRecord();
 
+	mySequence.myItems.clear();
+
+	for (uint32_t i = 0; i < config.pair_actions.size(); ++i)
+	{
+		auto& action_pair = config.pair_actions[i];
+		auto& function = FindFunctionByFunctionID(action_pair.mFunctionID);
+		MySequence::MySequenceItem item = {};
+		strcpy(item.mLabel, function.name);
+		item.mFunction = function;
+		item.mFrameStart = action_pair.mFrameStart;
+		item.mFrameEnd = action_pair.mFrameEnd;
+		item.mExpanded = false;
+		mySequence.myItems.push_back(item);
+	}
+}
 
 
 void ShowINGSequencerWindow(bool* p_open)
@@ -213,7 +230,10 @@ void ShowINGSequencerWindow(bool* p_open)
 	//ImGui::InputInt("Frame Max", &mySequence.mFrameMax);
 	//ImGui::PopItemWidth();
 	//ImGui::InputInt("First Frame", &firstFrame);
-	EnableKeyHook(true);
+
+	auto g = ImGui::GetCurrentContext();
+
+	EnableKeyHook(memcmp(g->NavWindow->Name, g->CurrentWindow->Name, strlen(g->CurrentWindow->Name)) == 0);
 	ImSequencer::Sequencer(&mySequence, &expanded, &selectedEntry, &firstFrame, ImSequencer::SEQUENCER_EDIT_STARTEND | ImSequencer::SEQUENCER_ADD | ImSequencer::SEQUENCER_DEL | ImSequencer::SEQUENCER_COPYPASTE | ImSequencer::SEQUENCER_CHANGE_FRAME);
 
 

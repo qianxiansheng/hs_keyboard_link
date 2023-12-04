@@ -10,6 +10,8 @@
 
 #include "resource.h"
 
+#include "sequencer/ingseq.h"
+
 // initial static member
 KLMacroConfigManager* KLMacroConfigManager::s_Instance = nullptr;
 std::once_flag KLMacroConfigManager::s_OnceFlag;
@@ -229,6 +231,7 @@ void ShowMacroConfigManagerWindow(bool* p_open)
 			selected = i;
 
 			configManager->SetCurrentConfig(i);
+			ReloadMacroConfig(configManager->GetCurrentConfig());
 		}
 	}
 

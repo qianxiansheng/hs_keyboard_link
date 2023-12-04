@@ -8,6 +8,7 @@
 #include "imgui/imgui_internal.h"
 #include "extensions/ImSequencer.h"
 #include "function/function.h"
+#include "configuration/macro_config.h"
 
 struct MySequence : public ImSequencer::SequenceInterface
 {
@@ -47,7 +48,7 @@ struct MySequence : public ImSequencer::SequenceInterface
 	virtual void CustomDrawCompact(int index, ImDrawList* draw_list, const ImRect& rc, const ImRect& clippingRect);
 };
 
-
+void ReloadMacroConfig(KLMacro& config);
 void UserInputKeyDown(KLFunction& function);
 void UserInputKeyUp(KLFunction& function);
 

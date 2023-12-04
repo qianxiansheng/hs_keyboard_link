@@ -22,7 +22,6 @@ void ShowMacroViewWindow(bool* p_open)
 		ImGui::End();
 		return;
 	}
-	EnableKeyHook(false);
 
 	auto configManager = KLMacroConfigManager::GetInstance();
 	auto imageManager = KLImageManager::GetInstance();
