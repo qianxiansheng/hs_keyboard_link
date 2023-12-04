@@ -1,6 +1,7 @@
 #include "ingseq.h"
 
 #include <unordered_map>
+#include <Windows.h>
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"

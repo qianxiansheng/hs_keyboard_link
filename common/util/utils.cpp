@@ -5,8 +5,9 @@
 
 #include "imgui.h"
 #include "aes.h"
-#define STB_IMAGE_IMPLEMENTATION
+
 #include "../stb_image.h"
+
 
 // OS Specific sleep
 #ifdef _WIN32
@@ -102,6 +103,72 @@ bool utils::Confirm(bool show, const char* title, const char* text)
 	}
 	return result;
 }
+
+bool utils::Prompt(bool* show, const char* title, const char* text, char* buf, size_t buf_size)
+{
+	bool result = false;
+	if (*show)
+		ImGui::OpenPopup(title);
+
+	// Always center this window when appearing
+	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+	if (ImGui::BeginPopupModal(title, NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		static bool is_focused = false;
+		if (!is_focused) {
+			ImGui::SetKeyboardFocusHere();
+			is_focused = true;
+		}
+		ImGui::InputText("##PROMPT", buf, buf_size);
+
+		if (ImGui::Button("OK", ImVec2(120, 0))) { 
+			ImGui::CloseCurrentPopup(); 
+			*show = false;  
+			result = true;
+			is_focused = false;
+		}
+		ImGui::EndPopup();
+	}
+
+	return result;
+}
+
+bool utils::ConfirmEx(bool* show, const char* title, const char* text)
+{
+	if (*show)
+		ImGui::OpenPopup(title);
+
+	// Always center this window when appearing
+	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+	bool result = false;
+
+	if (ImGui::BeginPopupModal(title, NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::Text(text);
+		ImGui::Separator();
+
+		if (ImGui::Button("OK", ImVec2(120, 0)))
+		{
+			ImGui::CloseCurrentPopup();
+			*show = false;
+			result = true;
+		}
+		ImGui::SetItemDefaultFocus();
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(120, 0)))
+		{
+			ImGui::CloseCurrentPopup();
+			*show = false;
+		}
+		ImGui::EndPopup();
+	}
+	return result;
+}
+
 
 void utils::readFileData(std::filesystem::path path, void* out_data)
 {

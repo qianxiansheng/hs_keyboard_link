@@ -476,7 +476,9 @@ struct KeyBtnView
     bool active;
 
     float face_vertex[12];
+    int color;
 
+    KeyBtnView() {};
     KeyBtnView(const char* tag, KEY_MapId_t id, int offsetX, int offsetY, int width = SL, int height = SL);
 };
 
@@ -507,7 +509,7 @@ struct KeyboardGLContext
     glm::mat4 model_matrix;
 
     bool mouse_down;
-    int active_index;
+    KEY_MapId_t active_index;
 
     kbv_hover_cb onhover;
 };

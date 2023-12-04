@@ -5,7 +5,6 @@
 #include <unordered_map>
 
 #include "util/utils.h"
-#include "stb_image.h"
 
 #include "imgui/imgui.h"
 #include "svgloader.h"

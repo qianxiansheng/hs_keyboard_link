@@ -1,7 +1,7 @@
 #include "resource.h"
 
 #include "glad/glad/glad.h"
-
+#include "stb_image.h"
 
 KLImageDefine image_resources_define[] = {
     {"image/func_fastbackward.png"    , "func_backward"        },

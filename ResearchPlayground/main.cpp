@@ -10,6 +10,7 @@
 #include "imgui/imgui_internal.h"
 
 #include "layout.h"
+#include "gui_win32_gl3.h"
 
 #include "keyboard/keyboard.h"
 #include "sequencer/ingseq.h"
@@ -17,6 +18,7 @@
 #include "function/function.h"
 #include "light/light.h"
 #include "settings/settings.h"
+#include "configuration/assignment_config.h"
 
 #define IMIDTEXT(name, i) ((std::string(name) + std::to_string(i)).c_str())
 
@@ -48,7 +50,7 @@ const ImWchar* GetGlyphRangesChineseFullAndDirection()
 	return &ranges[0];
 }
 
-static bool main_init(int argc, char* argv[])
+bool main_init(int argc, char* argv[])
 {
 	// Enable Dock
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -71,6 +73,7 @@ static bool main_init(int argc, char* argv[])
 	KLWindowInfo func_win_info(WINNAME_FUNCTION, ShowFunctionWindow);
 	KLWindowInfo sett_win_info(WINNAME_SETTINGS, ShowSettingsWindow);
 	KLWindowInfo light_win_info(WINNAME_LIGHT, ShowLightWindow);
+	KLWindowInfo assign_cfg_mgr_win_info(WINNAME_ASSIGN_CONFIG_MGR, ShowAssignmentConfigManagerWindow);
 
 	auto layoutManager = KLWindowLayoutManager::GetInstance();
 
@@ -82,6 +85,7 @@ static bool main_init(int argc, char* argv[])
 	layoutManager->KLRegisterLayout(KL_LAYOUT_ASSIGNMENT, menu_win_info);
 	layoutManager->KLRegisterLayout(KL_LAYOUT_ASSIGNMENT, kbod_win_info);
 	layoutManager->KLRegisterLayout(KL_LAYOUT_ASSIGNMENT, func_win_info);
+	layoutManager->KLRegisterLayout(KL_LAYOUT_ASSIGNMENT, assign_cfg_mgr_win_info);
 
 	// light
 	layoutManager->KLRegisterLayout(KL_LAYOUT_LIGHT, menu_win_info);
@@ -100,7 +104,7 @@ static bool main_init(int argc, char* argv[])
     return true;
 }
 
-static void main_shutdown(void)
+void main_shutdown(void)
 {
 }
 
@@ -459,14 +463,15 @@ static void ShowRootWindow(bool* p_open)
 }
 
 
-static int main_gui()
+int main_gui()
 {
 	ShowRootWindow(&show_root_window);
+
+
 
 	return 0;
 }
 
-#include "gui_win32_gl3.cpp"
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR, _In_ int nShowCmd)
 {

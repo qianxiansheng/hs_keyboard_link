@@ -247,25 +247,33 @@ struct KLFunctionConfig
 {
 	std::string name;
 	std::unordered_map<KEY_MapId_t, KLFunction> layers[KL_LAYER_TYPE_MAXIMUM];
+
+	KLFunctionConfig() {};
+	KLFunctionConfig(const char* _name) :name(_name) {};
 };
 
 class KLFunctionConfigManager
 {
 public:
 	KLFunctionLayerType m_CurrentLayerType;
-	KLFunctionConfig* m_CurrentConfig;
+	uint32_t m_CurrentConfigIndex;
 	std::vector<KLFunctionConfig> m_ConfigList;
 
-	void AddConfig(KLFunctionConfig& config)
-	{
-		m_ConfigList.push_back(std::move(config));
-	}
+	void AddConfig(KLFunctionConfig& config);
+	void AddConfig(const char* name);
+
+	bool IsConfigExists(const char* name);
 
 	void SetCurrentConfig(uint32_t i)
 	{
-		m_CurrentConfig = &m_ConfigList[i];
+		m_CurrentConfigIndex = i;
+	}
+	KLFunctionConfig& GetCurrentConfig()
+	{
+		return m_ConfigList[m_CurrentConfigIndex];
 	}
 
+public:
 	static KLFunctionConfigManager* GetInstance()
 	{
 		std::call_once(s_OnceFlag, []() {
@@ -275,13 +283,14 @@ public:
 	}
 private:
 	KLFunctionConfigManager()
-		: m_CurrentConfig(nullptr)
+		: m_CurrentConfigIndex(0)
 		, m_CurrentLayerType(KL_LAYER_TYPE_DEFAULT){}
 private:
 	static std::once_flag			s_OnceFlag;
 	static KLFunctionConfigManager*	s_Instance;
 };
 
+void InitDefaultConfig(KLFunctionConfig& temp_config);
 
 void InitFunctionWindow();
 void ShowFunctionWindow(bool* p_open);

@@ -11,6 +11,8 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
 
+#include "imgui/extensions/ImFileDialog.h"
+
 enum KLLayoutType
 {
 	KL_LAYOUT_SETTING,
@@ -110,6 +112,34 @@ private:
 	KLLayoutType					m_CurrentType;
 	static std::once_flag			s_OnceFlag;
 	static KLWindowLayoutManager*	s_Instance;
+};
+
+
+
+class KLDialogManager
+{
+public:
+	void ShowDialog()
+	{
+
+	}
+private:
+	char text[128];
+	bool open;
+
+public:
+	static KLDialogManager* GetInstance()
+	{
+		std::call_once(s_OnceFlag, []() {
+			s_Instance = new KLDialogManager();
+			});
+		return s_Instance;
+	}
+private:
+	KLDialogManager();
+private:
+	static std::once_flag			s_OnceFlag;
+	static KLDialogManager* s_Instance;
 };
 
 #endif

@@ -11,6 +11,24 @@
 KLFunctionConfigManager* KLFunctionConfigManager::s_Instance = nullptr;
 std::once_flag KLFunctionConfigManager::s_OnceFlag;
 
+void KLFunctionConfigManager::AddConfig(KLFunctionConfig& config)
+{
+	m_ConfigList.push_back(std::move(config));
+}
+void KLFunctionConfigManager::AddConfig(const char* name)
+{
+	KLFunctionConfig config(name);
+	InitDefaultConfig(config);
+	m_ConfigList.push_back(config);
+}
+bool KLFunctionConfigManager::IsConfigExists(const char* name)
+{
+	for (auto& config : m_ConfigList)
+		if (config.name == name)
+			return true;
+	return false;
+}
+
 KLFunctionLayout::KLFunctionLayout(KLFunctionID id, const char* name, ImVec4 param, KLFunctionLayoutFlags flagbits)
 {
 	this->id = id;
@@ -414,6 +432,7 @@ void InitFunctionWindow()
 
 	KLFunctionConfig config;
 	InitDefaultConfig(config);
+	config.name = "default";
 	configManager->AddConfig(config);
 
 	configManager->SetCurrentConfig(0);
@@ -441,7 +460,7 @@ void DrawFunctionLayout()
 
 		auto manager = KLFunctionConfigManager::GetInstance();
 
-		auto& functions = manager->m_CurrentConfig->layers[manager->m_CurrentLayerType];
+		auto& functions = manager->GetCurrentConfig().layers[manager->m_CurrentLayerType];
 
 		KEY_MapId_t mid = KeyboardGetActiveMapID();
 		KLFunctionID fid = FindFunctionIDByMapID(mid);
@@ -499,7 +518,7 @@ void DrawFunctionLayout()
 		{
 			auto manager = KLFunctionConfigManager::GetInstance();
 
-			auto& functions = manager->m_CurrentConfig->layers[manager->m_CurrentLayerType];
+			auto& functions = manager->GetCurrentConfig().layers[manager->m_CurrentLayerType];
 
 			functions[KeyboardGetActiveMapID()] = FindFunctionByFunctionID(functionLayout[i].id);
 		}

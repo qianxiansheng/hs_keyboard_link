@@ -8,6 +8,8 @@
 
 // This is provided for completeness, however it is strongly recommended you use OpenGL with SDL or GLFW.
 
+#include "gui_win32_gl3.h"
+
 #include "pch.h"
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"
@@ -17,13 +19,13 @@
 #endif
 #include <windows.h>
 #include <windowsx.h>
-#include <GL/GL.h>
 #include <glad/glad/glad.h>
 #include <tchar.h>
 
 #include <unordered_map>
 #include "function/function.h"
 #include "keyboard/keyboard.h"
+#include "sequencer/ingseq.h"
 
 
 extern std::unordered_map<KLFunctionID, KLFunction> function_map;
@@ -123,6 +125,7 @@ std::unordered_map<USHORT, KLFunction> kv_to_hid_map = {
     {0xA3, function_map[KLF_CTRL_R]},
     {0xA4, function_map[KLF_ALT_L]},
     {0xA5, function_map[KLF_ALT_R]},
+    {0xC0, function_map[KLF_TILDE]},
 };
 
 // Data stored per platform window
@@ -193,19 +196,38 @@ LRESULT KeyProc(int code, WPARAM wParam, LPARAM lParam)
             // 在这里处理按键事件
             std::cout << "Key pressed, VK code: " << pKbStruct->vkCode << std::endl;
 
-            auto& function = kv_to_hid_map[pKbStruct->vkCode];
-            UserInputKeyDown(function);
+            auto it = kv_to_hid_map.find(pKbStruct->vkCode);
+            if (it != kv_to_hid_map.end())
+                UserInputKeyDown(it->second);
         }
         else if (wParam == WM_KEYUP) {
             // 在这里处理按键事件
             std::cout << "Key pressed, VK code: " << pKbStruct->vkCode << std::endl;
-            auto& function = kv_to_hid_map[pKbStruct->vkCode];
-            UserInputKeyUp(function);
+
+            auto it = kv_to_hid_map.find(pKbStruct->vkCode);
+            if (it != kv_to_hid_map.end())
+                UserInputKeyUp(it->second);
         }
         return 1;
     }
     return CallNextHookEx(g_hook, code, wParam, lParam);
 }
+
+void EnableKeyHook(bool enable)
+{
+    if (enable)
+    {
+        g_hook = SetWindowsHookEx(13, KeyProc, 0, 0);
+    }
+    else
+    {
+        UnhookWindowsHookEx(g_hook);
+    }
+}
+
+bool main_init(int argc, char* argv[]);
+void main_shutdown(void);
+int main_gui();
 
 // Main code
 int main_(int argc, char** argv)
@@ -219,8 +241,6 @@ int main_(int argc, char** argv)
         APP_TITLE, 
         WS_POPUP,
         APP_X, APP_Y, APP_WIDTH, APP_HEIGHT, NULL, NULL, wc.hInstance, NULL);
-
-    g_hook = SetWindowsHookEx(13, KeyProc, 0, 0);
 
     // Initialize OpenGL
     if (!CreateDeviceWGL(hwnd, &g_MainWindow))
@@ -365,7 +385,6 @@ int main_(int argc, char** argv)
 
     CleanupDeviceWGL(hwnd, &g_MainWindow);
     wglDeleteContext(g_hRC);
-    UnhookWindowsHookEx(g_hook);
     ::DestroyWindow(hwnd);
     ::UnregisterClassW(wc.lpszClassName, wc.hInstance);
 
@@ -405,10 +424,6 @@ void CleanupDeviceWGL(HWND hWnd, WGL_WindowData* data)
 // Forward declare message handler from imgui_impl_win32.cpp
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-
-
-
-
 // Win32 message handler
 // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
 // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
@@ -435,6 +450,24 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
         ::PostQuitMessage(0);
         return 0;
+    case WM_KEYDOWN:
+    case WM_SYSKEYDOWN:
+    {
+        if (VK_PROCESSKEY == wParam)
+            return 0;
+        std::cout << "Key pressed, VK code: " << wParam << std::endl;
+        auto& function = kv_to_hid_map[wParam];
+        UserInputKeyDown(function);
+        return 0;
+    }
+    case WM_KEYUP:
+    case WM_SYSKEYUP:
+    {
+        std::cout << "Key pressed, VK code: " << wParam << std::endl;
+        auto& function = kv_to_hid_map[wParam];
+        UserInputKeyUp(function);
+        return 0;
+    }
     }
     return ::DefWindowProcW(hWnd, msg, wParam, lParam);
 }

@@ -11,6 +11,8 @@ namespace utils {
 	void Alert(bool show, const char* title, const char* text);
 	bool Confirm(bool show, const char* title, const char* text);
 	void AlertEx(bool* show, const char* title, const char* text);
+	bool Prompt(bool* show, const char* title, const char* text, char* buf, size_t buf_size);
+	bool ConfirmEx(bool* show, const char* title, const char* text);
 
 	void readFileData(std::filesystem::path path, void* out_data);
 	std::vector<uint8_t> readFileData(std::filesystem::path& path);

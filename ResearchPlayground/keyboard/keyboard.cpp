@@ -9,6 +9,7 @@
 #include "util/utils.h"
 
 #include "function/function.h"
+#include "layout.h"
 
 /* kb map */
 uint8_t KEY_GetMapIdByRowAndCol(uint8_t row, uint8_t col) {
@@ -43,114 +44,114 @@ uint8_t KEY_GetHidTypeAndHidKey(uint8_t row, uint8_t col, BSP_HID_KB_Type_t* hid
 
 KeyboardGLContext kbv_draw_ctx;
 
-KeyBtnView keyBtnViewList[] = {
-	KeyBtnView("ESC"		, KM_ESC, 0, 0, SL, SL),
-	KeyBtnView("F1"			, KM_F1,  ( 1 * MG +  1 * SL), 0, SL, SL),
-	KeyBtnView("F2"			, KM_F2,  ( 2 * MG +  2 * SL), 0, SL, SL),
-	KeyBtnView("F3"			, KM_F3,  ( 3 * MG +  3 * SL), 0, SL, SL),
-	KeyBtnView("F4"			, KM_F4,  ( 4 * MG +  4 * SL), 0, SL, SL),
-	KeyBtnView("F5"			, KM_F5,  ( 5 * MG +  5 * SL), 0, SL, SL),
-	KeyBtnView("F6"			, KM_F6,  ( 6 * MG +  6 * SL), 0, SL, SL),
-	KeyBtnView("F7"			, KM_F7,  ( 7 * MG +  7 * SL), 0, SL, SL),
-	KeyBtnView("F8"			, KM_F8,  ( 8 * MG +  8 * SL), 0, SL, SL),
-	KeyBtnView("F9"			, KM_F9,  ( 9 * MG +  9 * SL), 0, SL, SL),
-	KeyBtnView("F10"		, KM_F10, (10 * MG + 10 * SL), 0, SL, SL),
-	KeyBtnView("F11"		, KM_F11, (11 * MG + 11 * SL), 0, SL, SL),
-	KeyBtnView("F12"		, KM_F12, (12 * MG + 12 * SL), 0, SL, SL),
-	KeyBtnView("INS"		, KM_INS, (13 * MG + 13 * SL), 0, SL, SL),
-	KeyBtnView("DEL"		, KM_DEL, (14 * MG + 14 * SL), 0, SL, SL),
+std::unordered_map<KEY_MapId_t, KeyBtnView> keyBtnViewList = {
+	{KM_ESC      , KeyBtnView("ESC"        , KM_ESC      , 0, 0, SL, SL)},
+	{KM_F1       , KeyBtnView("F1"         , KM_F1       , (1 * MG + 1 * SL), 0, SL, SL)},
+	{KM_F2       , KeyBtnView("F2"         , KM_F2       , (2 * MG + 2 * SL), 0, SL, SL)},
+	{KM_F3       , KeyBtnView("F3"         , KM_F3       , (3 * MG + 3 * SL), 0, SL, SL)},
+	{KM_F4       , KeyBtnView("F4"         , KM_F4       , (4 * MG + 4 * SL), 0, SL, SL)},
+	{KM_F5       , KeyBtnView("F5"         , KM_F5       , (5 * MG + 5 * SL), 0, SL, SL)},
+	{KM_F6       , KeyBtnView("F6"         , KM_F6       , (6 * MG + 6 * SL), 0, SL, SL)},
+	{KM_F7       , KeyBtnView("F7"         , KM_F7       , (7 * MG + 7 * SL), 0, SL, SL)},
+	{KM_F8       , KeyBtnView("F8"         , KM_F8       , (8 * MG + 8 * SL), 0, SL, SL)},
+	{KM_F9       , KeyBtnView("F9"         , KM_F9       , (9 * MG + 9 * SL), 0, SL, SL)},
+	{KM_F10      , KeyBtnView("F10"        , KM_F10      , (10 * MG + 10 * SL), 0, SL, SL)},
+	{KM_F11      , KeyBtnView("F11"        , KM_F11      , (11 * MG + 11 * SL), 0, SL, SL)},
+	{KM_F12      , KeyBtnView("F12"        , KM_F12      , (12 * MG + 12 * SL), 0, SL, SL)},
+	{KM_INS      , KeyBtnView("INS"        , KM_INS      , (13 * MG + 13 * SL), 0, SL, SL)},
+	{KM_DEL      , KeyBtnView("DEL"        , KM_DEL      , (14 * MG + 14 * SL), 0, SL, SL)},
 
-	KeyBtnView("~"			, KM_TILDE,                       0, (FL + SL), SL, SL),
-	KeyBtnView("1"			, KM_1    , ( 1 * MG +  1 * SL + 0), (FL + SL), SL, SL),
-	KeyBtnView("2"			, KM_2    , ( 2 * MG +  2 * SL + 0), (FL + SL), SL, SL),
-	KeyBtnView("3"			, KM_3    , ( 3 * MG +  3 * SL + 0), (FL + SL), SL, SL),
-	KeyBtnView("4"			, KM_4    , ( 4 * MG +  4 * SL + 0), (FL + SL), SL, SL),
-	KeyBtnView("5"			, KM_5    , ( 5 * MG +  5 * SL + 0), (FL + SL), SL, SL),
-	KeyBtnView("6"			, KM_6    , ( 6 * MG +  6 * SL + 0), (FL + SL), SL, SL),
-	KeyBtnView("7"			, KM_7    , ( 7 * MG +  7 * SL + 0), (FL + SL), SL, SL),
-	KeyBtnView("8"			, KM_8    , ( 8 * MG +  8 * SL + 0), (FL + SL), SL, SL),
-	KeyBtnView("9"			, KM_9    , ( 9 * MG +  9 * SL + 0), (FL + SL), SL, SL),
-	KeyBtnView("0"			, KM_0    , (10 * MG + 10 * SL + 0), (FL + SL), SL, SL),
-	KeyBtnView("-"			, KM_UDS  , (11 * MG + 11 * SL + 0), (FL + SL), SL, SL),
-	KeyBtnView("="			, KM_PLUS , (12 * MG + 12 * SL + 0), (FL + SL), SL, SL),
-	KeyBtnView("BACKSPACE"	, KM_BS   , (13 * MG + 13 * SL + 0), (FL + SL), BACKSPACEW, SL),
+	{KM_TILDE    , KeyBtnView("~"          , KM_TILDE    ,                     0, (FL + SL), SL, SL)},
+	{KM_1        , KeyBtnView("1"          , KM_1        , (1 * MG + 1 * SL + 0), (FL + SL), SL, SL)},
+	{KM_2        , KeyBtnView("2"          , KM_2        , (2 * MG + 2 * SL + 0), (FL + SL), SL, SL)},
+	{KM_3        , KeyBtnView("3"          , KM_3        , (3 * MG + 3 * SL + 0), (FL + SL), SL, SL)},
+	{KM_4        , KeyBtnView("4"          , KM_4        , (4 * MG + 4 * SL + 0), (FL + SL), SL, SL)},
+	{KM_5        , KeyBtnView("5"          , KM_5        , (5 * MG + 5 * SL + 0), (FL + SL), SL, SL)},
+	{KM_6        , KeyBtnView("6"          , KM_6        , (6 * MG + 6 * SL + 0), (FL + SL), SL, SL)},
+	{KM_7        , KeyBtnView("7"          , KM_7        , (7 * MG + 7 * SL + 0), (FL + SL), SL, SL)},
+	{KM_8        , KeyBtnView("8"          , KM_8        , (8 * MG + 8 * SL + 0), (FL + SL), SL, SL)},
+	{KM_9        , KeyBtnView("9"          , KM_9        , (9 * MG + 9 * SL + 0), (FL + SL), SL, SL)},
+	{KM_0        , KeyBtnView("0"          , KM_0        , (10 * MG + 10 * SL + 0), (FL + SL), SL, SL)},
+	{KM_UDS      , KeyBtnView("-"          , KM_UDS      , (11 * MG + 11 * SL + 0), (FL + SL), SL, SL)},
+	{KM_PLUS     , KeyBtnView("="          , KM_PLUS     , (12 * MG + 12 * SL + 0), (FL + SL), SL, SL)},
+	{KM_BS       , KeyBtnView("BACKSPACE"  , KM_BS       , (13 * MG + 13 * SL + 0), (FL + SL), BACKSPACEW, SL)},
 
-	KeyBtnView("TAB"		, KM_TAB, (        0 * MG +  0 * SL), (FL + 2 * SL + MG), TABW, SL),
-	KeyBtnView("Q"			, KM_Q  , (TABW +  1 * MG +  0 * SL), (FL + 2 * SL + MG), SL, SL),
-	KeyBtnView("W"			, KM_W  , (TABW +  2 * MG +  1 * SL), (FL + 2 * SL + MG), SL, SL),
-	KeyBtnView("E"			, KM_E  , (TABW +  3 * MG +  2 * SL), (FL + 2 * SL + MG), SL, SL),
-	KeyBtnView("R"			, KM_R  , (TABW +  4 * MG +  3 * SL), (FL + 2 * SL + MG), SL, SL),
-	KeyBtnView("T"			, KM_T  , (TABW +  5 * MG +  4 * SL), (FL + 2 * SL + MG), SL, SL),
-	KeyBtnView("Y"			, KM_Y  , (TABW +  6 * MG +  5 * SL), (FL + 2 * SL + MG), SL, SL),
-	KeyBtnView("U"			, KM_U  , (TABW +  7 * MG +  6 * SL), (FL + 2 * SL + MG), SL, SL),
-	KeyBtnView("I"			, KM_I  , (TABW +  8 * MG +  7 * SL), (FL + 2 * SL + MG), SL, SL),
-	KeyBtnView("O"			, KM_O  , (TABW +  9 * MG +  8 * SL), (FL + 2 * SL + MG), SL, SL),
-	KeyBtnView("P"			, KM_P  , (TABW + 10 * MG +  9 * SL), (FL + 2 * SL + MG), SL, SL),
-	KeyBtnView("["			, KM_OB , (TABW + 11 * MG + 10 * SL), (FL + 2 * SL + MG), SL, SL),
-	KeyBtnView("]"			, KM_CB , (TABW + 12 * MG + 11 * SL), (FL + 2 * SL + MG), SL, SL),
-	KeyBtnView("\\"			, KM_BSL, (TABW + 13 * MG + 12 * SL), (FL + 2 * SL + MG), SLASHW, SL),
+	{KM_TAB      , KeyBtnView("TAB"        , KM_TAB      , (0 * MG + 0 * SL), (FL + 2 * SL + MG), TABW, SL)},
+	{KM_Q        , KeyBtnView("Q"          , KM_Q        , (TABW + 1 * MG + 0 * SL), (FL + 2 * SL + MG), SL, SL)},
+	{KM_W        , KeyBtnView("W"          , KM_W        , (TABW + 2 * MG + 1 * SL), (FL + 2 * SL + MG), SL, SL)},
+	{KM_E        , KeyBtnView("E"          , KM_E        , (TABW + 3 * MG + 2 * SL), (FL + 2 * SL + MG), SL, SL)},
+	{KM_R        , KeyBtnView("R"          , KM_R        , (TABW + 4 * MG + 3 * SL), (FL + 2 * SL + MG), SL, SL)},
+	{KM_T        , KeyBtnView("T"          , KM_T        , (TABW + 5 * MG + 4 * SL), (FL + 2 * SL + MG), SL, SL)},
+	{KM_Y        , KeyBtnView("Y"          , KM_Y        , (TABW + 6 * MG + 5 * SL), (FL + 2 * SL + MG), SL, SL)},
+	{KM_U        , KeyBtnView("U"          , KM_U        , (TABW + 7 * MG + 6 * SL), (FL + 2 * SL + MG), SL, SL)},
+	{KM_I        , KeyBtnView("I"          , KM_I        , (TABW + 8 * MG + 7 * SL), (FL + 2 * SL + MG), SL, SL)},
+	{KM_O        , KeyBtnView("O"          , KM_O        , (TABW + 9 * MG + 8 * SL), (FL + 2 * SL + MG), SL, SL)},
+	{KM_P        , KeyBtnView("P"          , KM_P        , (TABW + 10 * MG + 9 * SL), (FL + 2 * SL + MG), SL, SL)},
+	{KM_OB       , KeyBtnView("["          , KM_OB       , (TABW + 11 * MG + 10 * SL), (FL + 2 * SL + MG), SL, SL)},
+	{KM_CB       , KeyBtnView("]"          , KM_CB       , (TABW + 12 * MG + 11 * SL), (FL + 2 * SL + MG), SL, SL)},
+	{KM_BSL      , KeyBtnView("\\"         , KM_BSL      , (TABW + 13 * MG + 12 * SL), (FL + 2 * SL + MG), SLASHW, SL)},
 
-	KeyBtnView("CAPS LOCK"	, KM_CAPS , (             0 * MG +  0 * SL), (FL + 3 * SL + 2 * MG), CAPSLOCKW, SL),
-	KeyBtnView("A"			, KM_A    , (CAPSLOCKW +  1 * MG +  0 * SL), (FL + 3 * SL + 2 * MG), SL, SL),
-	KeyBtnView("S"			, KM_S    , (CAPSLOCKW +  2 * MG +  1 * SL), (FL + 3 * SL + 2 * MG), SL, SL),
-	KeyBtnView("D"			, KM_D    , (CAPSLOCKW +  3 * MG +  2 * SL), (FL + 3 * SL + 2 * MG), SL, SL),
-	KeyBtnView("F"			, KM_F    , (CAPSLOCKW +  4 * MG +  3 * SL), (FL + 3 * SL + 2 * MG), SL, SL),
-	KeyBtnView("G"			, KM_G    , (CAPSLOCKW +  5 * MG +  4 * SL), (FL + 3 * SL + 2 * MG), SL, SL),
-	KeyBtnView("H"			, KM_H    , (CAPSLOCKW +  6 * MG +  5 * SL), (FL + 3 * SL + 2 * MG), SL, SL),
-	KeyBtnView("J"			, KM_J    , (CAPSLOCKW +  7 * MG +  6 * SL), (FL + 3 * SL + 2 * MG), SL, SL),
-	KeyBtnView("K"			, KM_K    , (CAPSLOCKW +  8 * MG +  7 * SL), (FL + 3 * SL + 2 * MG), SL, SL),
-	KeyBtnView("L"			, KM_L    , (CAPSLOCKW +  9 * MG +  8 * SL), (FL + 3 * SL + 2 * MG), SL, SL),
-	KeyBtnView(":"			, KM_COLON, (CAPSLOCKW + 10 * MG +  9 * SL), (FL + 3 * SL + 2 * MG), SL, SL),
-	KeyBtnView("'"			, KM_QUOTE, (CAPSLOCKW + 11 * MG + 10 * SL), (FL + 3 * SL + 2 * MG), SL, SL),
-	KeyBtnView("ENTER"		, KM_ENTER, (CAPSLOCKW + 12 * MG + 11 * SL), (FL + 3 * SL + 2 * MG), ENTERW, SL),
+	{KM_CAPS     , KeyBtnView("CAPS LOCK"  , KM_CAPS     , (0 * MG + 0 * SL), (FL + 3 * SL + 2 * MG), CAPSLOCKW, SL)},
+	{KM_A        , KeyBtnView("A"          , KM_A        , (CAPSLOCKW + 1 * MG + 0 * SL), (FL + 3 * SL + 2 * MG), SL, SL)},
+	{KM_S        , KeyBtnView("S"          , KM_S        , (CAPSLOCKW + 2 * MG + 1 * SL), (FL + 3 * SL + 2 * MG), SL, SL)},
+	{KM_D        , KeyBtnView("D"          , KM_D        , (CAPSLOCKW + 3 * MG + 2 * SL), (FL + 3 * SL + 2 * MG), SL, SL)},
+	{KM_F        , KeyBtnView("F"          , KM_F        , (CAPSLOCKW + 4 * MG + 3 * SL), (FL + 3 * SL + 2 * MG), SL, SL)},
+	{KM_G        , KeyBtnView("G"          , KM_G        , (CAPSLOCKW + 5 * MG + 4 * SL), (FL + 3 * SL + 2 * MG), SL, SL)},
+	{KM_H        , KeyBtnView("H"          , KM_H        , (CAPSLOCKW + 6 * MG + 5 * SL), (FL + 3 * SL + 2 * MG), SL, SL)},
+	{KM_J        , KeyBtnView("J"          , KM_J        , (CAPSLOCKW + 7 * MG + 6 * SL), (FL + 3 * SL + 2 * MG), SL, SL)},
+	{KM_K        , KeyBtnView("K"          , KM_K        , (CAPSLOCKW + 8 * MG + 7 * SL), (FL + 3 * SL + 2 * MG), SL, SL)},
+	{KM_L        , KeyBtnView("L"          , KM_L        , (CAPSLOCKW + 9 * MG + 8 * SL), (FL + 3 * SL + 2 * MG), SL, SL)},
+	{KM_COLON    , KeyBtnView(":"          , KM_COLON    , (CAPSLOCKW + 10 * MG + 9 * SL), (FL + 3 * SL + 2 * MG), SL, SL)},
+	{KM_QUOTE    , KeyBtnView("'"          , KM_QUOTE    , (CAPSLOCKW + 11 * MG + 10 * SL), (FL + 3 * SL + 2 * MG), SL, SL)},
+	{KM_ENTER    , KeyBtnView("ENTER"      , KM_ENTER    , (CAPSLOCKW + 12 * MG + 11 * SL), (FL + 3 * SL + 2 * MG), ENTERW, SL)},
 
-	KeyBtnView("SHIFT"      , KM_SHIFT_L, (           0 * MG +  0 * SL), (FL + 4 * SL + 3 * MG), LSHIFTW, SL),
-	KeyBtnView("Z"			, KM_Z      , (LSHIFTW +  1 * MG +  0 * SL), (FL + 4 * SL + 3 * MG), SL, SL),
-	KeyBtnView("X"			, KM_X      , (LSHIFTW +  2 * MG +  1 * SL), (FL + 4 * SL + 3 * MG), SL, SL),
-	KeyBtnView("C"			, KM_C      , (LSHIFTW +  3 * MG +  2 * SL), (FL + 4 * SL + 3 * MG), SL, SL),
-	KeyBtnView("V"			, KM_V      , (LSHIFTW +  4 * MG +  3 * SL), (FL + 4 * SL + 3 * MG), SL, SL),
-	KeyBtnView("B"			, KM_B      , (LSHIFTW +  5 * MG +  4 * SL), (FL + 4 * SL + 3 * MG), SL, SL),
-	KeyBtnView("N"			, KM_N      , (LSHIFTW +  6 * MG +  5 * SL), (FL + 4 * SL + 3 * MG), SL, SL),
-	KeyBtnView("M"			, KM_M      , (LSHIFTW +  7 * MG +  6 * SL), (FL + 4 * SL + 3 * MG), SL, SL),
-	KeyBtnView(","			, KM_COMM   , (LSHIFTW +  8 * MG +  7 * SL), (FL + 4 * SL + 3 * MG), SL, SL),
-	KeyBtnView("."			, KM_DOT    , (LSHIFTW +  9 * MG +  8 * SL), (FL + 4 * SL + 3 * MG), SL, SL),
-	KeyBtnView("/"			, KM_SLASH  , (LSHIFTW + 10 * MG +  9 * SL), (FL + 4 * SL + 3 * MG), SL, SL),
-	KeyBtnView("SHIFT"		, KM_SHIFT_R, (LSHIFTW + 11 * MG + 10 * SL), (FL + 4 * SL + 3 * MG), RSHIFTW, SL),
+	{KM_SHIFT_L  , KeyBtnView("SHIFT"      , KM_SHIFT_L  , (0 * MG + 0 * SL), (FL + 4 * SL + 3 * MG), LSHIFTW, SL)},
+	{KM_Z        , KeyBtnView("Z"          , KM_Z        , (LSHIFTW + 1 * MG + 0 * SL), (FL + 4 * SL + 3 * MG), SL, SL)},
+	{KM_X        , KeyBtnView("X"          , KM_X        , (LSHIFTW + 2 * MG + 1 * SL), (FL + 4 * SL + 3 * MG), SL, SL)},
+	{KM_C        , KeyBtnView("C"          , KM_C        , (LSHIFTW + 3 * MG + 2 * SL), (FL + 4 * SL + 3 * MG), SL, SL)},
+	{KM_V        , KeyBtnView("V"          , KM_V        , (LSHIFTW + 4 * MG + 3 * SL), (FL + 4 * SL + 3 * MG), SL, SL)},
+	{KM_B        , KeyBtnView("B"          , KM_B        , (LSHIFTW + 5 * MG + 4 * SL), (FL + 4 * SL + 3 * MG), SL, SL)},
+	{KM_N        , KeyBtnView("N"          , KM_N        , (LSHIFTW + 6 * MG + 5 * SL), (FL + 4 * SL + 3 * MG), SL, SL)},
+	{KM_M        , KeyBtnView("M"          , KM_M        , (LSHIFTW + 7 * MG + 6 * SL), (FL + 4 * SL + 3 * MG), SL, SL)},
+	{KM_COMM     , KeyBtnView(","          , KM_COMM     , (LSHIFTW + 8 * MG + 7 * SL), (FL + 4 * SL + 3 * MG), SL, SL)},
+	{KM_DOT      , KeyBtnView("."          , KM_DOT      , (LSHIFTW + 9 * MG + 8 * SL), (FL + 4 * SL + 3 * MG), SL, SL)},
+	{KM_SLASH    , KeyBtnView("/"          , KM_SLASH    , (LSHIFTW + 10 * MG + 9 * SL), (FL + 4 * SL + 3 * MG), SL, SL)},
+	{KM_SHIFT_R  , KeyBtnView("SHIFT"      , KM_SHIFT_R  , (LSHIFTW + 11 * MG + 10 * SL), (FL + 4 * SL + 3 * MG), RSHIFTW, SL)},
 
-	KeyBtnView("CTRL"		, KM_CTRL_L, (0)                                                , (FL + 5 * SL + 4 * MG), LCTRLW, SL),
-	KeyBtnView("WIN"        , KM_WIN_L , (LCTRLW + 1 * MG)                                  , (FL + 5 * SL + 4 * MG), LWINW , SL),
-	KeyBtnView("ALT"		, KM_ALT_L , (LCTRLW + LWINW + 2 * MG)                          , (FL + 5 * SL + 4 * MG), LALTW , SL),
-	KeyBtnView("SPACE"      , KM_SP    , (LCTRLW + LWINW + LALTW + 3 * MG)                  , (FL + 5 * SL + 4 * MG), SPACEW, SL),
-	KeyBtnView("ALT"        , KM_ALT_R , (LCTRLW + LWINW + LALTW + SPACEW + 4 * MG)         , (FL + 5 * SL + 4 * MG), SL    , SL),
-	KeyBtnView("FN"         , KM_FN    , (LCTRLW + LWINW + LALTW + SPACEW + 5 * MG + 1 * SL), (FL + 5 * SL + 4 * MG), SL    , SL),
-	KeyBtnView("CTRL"		, KM_CTRL_R, (LCTRLW + LWINW + LALTW + SPACEW + 6 * MG + 2 * SL), (FL + 5 * SL + 4 * MG), SL    , SL),
+	{KM_CTRL_L   , KeyBtnView("CTRL"       , KM_CTRL_L   , (0)                                                , (FL + 5 * SL + 4 * MG), LCTRLW, SL)},
+	{KM_WIN_L    , KeyBtnView("WIN"        , KM_WIN_L    , (LCTRLW + 1 * MG)                                  , (FL + 5 * SL + 4 * MG), LWINW , SL)},
+	{KM_ALT_L    , KeyBtnView("ALT"        , KM_ALT_L    , (LCTRLW + LWINW + 2 * MG)                          , (FL + 5 * SL + 4 * MG), LALTW , SL)},
+	{KM_SP       , KeyBtnView("SPACE"      , KM_SP       , (LCTRLW + LWINW + LALTW + 3 * MG)                  , (FL + 5 * SL + 4 * MG), SPACEW, SL)},
+	{KM_ALT_R    , KeyBtnView("ALT"        , KM_ALT_R    , (LCTRLW + LWINW + LALTW + SPACEW + 4 * MG)         , (FL + 5 * SL + 4 * MG), SL    , SL)},
+	{KM_FN       , KeyBtnView("FN"         , KM_FN       , (LCTRLW + LWINW + LALTW + SPACEW + 5 * MG + 1 * SL), (FL + 5 * SL + 4 * MG), SL    , SL)},
+	{KM_CTRL_R   , KeyBtnView("CTRL"       , KM_CTRL_R   , (LCTRLW + LWINW + LALTW + SPACEW + 6 * MG + 2 * SL), (FL + 5 * SL + 4 * MG), SL    , SL)},
 
-	KeyBtnView("RIGHT"      , KM_RIGHT, ((LCTRLW + LWINW + LALTW + SPACEW + 6 * MG + 3 * SL + OM) + (0 * SL + 0 * MG)), ((FL + 4 * SL + 2 * MG + OM) + (1 * SL + 1 * MG)), SL, SL),
-	KeyBtnView("LEFT"       , KM_LEFT , ((LCTRLW + LWINW + LALTW + SPACEW + 6 * MG + 3 * SL + OM) + (2 * SL + 2 * MG)), ((FL + 4 * SL + 2 * MG + OM) + (1 * SL + 1 * MG)), SL, SL),
-	KeyBtnView("DOWN"       , KM_DOWN , ((LCTRLW + LWINW + LALTW + SPACEW + 6 * MG + 3 * SL + OM) + (1 * SL + 1 * MG)), ((FL + 4 * SL + 2 * MG + OM) + (1 * SL + 1 * MG)), SL, SL),
-	KeyBtnView("UP"         , KM_UP   , ((LCTRLW + LWINW + LALTW + SPACEW + 6 * MG + 3 * SL + OM) + (1 * SL + 1 * MG)), ((FL + 4 * SL + 2 * MG + OM) + (0 * SL + 0 * MG)), SL, SL),
+	{KM_RIGHT    , KeyBtnView("RIGHT"      , KM_RIGHT    , ((LCTRLW + LWINW + LALTW + SPACEW + 6 * MG + 3 * SL + OM) + (0 * SL + 0 * MG)), ((FL + 4 * SL + 2 * MG + OM) + (1 * SL + 1 * MG)), SL, SL)},
+	{KM_LEFT     , KeyBtnView("LEFT"       , KM_LEFT     , ((LCTRLW + LWINW + LALTW + SPACEW + 6 * MG + 3 * SL + OM) + (2 * SL + 2 * MG)), ((FL + 4 * SL + 2 * MG + OM) + (1 * SL + 1 * MG)), SL, SL)},
+	{KM_DOWN     , KeyBtnView("DOWN"       , KM_DOWN     , ((LCTRLW + LWINW + LALTW + SPACEW + 6 * MG + 3 * SL + OM) + (1 * SL + 1 * MG)), ((FL + 4 * SL + 2 * MG + OM) + (1 * SL + 1 * MG)), SL, SL)},
+	{KM_UP       , KeyBtnView("UP"         , KM_UP       , ((LCTRLW + LWINW + LALTW + SPACEW + 6 * MG + 3 * SL + OM) + (1 * SL + 1 * MG)), ((FL + 4 * SL + 2 * MG + OM) + (0 * SL + 0 * MG)), SL, SL)},
 
-	KeyBtnView("HOME"		, KM_HOME     , (LW + KP + 0 * MG + 0 * SL), (0), SL, SL),
-	KeyBtnView("PRTSC"		, KM_PRINT    , (LW + KP + 1 * MG + 1 * SL), (0), SL, SL),
-	KeyBtnView("SCRLK"		, KM_SCL      , (LW + KP + 2 * MG + 2 * SL), (0), SL, SL),
-	KeyBtnView("PAUSE"		, KM_PAUSE    , (LW + KP + 3 * MG + 3 * SL), (0), SL, SL),
-	KeyBtnView("NUM"		, KM_KP_NUM   , (LW + KP + 0 * MG + 0 * SL), (FL + 1 * SL + 0 * MG), SL, SL),
-	KeyBtnView("/"			, KM_KP_DIV   , (LW + KP + 1 * MG + 1 * SL), (FL + 1 * SL + 0 * MG), SL, SL),
-	KeyBtnView("*"			, KM_KP_MULT  , (LW + KP + 2 * MG + 2 * SL), (FL + 1 * SL + 0 * MG), SL, SL),
-	KeyBtnView("-"			, KM_KP_MINUS , (LW + KP + 3 * MG + 3 * SL), (FL + 1 * SL + 0 * MG), SL, SL),
-	KeyBtnView("7"			, KM_KP_7     , (LW + KP + 0 * MG + 0 * SL), (FL + 2 * SL + 1 * MG), SL, SL),
-	KeyBtnView("8"			, KM_KP_8     , (LW + KP + 1 * MG + 1 * SL), (FL + 2 * SL + 1 * MG), SL, SL),
-	KeyBtnView("9"			, KM_KP_9     , (LW + KP + 2 * MG + 2 * SL), (FL + 2 * SL + 1 * MG), SL, SL),
-	KeyBtnView("+"			, KM_KP_PLUS  , (LW + KP + 3 * MG + 3 * SL), (FL + 2 * SL + 1 * MG), SL, NUMPLUSH),
-	KeyBtnView("4"			, KM_KP_4     , (LW + KP + 0 * MG + 0 * SL), (FL + 3 * SL + 2 * MG), SL, SL),
-	KeyBtnView("5"			, KM_KP_5     , (LW + KP + 1 * MG + 1 * SL), (FL + 3 * SL + 2 * MG), SL, SL),
-	KeyBtnView("6"			, KM_KP_6     , (LW + KP + 2 * MG + 2 * SL), (FL + 3 * SL + 2 * MG), SL, SL),
-	KeyBtnView("1"          , KM_KP_1     , (LW + KP + 0 * MG + 0 * SL), (FL + 4 * SL + 3 * MG), SL, SL),
-	KeyBtnView("2"          , KM_KP_2     , (LW + KP + 1 * MG + 1 * SL), (FL + 4 * SL + 3 * MG), SL, SL),
-	KeyBtnView("3"          , KM_KP_3     , (LW + KP + 2 * MG + 2 * SL), (FL + 4 * SL + 3 * MG), SL, SL),
-	KeyBtnView("ENTER"		, KM_KP_ENTER , (LW + KP + 3 * MG + 3 * SL), (FL + 4 * SL + 3 * MG), SL, NUMENTERH),
-	KeyBtnView("0"			, KM_KP_0     , (LW + KP + 1 * MG + 1 * SL), (FL + 5 * SL + 4 * MG), SL, SL),
-	KeyBtnView("."			, KM_KP_DEL   , (LW + KP + 2 * MG + 2 * SL), (FL + 5 * SL + 4 * MG), SL, SL),
+	{KM_HOME     , KeyBtnView("HOME"       , KM_HOME     , (LW + KP + 0 * MG + 0 * SL), (0), SL, SL)},
+	{KM_PRINT    , KeyBtnView("PRTSC"      , KM_PRINT    , (LW + KP + 1 * MG + 1 * SL), (0), SL, SL)},
+	{KM_SCL      , KeyBtnView("SCRLK"      , KM_SCL      , (LW + KP + 2 * MG + 2 * SL), (0), SL, SL)},
+	{KM_PAUSE    , KeyBtnView("PAUSE"      , KM_PAUSE    , (LW + KP + 3 * MG + 3 * SL), (0), SL, SL)},
+	{KM_KP_NUM   , KeyBtnView("NUM"        , KM_KP_NUM   , (LW + KP + 0 * MG + 0 * SL), (FL + 1 * SL + 0 * MG), SL, SL)},
+	{KM_KP_DIV   , KeyBtnView("/"          , KM_KP_DIV   , (LW + KP + 1 * MG + 1 * SL), (FL + 1 * SL + 0 * MG), SL, SL)},
+	{KM_KP_MULT  , KeyBtnView("*"          , KM_KP_MULT  , (LW + KP + 2 * MG + 2 * SL), (FL + 1 * SL + 0 * MG), SL, SL)},
+	{KM_KP_MINUS , KeyBtnView("-"          , KM_KP_MINUS , (LW + KP + 3 * MG + 3 * SL), (FL + 1 * SL + 0 * MG), SL, SL)},
+	{KM_KP_7     , KeyBtnView("7"          , KM_KP_7     , (LW + KP + 0 * MG + 0 * SL), (FL + 2 * SL + 1 * MG), SL, SL)},
+	{KM_KP_8     , KeyBtnView("8"          , KM_KP_8     , (LW + KP + 1 * MG + 1 * SL), (FL + 2 * SL + 1 * MG), SL, SL)},
+	{KM_KP_9     , KeyBtnView("9"          , KM_KP_9     , (LW + KP + 2 * MG + 2 * SL), (FL + 2 * SL + 1 * MG), SL, SL)},
+	{KM_KP_PLUS  , KeyBtnView("+"          , KM_KP_PLUS  , (LW + KP + 3 * MG + 3 * SL), (FL + 2 * SL + 1 * MG), SL, NUMPLUSH)},
+	{KM_KP_4     , KeyBtnView("4"          , KM_KP_4     , (LW + KP + 0 * MG + 0 * SL), (FL + 3 * SL + 2 * MG), SL, SL)},
+	{KM_KP_5     , KeyBtnView("5"          , KM_KP_5     , (LW + KP + 1 * MG + 1 * SL), (FL + 3 * SL + 2 * MG), SL, SL)},
+	{KM_KP_6     , KeyBtnView("6"          , KM_KP_6     , (LW + KP + 2 * MG + 2 * SL), (FL + 3 * SL + 2 * MG), SL, SL)},
+	{KM_KP_1     , KeyBtnView("1"          , KM_KP_1     , (LW + KP + 0 * MG + 0 * SL), (FL + 4 * SL + 3 * MG), SL, SL)},
+	{KM_KP_2     , KeyBtnView("2"          , KM_KP_2     , (LW + KP + 1 * MG + 1 * SL), (FL + 4 * SL + 3 * MG), SL, SL)},
+	{KM_KP_3     , KeyBtnView("3"          , KM_KP_3     , (LW + KP + 2 * MG + 2 * SL), (FL + 4 * SL + 3 * MG), SL, SL)},
+	{KM_KP_ENTER , KeyBtnView("ENTER"      , KM_KP_ENTER , (LW + KP + 3 * MG + 3 * SL), (FL + 4 * SL + 3 * MG), SL, NUMENTERH)},
+	{KM_KP_0     , KeyBtnView("0"          , KM_KP_0     , (LW + KP + 1 * MG + 1 * SL), (FL + 5 * SL + 4 * MG), SL, SL)},
+	{KM_KP_DEL   , KeyBtnView("."          , KM_KP_DEL   , (LW + KP + 2 * MG + 2 * SL), (FL + 5 * SL + 4 * MG), SL, SL)},
 
 
 	//KeyBtnView("#"			, KM_ASH     , 0, 0, SL, SL), 
@@ -162,7 +163,6 @@ KeyBtnView keyBtnViewList[] = {
 	//KeyBtnView("@"			, KM_KP_AT   , 0, 0, SL, SL),
 	//KeyBtnView("WIN"		, KM_WIN_R   , 0, 0, SL, SL),
 };
-int keyBtnViewSize = sizeof(keyBtnViewList) / sizeof(keyBtnViewList[0]);
 
 KeyBtnView::KeyBtnView(const char* tag, KEY_MapId_t id, int offsetX, int offsetY, int width, int height)
 {
@@ -310,14 +310,15 @@ void RenderModelInit()
 {
 	glm::vec3 global_pos(0.0f, 0.0f, 0.0f);
 
-	for (int i = 0; i < keyBtnViewSize; ++i)
+	for (auto& it : keyBtnViewList)
 	{
-		glm::vec3 pos1(global_pos.x + keyBtnViewList[i].x, global_pos.y + keyBtnViewList[i].y, 0.0f);
-		glm::vec3 shape(keyBtnViewList[i].w, keyBtnViewList[i].h, KEY_DEPTH);
+		auto& keyBtnView = it.second;
+		glm::vec3 pos1(global_pos.x + keyBtnView.x, global_pos.y + keyBtnView.y, 0.0f);
+		glm::vec3 shape(keyBtnView.w, keyBtnView.h, KEY_DEPTH);
 		pos1 /= SECTOR;
 		shape /= SECTOR;
 
-		KeyCapInit(pos1, shape, 0.1f, keyBtnViewList[i].face_vertex);
+		KeyCapInit(pos1, shape, 0.1f, keyBtnView.face_vertex);
 	}
 }
 
@@ -327,7 +328,7 @@ bool FunctionIsModified(KLFunctionLayerType layerType, KEY_MapId_t kmID)
 
 	KLFunctionID fid = FindFunctionIDByMapID(kmID);
 
-	auto function = configManager->m_CurrentConfig->layers[configManager->m_CurrentLayerType][kmID];
+	auto function = configManager->GetCurrentConfig().layers[configManager->m_CurrentLayerType][kmID];
 
 	if (function.id == fid)
 	{
@@ -336,45 +337,6 @@ bool FunctionIsModified(KLFunctionLayerType layerType, KEY_MapId_t kmID)
 	else
 	{
 		return true;
-	}
-}
-
-void RenderModelUpdate()
-{
-	kbv_draw_ctx.vertices.resize(0);
-
-	glm::vec3 global_pos(0.0f, 0.0f, 0.0f);
-
-	for (int i = 0; i < keyBtnViewSize; ++i)
-	{
-		glm::vec3 pos1(global_pos.x + keyBtnViewList[i].x, global_pos.y + keyBtnViewList[i].y, 0.0f);
-		glm::vec3 shape(keyBtnViewList[i].w, keyBtnViewList[i].h, KEY_DEPTH);
-		pos1 /= SECTOR;
-		shape /= SECTOR;
-
-		bool modified = FunctionIsModified(KLFunctionConfigManager::GetInstance()->m_CurrentLayerType, keyBtnViewList[i].id);
-		glm::vec4 color;
-		if (i == kbv_draw_ctx.active_index && modified)
-		{
-			color = MODIFIED_ACTIVE_COLOR;
-		}
-		else if (i == kbv_draw_ctx.active_index)
-		{
-			color = ACTIVE_COLOR;
-		}
-		else if (keyBtnViewList[i].hover) 
-		{
-			color = HOVER_COLOR;
-		}
-		else if (modified)
-		{
-			color = MODIFIED_COLOR;
-		}
-		else
-		{
-			color = DEFAULT_COLOR;
-		}
-		DrawKeycap(pos1, shape, PADDING, THINKNESS, color, kbv_draw_ctx.vertices);
 	}
 }
 
@@ -456,11 +418,11 @@ void assignment_layout_kbv_hover_cb(KeyBtnView& view)
 	{
 		KLFunctionID fid = FindFunctionIDByMapID(view.id);
 		KLFunction defaultFunction = FindFunctionByFunctionID(fid);
-
+	
 		auto configManager = KLFunctionConfigManager::GetInstance();
-
-		KLFunction currentFunction = configManager->m_CurrentConfig->layers[configManager->m_CurrentLayerType][view.id];
-
+	
+		KLFunction currentFunction = configManager->GetCurrentConfig().layers[configManager->m_CurrentLayerType][view.id];
+	
 		char temp_buf[64];
 		sprintf(temp_buf, " [default:%s|current:%s] ", defaultFunction.name, currentFunction.name);
 		ImGui::Text(temp_buf);
@@ -468,10 +430,169 @@ void assignment_layout_kbv_hover_cb(KeyBtnView& view)
 	}
 }
 
+
+
+void RenderModelUpdate()
+{
+	kbv_draw_ctx.vertices.resize(0);
+
+	glm::vec3 global_pos(0.0f, 0.0f, 0.0f);
+
+	for (auto& it : keyBtnViewList)
+	{
+		auto& keyBtnView = it.second;
+		glm::vec3 pos1(global_pos.x + keyBtnView.x, global_pos.y + keyBtnView.y, 0.0f);
+		glm::vec3 shape(keyBtnView.w, keyBtnView.h, KEY_DEPTH);
+		pos1 /= SECTOR;
+		shape /= SECTOR;
+
+		DrawKeycap(pos1, shape, PADDING, THINKNESS, DEFAULT_COLOR, kbv_draw_ctx.vertices);
+	}
+}
+
+static uint8_t light[KEY_ROW_NUM][KB_COL_NUM] = {
+	0
+};
+
+void LightUpdate()
+{
+	static int frame_cnt = 0;
+	if (frame_cnt++ > 60)
+	{
+		int b = 5;
+		int a = 0;
+		for (uint32_t i = 0; i < KEY_ROW_NUM; ++i)
+		{
+			for (uint32_t j = 0; j < KB_COL_NUM; ++j)
+			{
+				light[i][j] = (rand() % (b - a)) + a;
+			}
+		}
+		frame_cnt = 0;
+	}
+}
+
+void RenderModelUpdateLight()
+{
+	LightUpdate();
+
+	for (uint32_t i = 0; i < KEY_ROW_NUM; ++i)
+	{
+		for (uint32_t j = 0; j < KB_COL_NUM; ++j)
+		{
+			KEY_MapId_t kmId = (KEY_MapId_t)usr_key_map[i][j];
+
+			auto it = keyBtnViewList.find(kmId);
+			if (it != keyBtnViewList.end())
+			{
+				auto& keyBtnView = it->second;
+
+				keyBtnView.color = light[i][j];
+			}
+		}
+	}
+
+	kbv_draw_ctx.vertices.resize(0);
+
+	glm::vec3 global_pos(0.0f, 0.0f, 0.0f);
+
+	for (auto& it : keyBtnViewList)
+	{
+		auto& keyBtnView = it.second;
+		glm::vec3 pos1(global_pos.x + keyBtnView.x, global_pos.y + keyBtnView.y, 0.0f);
+		glm::vec3 shape(keyBtnView.w, keyBtnView.h, KEY_DEPTH);
+		pos1 /= SECTOR;
+		shape /= SECTOR;
+
+		float a = 0.7f;
+		float c = ((float)keyBtnView.color / 4) * 0.6f + 0.1f;
+
+		glm::vec4 color(a, a, a, c);
+
+		DrawKeycap(pos1, shape, PADDING, THINKNESS, color, kbv_draw_ctx.vertices);
+	}
+}
+
+void RenderModelUpdateAssignment(glm::vec3 mousePos_3DC)
+{
+	
+	ImGuiContext* g = ImGui::GetCurrentContext();
+
+	if (g->HoveredWindow == g->CurrentWindow && g->ActiveIdWindow == NULL)
+	{
+		ImGui::IsItemHovered();
+		for (auto& it : keyBtnViewList)
+		{
+			auto& keyBtnView = it.second;
+			if (wmouse_in_quad(mousePos_3DC, kbv_draw_ctx.camera.Position, keyBtnView.face_vertex))
+			{
+				keyBtnView.hover = true;
+
+				if (kbv_draw_ctx.onhover)
+					assignment_layout_kbv_hover_cb(keyBtnView);
+
+				if (kbv_draw_ctx.mouse_down)
+					kbv_draw_ctx.active_index = keyBtnView.id;
+			}
+			else
+			{
+				keyBtnView.hover = false;
+			}
+		}
+	}
+
+	kbv_draw_ctx.vertices.resize(0);
+
+	glm::vec3 global_pos(0.0f, 0.0f, 0.0f);
+
+	for (auto& it : keyBtnViewList)
+	{
+		auto& keyBtnView = it.second;
+		glm::vec3 pos1(global_pos.x + keyBtnView.x, global_pos.y + keyBtnView.y, 0.0f);
+		glm::vec3 shape(keyBtnView.w, keyBtnView.h, KEY_DEPTH);
+		pos1 /= SECTOR;
+		shape /= SECTOR;
+
+		bool modified = FunctionIsModified(KLFunctionConfigManager::GetInstance()->m_CurrentLayerType, keyBtnView.id);
+		glm::vec4 color;
+		if (keyBtnView.id == kbv_draw_ctx.active_index && modified)
+		{
+			color = MODIFIED_ACTIVE_COLOR;
+		}
+		else if (keyBtnView.id == kbv_draw_ctx.active_index)
+		{
+			color = ACTIVE_COLOR;
+		}
+		else if (keyBtnView.hover)
+		{
+			color = HOVER_COLOR;
+		}
+		else if (modified)
+		{
+			color = MODIFIED_COLOR;
+		}
+		else
+		{
+			color = DEFAULT_COLOR;
+		}
+		DrawKeycap(pos1, shape, PADDING, THINKNESS, color, kbv_draw_ctx.vertices);
+	}
+}
+
+
 void KeyboardGLInit()
 {
 	auto& style = ImGui::GetStyle();
 	ImVec4 bgcolor = style.Colors[ImGuiCol_WindowBg];
+
+
+	for (uint32_t i = 0; i < KEY_ROW_NUM; ++i)
+	{
+		for (uint32_t j = 0; j < KB_COL_NUM; ++j)
+		{
+			light[i][j] = 4;
+		}
+	}
 
 	kbv_draw_ctx.onhover = assignment_layout_kbv_hover_cb;
 	kbv_draw_ctx.camera.Position = glm::vec3(10.4f, -3.5f, 14.4f);
@@ -592,26 +713,22 @@ void ShowKeyboardWindow(bool* p_open)
 	glm::vec3 mousePos_NDC(kbv_draw_ctx.mouse_pos.x, kbv_draw_ctx.h - kbv_draw_ctx.mouse_pos.y, 0.1f);
 	glm::vec3 mousePos_3DC = glm::unProject(mousePos_NDC, modelViewMatrix, kbv_draw_ctx.projection_matrix, viewport);
 
-	for (int i = 0; i < keyBtnViewSize; ++i)
+
+	auto layoutManager = KLWindowLayoutManager::GetInstance();
+
+
+	if (KL_LAYOUT_ASSIGNMENT == layoutManager->GetLayoutType())
 	{
-		if (wmouse_in_quad(mousePos_3DC, kbv_draw_ctx.camera.Position, keyBtnViewList[i].face_vertex))
-		{
-			keyBtnViewList[i].hover = true;
-
-			if (kbv_draw_ctx.onhover)
-				kbv_draw_ctx.onhover(keyBtnViewList[i]);
-
-			if (kbv_draw_ctx.mouse_down)
-				kbv_draw_ctx.active_index = i;
-		}
-		else
-		{
-			keyBtnViewList[i].hover = false;
-		}
+		RenderModelUpdateAssignment(mousePos_3DC);
 	}
-
-	RenderModelUpdate();
-
+	else if (KL_LAYOUT_LIGHT == layoutManager->GetLayoutType())
+	{
+		RenderModelUpdateLight();
+	}
+	else
+	{
+		RenderModelUpdate();
+	}
 
 	// Draw texture
 	ImGui::Image(

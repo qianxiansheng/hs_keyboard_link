@@ -1,9 +1,9 @@
 #pragma once
 
 #define APP_X				100
-#define APP_Y				100
-#define APP_WIDTH			800
-#define APP_HEIGHT			500
+#define APP_Y				50
+#define APP_WIDTH			1080
+#define APP_HEIGHT			600
 #define APP_TITLE           L"Keyboard Link"
 #define DEFAULT_FONT		"c:\\Windows\\Fonts\\msyh.ttc"
 //#define DEFAULT_FONT		"DroidSans.ttf"
@@ -15,6 +15,12 @@
 #define WINNAME_SETTINGS "settings"
 #define WINNAME_LIGHT "light"
 #define WINNAME_MACRO "macro"
+#define WINNAME_ASSIGN_CONFIG_MGR "assign_config"
+#define WINNAME_MACRO_CONFIG_MGR "macro_config"
+
+
+#define KL_CONFIG_MAX_NAME_SIZE 32
+#define KL_CONFIG_MAX_NUM 99
 
 #ifdef _WIN32
 	//define something for Windows (32-bit and 64-bit, this part is common)
