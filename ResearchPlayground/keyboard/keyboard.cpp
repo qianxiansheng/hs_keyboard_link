@@ -457,15 +457,18 @@ static uint8_t light[KEY_ROW_NUM][KB_COL_NUM] = {
 void LightUpdate()
 {
 	static int frame_cnt = 0;
-	if (frame_cnt++ > 60)
+	static int anim_cnt = 0;
+	if (frame_cnt++ > 20)
 	{
+		anim_cnt++;
+
 		int b = 5;
 		int a = 0;
 		for (uint32_t i = 0; i < KEY_ROW_NUM; ++i)
 		{
 			for (uint32_t j = 0; j < KB_COL_NUM; ++j)
 			{
-				light[i][j] = (rand() % (b - a)) + a;
+				light[i][j] = (j + anim_cnt) % 5;
 			}
 		}
 		frame_cnt = 0;
