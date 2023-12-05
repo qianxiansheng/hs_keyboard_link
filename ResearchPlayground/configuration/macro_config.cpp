@@ -53,6 +53,10 @@ bool KLMacroConfigManager::RemoveConfig(const char* name)
 
 void SyncActionsFromPairInfo(KLMacro& macro)
 {
+	macro.actions.clear();
+	if (macro.pair_actions.size() == 0)
+		return;
+
 	std::vector<KLMacroAction> actions;
 
 	for (uint32_t i = 0; i < macro.pair_actions.size(); ++i)

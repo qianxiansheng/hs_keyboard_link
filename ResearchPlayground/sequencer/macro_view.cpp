@@ -23,9 +23,12 @@ void ShowMacroViewWindow(bool* p_open)
 		return;
 	}
 	auto window = ImGui::GetCurrentWindow();
-	window->DockNode->LocalFlags &= ~ImGuiDockNodeFlags_NoTabBar;
-	window->DockNode->LocalFlags |= ImGuiDockNodeFlags_NoWindowMenuButton;
-	window->DockNode->LocalFlags |= ImGuiDockNodeFlags_NoCloseButton;
+	auto dockNode = window->DockNode;
+	if (dockNode) {
+		dockNode->LocalFlags &= ~ImGuiDockNodeFlags_NoTabBar;
+		dockNode->LocalFlags |= ImGuiDockNodeFlags_NoWindowMenuButton;
+		dockNode->LocalFlags |= ImGuiDockNodeFlags_NoCloseButton;
+	}
 
 	auto configManager = KLMacroConfigManager::GetInstance();
 	auto imageManager = KLImageManager::GetInstance();
