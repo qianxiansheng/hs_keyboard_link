@@ -52,6 +52,9 @@ public:
 	bool RemoveCurrentConfig();
 	bool RemoveConfig(const char* name);
 
+	void SaveConfig(const char* filename = MACROS_FILE_NAME);
+	void LoadConfig(const char* filename = MACROS_FILE_NAME);
+
 	void SetCurrentConfig(uint32_t i)
 	{
 		m_CurrentConfigIndex = i;

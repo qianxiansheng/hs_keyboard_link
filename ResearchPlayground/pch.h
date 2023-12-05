@@ -24,6 +24,9 @@
 #define KL_CONFIG_MAX_NAME_SIZE 32
 #define KL_CONFIG_MAX_NUM 99
 
+constexpr auto ASSIGNMENT_FILE_NAME = "assignment.xml";
+constexpr auto MACROS_FILE_NAME = "macros.xml";
+
 #ifdef _WIN32
 	//define something for Windows (32-bit and 64-bit, this part is common)
 	#ifdef _WIN64

@@ -1,13 +1,11 @@
 <?xml version="1.0"?>
 <MACROS>
   <MACRO name="default" id="-858993460">
-    <ACTION name="E" fid="5" hid="8" start="1" end="192"/>
-    <ACTION name="E" fid="5" hid="8" start="209" end="370"/>
-    <ACTION name="Q" fid="17" hid="20" start="506" end="737"/>
-    <ACTION name="Q" fid="17" hid="20" start="885" end="1015"/>
-    <ACTION name="W" fid="23" hid="26" start="1210" end="1412"/>
-    <ACTION name="Q" fid="17" hid="20" start="1174" end="1426"/>
-    <ACTION name="D" fid="4" hid="7" start="660" end="1637"/>
+    <ACTION name="D" fid="4" hid="7" start="0" end="135"/>
+    <ACTION name="D" fid="4" hid="7" start="205" end="305"/>
+    <ACTION name="D" fid="4" hid="7" start="375" end="494"/>
+    <ACTION name="D" fid="4" hid="7" start="555" end="663"/>
+    <ACTION name="D" fid="4" hid="7" start="778" end="842"/>
   </MACRO>
   <MACRO name="&#x9876;&#x70B9;" id="-858993460">
     <ACTION name="W" fid="23" hid="26" start="0" end="121"/>
@@ -19,5 +17,11 @@
     <ACTION name="LEFT_SHIFT" fid="99" hid="2" start="1832" end="2296"/>
     <ACTION name="LEFT_SHIFT" fid="99" hid="2" start="2404" end="2646"/>
     <ACTION name="LEFT_UI" fid="101" hid="8" start="2725" end="2865"/>
+  </MACRO>
+  <MACRO name="san" id="-858993460">
+    <ACTION name="D" fid="4" hid="7" start="0" end="147"/>
+    <ACTION name="A" fid="1" hid="4" start="130" end="318"/>
+    <ACTION name="S" fid="19" hid="22" start="248" end="1229"/>
+    <ACTION name="D" fid="4" hid="7" start="334" end="495"/>
   </MACRO>
 </MACROS>

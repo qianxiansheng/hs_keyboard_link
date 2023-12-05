@@ -5,6 +5,7 @@
 
 
 
+void InitAssignmentConfigManagerWindow();
 void ShowAssignmentConfigManagerWindow(bool* p_open);
 
 

@@ -52,6 +52,16 @@ bool KLMacroConfigManager::RemoveConfig(const char* name)
 }
 
 
+void KLMacroConfigManager::SaveConfig(const char* filename)
+{
+	MacroConfigWrite(filename);
+}
+void KLMacroConfigManager::LoadConfig(const char* filename)
+{
+	MacroConfigRead(filename);
+}
+
+
 void SyncActionsFromPairInfo(KLMacro& macro)
 {
 	macro.actions.clear();
@@ -126,7 +136,7 @@ void InitMacroConfigWindow()
 {
 	auto configManager = KLMacroConfigManager::GetInstance();
 
-	MacroConfigRead();
+	configManager->LoadConfig();
 
 	for (auto& macro : configManager->m_ConfigList) {
 		SyncActionsFromPairInfo(macro);
@@ -253,7 +263,7 @@ void ShowMacroConfigManagerWindow(bool* p_open)
 	static int frame_cnt = 0;
 	if (frame_cnt++ >= 500)
 	{
-		MacroConfigWrite();
+		configManager->SaveConfig();
 
 		frame_cnt = 0;
 	}

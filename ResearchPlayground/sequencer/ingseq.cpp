@@ -228,6 +228,8 @@ void ShowINGSequencerWindow(bool* p_open)
 			config.pair_actions.push_back(info);
 		}
 
+		configManager->SaveConfig();
+
 		SyncActionsFromPairInfo(config);
 	}
 

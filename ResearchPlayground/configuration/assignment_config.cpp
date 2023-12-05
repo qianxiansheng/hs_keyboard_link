@@ -11,11 +11,21 @@
 #include "function/function.h"
 #include "resource.h"
 
-void SaveAssignedConfig()
-{
-	// TODO
-}
 
+void InitAssignmentConfigManagerWindow()
+{
+	auto configManager = KLFunctionConfigManager::GetInstance();
+
+	configManager->LoadConfig();
+
+	if (configManager->m_ConfigList.size() == 0)
+	{
+		KLFunctionConfig config;
+		config.name = "default";
+		configManager->AddConfig(config);
+		configManager->SetCurrentConfig(0);
+	}
+}
 
 static bool MyButton(const char* vgname, ImVec2 size)
 {
@@ -148,6 +158,14 @@ void ShowAssignmentConfigManagerWindow(bool* p_open)
 
 			configManager->SetCurrentConfig(i);
 		}
+	}
+
+
+	static int frame_cnt = 0;
+	if (frame_cnt++ >= 500)
+	{
+		configManager->SaveConfig();
+		frame_cnt = 0;
 	}
 	
 	ImGui::End();

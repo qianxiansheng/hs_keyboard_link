@@ -180,6 +180,8 @@ typedef enum
     // KEY_TYPE_VENDOR_DEFINE.
     KM_FN,
 
+    KM_MAXIMUM,
+
 } KEY_MapId_t;
 
 typedef enum

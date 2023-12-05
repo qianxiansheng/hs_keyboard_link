@@ -1,11 +1,13 @@
 #include "function.h"
 
+#include <unordered_map>
+
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
 
 #include "keyboard/keyboard.h"
 #include "resource.h"
-#include <unordered_map>
+#include "configuration/kl_persistence.h"
 
 // initial static member
 KLFunctionConfigManager* KLFunctionConfigManager::s_Instance = nullptr;
@@ -18,7 +20,7 @@ void KLFunctionConfigManager::AddConfig(KLFunctionConfig& config)
 void KLFunctionConfigManager::AddConfig(const char* name)
 {
 	KLFunctionConfig config(name);
-	InitDefaultConfig(config);
+	//InitDefaultConfig(config);
 	m_ConfigList.push_back(config);
 }
 bool KLFunctionConfigManager::IsConfigExists(const char* name)
@@ -43,6 +45,16 @@ bool KLFunctionConfigManager::RemoveConfig(const char* name)
 		}
 	}
 	return true;
+}
+
+
+void KLFunctionConfigManager::SaveConfig(const char* filename)
+{
+	AssignmentConfigWrite(filename);
+}
+void KLFunctionConfigManager::LoadConfig(const char* filename)
+{
+	AssignmentConfigRead(filename);
 }
 
 KLFunctionLayout::KLFunctionLayout(KLFunctionID id, const char* name, ImVec4 param, KLFunctionLayoutFlags flagbits)
@@ -423,6 +435,29 @@ KLFunctionID FindFunctionIDByMapID(KEY_MapId_t id)
 	return default_map_function_map[id];
 }
 
+KLFunction& FindDefaultFunctionByMapID(KEY_MapId_t id)
+{
+	return FindFunctionByFunctionID(FindFunctionIDByMapID(id));
+}
+
+KLFunction& FindCurrentConfigFunctionByMapID(KEY_MapId_t mid)
+{
+
+	auto configManager = KLFunctionConfigManager::GetInstance();
+
+	auto& layer = configManager->GetCurrentConfig().layers[configManager->m_CurrentLayerType];
+
+	auto it = layer.find(mid);
+	if (it == layer.end())
+	{
+		return function_map[default_map_function_map[mid]];
+	}
+	else
+	{
+		return it->second;
+	}
+}
+
 
 void InitDefaultConfig(KLFunctionConfig& temp_config)
 {
@@ -443,21 +478,10 @@ void InitDefaultConfig(KLFunctionConfig& temp_config)
 	}
 }
 
-void InitFunctionWindow()
-{
-	auto configManager = KLFunctionConfigManager::GetInstance();
-
-	KLFunctionConfig config;
-	InitDefaultConfig(config);
-	config.name = "default";
-	configManager->AddConfig(config);
-
-	configManager->SetCurrentConfig(0);
-}
-
 void DrawFunctionLayout()
 {
 	auto imageManager = KLImageManager::GetInstance();
+	auto configManager = KLFunctionConfigManager::GetInstance();
 
 	static int e;
 	ImGui::RadioButton("Default", &e, KL_LAYER_TYPE_DEFAULT); 
@@ -467,12 +491,12 @@ void DrawFunctionLayout()
 	ImGui::RadioButton("Fn2"    , &e, KL_LAYER_TYPE_FN2); 
 	ImGui::SameLine();
 	
-	auto& imgSave = imageManager->GetImage("save");
+	auto& imgSave = imageManager->GetImage("btn_save");
 	if (ImGui::ImageButton(imgSave.texID, ImVec2(imgSave.width, imgSave.height))) {
-		
+		configManager->SaveConfig();
 	}
 	ImGui::SameLine();
-	auto& imgReset = imageManager->GetImage("reset");
+	auto& imgReset = imageManager->GetImage("btn_reset");
 	if (ImGui::ImageButton(imgReset.texID, ImVec2(imgReset.width, imgReset.height))) {
 
 		auto manager = KLFunctionConfigManager::GetInstance();

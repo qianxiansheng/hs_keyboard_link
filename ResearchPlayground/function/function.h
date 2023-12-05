@@ -150,6 +150,8 @@ enum KLFunctionID
 	KLF_MEDIA_FORWARD,
 	KLF_MEDIA_BACKWARD,
 	KLF_MEDIA_TERMINATE,
+
+	KLF_MAXIMUM,
 };
 
 enum KLFunctionLayoutFlags
@@ -240,6 +242,8 @@ struct KLFunction
 
 KLFunction& FindFunctionByFunctionID(KLFunctionID id);
 KLFunctionID FindFunctionIDByMapID(KEY_MapId_t id);
+KLFunction& FindDefaultFunctionByMapID(KEY_MapId_t id);
+KLFunction& FindCurrentConfigFunctionByMapID(KEY_MapId_t mid);
 
 
 struct KLFunctionConfig
@@ -264,6 +268,9 @@ public:
 	bool IsConfigExists(const char* name);
 	bool RemoveCurrentConfig();
 	bool RemoveConfig(const char* name);
+
+	void SaveConfig(const char* filename = ASSIGNMENT_FILE_NAME);
+	void LoadConfig(const char* filename = ASSIGNMENT_FILE_NAME);
 
 	void SetCurrentConfig(uint32_t i)
 	{
@@ -293,7 +300,6 @@ private:
 
 void InitDefaultConfig(KLFunctionConfig& temp_config);
 
-void InitFunctionWindow();
 void ShowFunctionWindow(bool* p_open);
 
 #endif

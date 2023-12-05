@@ -322,13 +322,13 @@ void RenderModelInit()
 	}
 }
 
-bool FunctionIsModified(KLFunctionLayerType layerType, KEY_MapId_t kmID)
+bool FunctionIsModified(KEY_MapId_t kmID)
 {
 	auto configManager = KLFunctionConfigManager::GetInstance();
 
 	KLFunctionID fid = FindFunctionIDByMapID(kmID);
 
-	auto function = configManager->GetCurrentConfig().layers[configManager->m_CurrentLayerType][kmID];
+	auto& function = FindCurrentConfigFunctionByMapID(kmID);
 
 	if (function.id == fid)
 	{
@@ -418,10 +418,7 @@ void assignment_layout_kbv_hover_cb(KeyBtnView& view)
 	{
 		KLFunctionID fid = FindFunctionIDByMapID(view.id);
 		KLFunction defaultFunction = FindFunctionByFunctionID(fid);
-	
-		auto configManager = KLFunctionConfigManager::GetInstance();
-	
-		KLFunction currentFunction = configManager->GetCurrentConfig().layers[configManager->m_CurrentLayerType][view.id];
+		KLFunction currentFunction = FindCurrentConfigFunctionByMapID(view.id);
 	
 		char temp_buf[64];
 		sprintf(temp_buf, " [default:%s|current:%s] ", defaultFunction.name, currentFunction.name);
@@ -556,7 +553,7 @@ void RenderModelUpdateAssignment(glm::vec3 mousePos_3DC)
 		pos1 /= SECTOR;
 		shape /= SECTOR;
 
-		bool modified = FunctionIsModified(KLFunctionConfigManager::GetInstance()->m_CurrentLayerType, keyBtnView.id);
+		bool modified = FunctionIsModified(keyBtnView.id);
 		glm::vec4 color;
 		if (keyBtnView.id == kbv_draw_ctx.active_index && modified)
 		{

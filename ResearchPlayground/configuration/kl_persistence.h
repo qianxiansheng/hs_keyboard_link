@@ -3,7 +3,10 @@
 
 #include "pch.h"
 
-void MacroConfigWrite();
-void MacroConfigRead();
+void AssignmentConfigWrite(const char* filename);
+void AssignmentConfigRead(const char* filename);
+
+void MacroConfigWrite(const char* filename);
+void MacroConfigRead(const char* filename);
 
 #endif
