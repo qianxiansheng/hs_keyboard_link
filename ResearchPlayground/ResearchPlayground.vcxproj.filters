@@ -132,7 +132,7 @@
     <ClCompile Include="light\light_modify.cpp">
       <Filter>源文件\light</Filter>
     </ClCompile>
-    <ClCompile Include="configuration\persistence.cpp">
+    <ClCompile Include="configuration\kl_persistence.cpp">
       <Filter>源文件\configuration</Filter>
     </ClCompile>
   </ItemGroup>

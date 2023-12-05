@@ -178,6 +178,8 @@ void ReloadMacroConfig(KLMacro& config)
 	}
 }
 
+#include "configuration/kl_persistence.h"
+
 
 void ShowINGSequencerWindow(bool* p_open)
 {

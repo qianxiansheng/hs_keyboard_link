@@ -11,6 +11,7 @@
 #include "resource.h"
 
 #include "sequencer/ingseq.h"
+#include "kl_persistence.h"
 
 // initial static member
 KLMacroConfigManager* KLMacroConfigManager::s_Instance = nullptr;
@@ -125,10 +126,19 @@ void InitMacroConfigWindow()
 {
 	auto configManager = KLMacroConfigManager::GetInstance();
 
-	KLMacro macro;
-	macro.name = "default";
-	configManager->AddConfig(macro);
-	configManager->SetCurrentConfig(0);
+	MacroConfigRead();
+
+	for (auto& macro : configManager->m_ConfigList) {
+		SyncActionsFromPairInfo(macro);
+	}
+
+	if (configManager->m_ConfigList.size() == 0)
+	{
+		KLMacro macro;
+		macro.name = "default";
+		configManager->AddConfig(macro);
+		configManager->SetCurrentConfig(0);
+	}
 }
 
 void ShowMacroConfigManagerWindow(bool* p_open)
@@ -239,6 +249,15 @@ void ShowMacroConfigManagerWindow(bool* p_open)
 			ReloadMacroConfig(configManager->GetCurrentConfig());
 		}
 	}
+
+	static int frame_cnt = 0;
+	if (frame_cnt++ >= 500)
+	{
+		MacroConfigWrite();
+
+		frame_cnt = 0;
+	}
+
 
 	ImGui::End();
 }

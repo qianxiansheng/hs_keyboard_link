@@ -3,5 +3,7 @@
 
 #include "pch.h"
 
+void MacroConfigWrite();
+void MacroConfigRead();
 
 #endif
