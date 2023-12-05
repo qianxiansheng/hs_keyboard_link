@@ -13,6 +13,7 @@ void ShowSettingsWindow(bool* p_open)
 		ImGui::End();
 		return;
 	}
+	ImGui::GetCurrentWindow()->DockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
 
 	char xinghao[] = "--";
 	char softVersion[] = "--";

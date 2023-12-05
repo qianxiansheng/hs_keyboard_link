@@ -58,6 +58,9 @@ void ShowMenuWindow(bool* p_open)
 		ImGui::PopStyleVar();	//ImGuiStyleVar_WindowPadding
 		return;
 	}
+
+	ImGui::GetCurrentWindow()->DockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
+
 	auto imageManager = KLImageManager::GetInstance();
 	auto layoutManager = KLWindowLayoutManager::GetInstance();
 

@@ -13,6 +13,7 @@ void ShowLightModifyWindow(bool* p_open)
 		ImGui::End();
 		return;
 	}
+	ImGui::GetCurrentWindow()->DockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
 
 
 

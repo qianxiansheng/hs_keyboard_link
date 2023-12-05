@@ -186,6 +186,10 @@ void ShowINGSequencerWindow(bool* p_open)
 		ImGui::End();
 		return;
 	}
+	auto window = ImGui::GetCurrentWindow();
+	window->DockNode->LocalFlags &= ~ImGuiDockNodeFlags_NoTabBar;
+	window->DockNode->LocalFlags |= ImGuiDockNodeFlags_NoWindowMenuButton;
+	window->DockNode->LocalFlags |= ImGuiDockNodeFlags_NoCloseButton;
 
 	auto configManager = KLMacroConfigManager::GetInstance();
 

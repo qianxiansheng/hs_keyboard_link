@@ -57,6 +57,7 @@ void ShowAssignmentConfigManagerWindow(bool* p_open)
 		ImGui::End();
 		return;
 	}
+	ImGui::GetCurrentWindow()->DockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
 
 	auto configManager = KLFunctionConfigManager::GetInstance();
 	auto imageManager = KLImageManager::GetInstance();

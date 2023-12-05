@@ -132,6 +132,9 @@
     <ClCompile Include="light\light_modify.cpp">
       <Filter>源文件\light</Filter>
     </ClCompile>
+    <ClCompile Include="configuration\persistence.cpp">
+      <Filter>源文件\configuration</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="keyboard\keyboard.h">
