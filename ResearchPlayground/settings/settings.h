@@ -3,6 +3,13 @@
 
 #include "../pch.h"
 
+
+struct IdelTime
+{
+    int num;
+    int unit;
+};
+
 void ShowSettingsWindow(bool* p_open);
 
 #endif

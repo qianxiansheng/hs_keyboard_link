@@ -12,6 +12,20 @@
 #define ImGuiDCXAxisAlign(v) ImGui::SetCursorPos(ImVec2((v), ImGui::GetCursorPos().y))
 #define ImGuiDCYMargin(v) ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y + (v)))
 
+IdelTime idleTime[] = {
+	{30, 0},
+	{ 1, 1},
+	{90, 0},
+	{ 2, 1},
+	{ 3, 1},
+	{ 4, 1},
+	{ 5, 1},
+	{10, 1},
+	{15, 1},
+	{20, 1},
+};
+
+int global_setting_idle_time_idx = 0;
 
 void ShowSettingsWindow(bool* p_open)
 {
@@ -60,12 +74,17 @@ void ShowSettingsWindow(bool* p_open)
 		KLLanguageManager::GetInstance()->SetLanguage((KLLangType)item_current_2);
 	prev_item = item_current_2;
 
+	ImGui::SeparatorText(KLLABLEA(KLL_KEY_STARTUP));
 	ImGui::SeparatorText(KLLABLEA(KLL_KEY_EXIT));
 	
 
-	static int idle_time = 0;
 	ImGui::SeparatorText(KLLABLEA(KLL_KEY_SLEEP));
-	ImGui::SliderInt("##IDLE_TIME", &idle_time, 1, 20);
+	ImGui::SliderInt("##IDLE_TIME", &global_setting_idle_time_idx, 1, 9, "");
+	ImGui::SameLine();
+	ImGui::Text("%d %s", idleTime[global_setting_idle_time_idx].num, idleTime[global_setting_idle_time_idx].unit == 0 ? KLLABLEA(KLL_KEY_SECOND) : KLLABLEA(KLL_KEY_MINUTE));
+	ImGui::SameLine();
+	utils::HelpMarker(KLLABLEA(KLL_KEY_TOOLTIP_SLEEP));
+
 
 	ImGui::SeparatorText(KLLABLEA(KLL_KEY_RESET));
 	ImGui::Button(KLLABLEB(KLL_KEY_RESET_BTN, "RESET_BTN"));
