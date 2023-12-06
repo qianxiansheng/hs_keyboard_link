@@ -177,6 +177,7 @@
     <ClCompile Include="glad\glad.c" />
     <ClCompile Include="gui_win32_gl3.cpp" />
     <ClCompile Include="keyboard\keyboard.cpp" />
+    <ClCompile Include="language.cpp" />
     <ClCompile Include="layout.cpp" />
     <ClCompile Include="light\light.cpp" />
     <ClCompile Include="light\light_modify.cpp" />
@@ -191,7 +192,6 @@
   <ItemGroup>
     <ClInclude Include="keyboard\keyboard.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="sequencer\ingseq.h" />
     <ClInclude Include="settings\settings.h" />
   </ItemGroup>

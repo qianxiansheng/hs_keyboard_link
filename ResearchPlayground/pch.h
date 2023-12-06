@@ -26,6 +26,7 @@
 
 constexpr auto ASSIGNMENT_FILE_NAME = "assignment.xml";
 constexpr auto MACROS_FILE_NAME = "macros.xml";
+constexpr auto LANGUAGE_FILE_NAME = "language.xml";
 
 #ifdef _WIN32
 	//define something for Windows (32-bit and 64-bit, this part is common)

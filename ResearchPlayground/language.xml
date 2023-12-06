@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<PROFILE>
+  <LANGUAGE type="0">
+    <ENTRY type="1" value="&#x5168;&#x5C40;&#x8BBE;&#x7F6E;"/>
+    <ENTRY type="2" value="&#x8BBE;&#x5907;&#x4FE1;&#x606F;"/>
+    <ENTRY type="3" value="&#x8BED;&#x8A00;"/>
+    <ENTRY type="4" value="&#x542F;&#x52A8;"/>
+    <ENTRY type="5" value="&#x9000;&#x51FA;"/>
+    <ENTRY type="6" value="&#x4F11;&#x7720;"/>
+    <ENTRY type="7" value="&#x6062;&#x590D;"/>
+    <ENTRY type="8" value="&#x8BBE;&#x5907;&#x578B;&#x53F7;"/>
+    <ENTRY type="9" value="&#x82AF;&#x7247;&#x578B;&#x53F7;"/>
+    <ENTRY type="10" value="&#x786C;&#x4EF6;&#x7248;&#x672C;"/>
+    <ENTRY type="11" value="&#x8F6F;&#x4EF6;&#x7248;&#x672C;"/>
+    <ENTRY type="12" value="&#x5F00;&#x673A;&#x81EA;&#x52A8;&#x8FD0;&#x884C;"/>
+    <ENTRY type="13" value="&#x5F53;&#x6309;X&#x6309;&#x94AE;&#x65F6;"/>
+    <ENTRY type="14" value="&#x76F4;&#x63A5;&#x9000;&#x51FA;"/>
+    <ENTRY type="15" value="&#x7F29;&#x5C0F;&#x5230;&#x53F3;&#x4E0B;&#x89D2;"/>
+    <ENTRY type="16" value="&#x5206;&#x949F;"/>
+    <ENTRY type="17" value="&#x79D2;"/>
+    <ENTRY type="18" value="&#x5904;&#x4E8E;&#x65E0;&#x7EBF;&#x6A21;&#x5F0F;&#x4E2D;&#x7684;&#x8BBE;&#x5907;&#xFF0C;&#x7A7A;&#x95F2;&#x6307;&#x5B9A;&#x65F6;&#x95F4;&#x540E;&#x4F1A;&#x8FDB;&#x5165;&#x4F11;&#x7720;&#x6A21;&#x5F0F;"/>
+    <ENTRY type="19" value="&#x6062;&#x590D;&#x9ED8;&#x8BA4;"/>
+    <ENTRY type="20" value="&#x6062;&#x590D;&#x5230;&#x51FA;&#x5382;&#x65F6;&#x7684;&#x8BBE;&#x5B9A;"/>
+    
+    <ENTRY type="21" value="&#x6309;&#x5EFA;&#x6307;&#x6D3E;"/>
+    <ENTRY type="22" value="&#x952E;&#x76D8;&#x706F;&#x6548;"/>
+    <ENTRY type="23" value="&#x6548;&#x679C;"/>
+    <ENTRY type="24" value="&#x5B8F;&#x7F16;&#x8F91;&#x9762;&#x677F;"/>
+    <ENTRY type="25" value="&#x914D;&#x7F6E;&#x6587;&#x4EF6;"/>
+    <ENTRY type="26" value="&#x5BFC;&#x5165;"/>
+    <ENTRY type="27" value="&#x5BFC;&#x51FA;"/>
+    <ENTRY type="28" value="&#x91CD;&#x547D;&#x540D;"/>
+    <ENTRY type="29" value="&#x5220;&#x9664;"/>
+    <ENTRY type="30" value="&#x65B0;&#x5EFA;"/>
+    <ENTRY type="31" value="&#x9884;&#x89C8;"/>
+
+    
+  </LANGUAGE>
+  <LANGUAGE type="1">
+    <ENTRY type="1" value="Global"/>
+    <ENTRY type="2" value="Device Info"/>
+    <ENTRY type="3" value="Language"/>
+    <ENTRY type="4" value="Startup"/>
+    <ENTRY type="5" value="Exit"/>
+    <ENTRY type="6" value="Sleep"/>
+    <ENTRY type="7" value="Reset"/>
+    <ENTRY type="8" value="Device model"/>
+    <ENTRY type="9" value="Chip model"/>
+    <ENTRY type="10" value="Hardware version"/>
+    <ENTRY type="11" value="Software version"/>
+    <ENTRY type="12" value="Auto run"/>
+    <ENTRY type="13" value="When you click the X button"/>
+    <ENTRY type="14" value="Exit"/>
+    <ENTRY type="15" value="Resides in the system tray area"/>
+    <ENTRY type="16" value="Min"/>
+    <ENTRY type="17" value="Second"/>
+    <ENTRY type="18" value="Devices in wireless mode will enter sleep mode after a specified amount of idle time"/>
+    <ENTRY type="19" value="Reset"/>
+    <ENTRY type="20" value="Restore the device to the factory settings"/>
+    
+    <ENTRY type="21" value="Key assignment"/>
+    <ENTRY type="22" value="Light effect"/>
+    <ENTRY type="23" value="Effect"/>
+    <ENTRY type="24" value="Macro edit"/>
+    <ENTRY type="25" value="profile"/>
+    <ENTRY type="26" value="import"/>
+    <ENTRY type="27" value="export"/>
+    <ENTRY type="28" value="rename"/>
+    <ENTRY type="29" value="delete"/>
+    <ENTRY type="30" value="new"/>
+    <ENTRY type="31" value="preview"/>
+  </LANGUAGE>
+</PROFILE>

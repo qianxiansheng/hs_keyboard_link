@@ -6,6 +6,13 @@
 #include "imgui/imgui_internal.h"
 #include "util/utils.h"
 
+#include "language.h"
+
+
+#define ImGuiDCXAxisAlign(v) ImGui::SetCursorPos(ImVec2((v), ImGui::GetCursorPos().y))
+#define ImGuiDCYMargin(v) ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y + (v)))
+
+
 void ShowSettingsWindow(bool* p_open)
 {
 	ImGuiWindowFlags window_flags = 0;
@@ -15,27 +22,55 @@ void ShowSettingsWindow(bool* p_open)
 	}
 	ImGui::GetCurrentWindow()->DockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
 
-	char xinghao[] = "--";
-	char softVersion[] = "--";
-	char hardVersion[] = "--";
+	char device_model[] = "-";
+	char chip_model[] = "-";
+	char hard_version[] = "-";
+	char soft_version[] = "-";
 
-	ImGui::SeparatorText(u8"设备信息");
-	ImGui::Text(u8"产品型号：%s", xinghao);
-	ImGui::Text(u8"软件版本：%s", softVersion);
-	ImGui::Text(u8"硬件版本：%s", hardVersion);
+	float c1 = 150.0f;
+
+	ImGui::SeparatorText(KLLABLEA(KLL_KEY_DEVICE_INFO));
+	ImGui::Text(KLLABLEA(KLL_KEY_DEVICE_MODEL));
+	ImGui::SameLine();
+	ImGuiDCXAxisAlign(c1);
+	ImGui::Text("%s", device_model);
+
+	ImGui::Text(KLLABLEA(KLL_KEY_CHIP_MODEL));
+	ImGui::SameLine();
+	ImGuiDCXAxisAlign(c1);
+	ImGui::Text("%s", chip_model);
+
+	ImGui::Text(KLLABLEA(KLL_KEY_HARDWARE_VERSION));
+	ImGui::SameLine();
+	ImGuiDCXAxisAlign(c1);
+	ImGui::Text("%s", hard_version);
+
+	ImGui::Text(KLLABLEA(KLL_KEY_SOFTWARE_VERSION));
+	ImGui::SameLine();
+	ImGuiDCXAxisAlign(c1);
+	ImGui::Text("%s", soft_version);
 
 
-	ImGui::SeparatorText(u8"语言");
+	ImGui::SeparatorText(KLLABLEA(KLL_KEY_LANGUAGE));
 
 	static int item_current_2 = 0;
+	static int prev_item = 0;
 	ImGui::Combo("##LANGUAGE", &item_current_2, u8"简体中文\0English\0\0");
+	if (prev_item != item_current_2)
+		KLLanguageManager::GetInstance()->SetLanguage((KLLangType)item_current_2);
+	prev_item = item_current_2;
+
+	ImGui::SeparatorText(KLLABLEA(KLL_KEY_EXIT));
+	
 
 	static int idle_time = 0;
-	ImGui::SeparatorText(u8"休眠");
+	ImGui::SeparatorText(KLLABLEA(KLL_KEY_SLEEP));
 	ImGui::SliderInt("##IDLE_TIME", &idle_time, 1, 20);
 
-	ImGui::SeparatorText(u8"恢复出厂设置");
-	ImGui::Button(u8"恢复出厂设置");
+	ImGui::SeparatorText(KLLABLEA(KLL_KEY_RESET));
+	ImGui::Button(KLLABLEB(KLL_KEY_RESET_BTN, "RESET_BTN"));
+	ImGui::SameLine();
+	utils::HelpMarker(KLLABLEA(KLL_KEY_RESTORE_FACTORY_SETTINGS));
 
 	ImGui::End();
 }

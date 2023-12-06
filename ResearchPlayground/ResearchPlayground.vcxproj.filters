@@ -81,9 +81,6 @@
     <ClCompile Include="..\common\imgui\extensions\ImSequencer.cpp">
       <Filter>源文件\imgui\extension</Filter>
     </ClCompile>
-    <ClCompile Include="sequencer\ingseq.cpp">
-      <Filter>源文件\sequencer</Filter>
-    </ClCompile>
     <ClCompile Include="..\common\util\utils.cpp">
       <Filter>源文件\common</Filter>
     </ClCompile>
@@ -135,6 +132,12 @@
     <ClCompile Include="configuration\kl_persistence.cpp">
       <Filter>源文件\configuration</Filter>
     </ClCompile>
+    <ClCompile Include="sequencer\ingseq.cpp">
+      <Filter>源文件\sequencer</Filter>
+    </ClCompile>
+    <ClCompile Include="language.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="keyboard\keyboard.h">
@@ -148,9 +151,6 @@
     </ClInclude>
     <ClInclude Include="settings\settings.h">
       <Filter>源文件\settings</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
