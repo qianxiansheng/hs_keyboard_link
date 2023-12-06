@@ -186,6 +186,7 @@
     <ClCompile Include="resources.cpp" />
     <ClCompile Include="sequencer\ingseq.cpp" />
     <ClCompile Include="sequencer\macro_view.cpp" />
+    <ClCompile Include="settings\program_setting.cpp" />
     <ClCompile Include="settings\settings.cpp" />
     <ClCompile Include="svgloader.cpp" />
   </ItemGroup>
@@ -193,6 +194,7 @@
     <ClInclude Include="keyboard\keyboard.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="sequencer\ingseq.h" />
+    <ClInclude Include="settings\program_setting.h" />
     <ClInclude Include="settings\settings.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

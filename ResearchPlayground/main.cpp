@@ -110,6 +110,7 @@ bool main_init(int argc, char* argv[])
 	mySequence.mFrameMin = 0;
 	mySequence.mFrameMax = 50000;
 
+	InitSettingsWindow();
 	InitAssignmentConfigManagerWindow();
 	InitMacroConfigWindow();
 

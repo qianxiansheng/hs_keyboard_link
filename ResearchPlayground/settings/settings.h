@@ -10,6 +10,8 @@ struct IdelTime
     int unit;
 };
 
+void InitSettingsWindow();
+
 void ShowSettingsWindow(bool* p_open);
 
 #endif
