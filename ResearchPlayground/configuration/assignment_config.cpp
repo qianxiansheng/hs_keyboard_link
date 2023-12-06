@@ -107,8 +107,8 @@ void ShowAssignmentConfigManagerWindow(bool* p_open)
 		}
 	}
 	if (utils::ConfirmEx(&show_del_confirm, u8"É¾³ýÅäÖÃ", u8"ÊÇ·ñÈ·ÈÏÉ¾³ý")) {
-		configManager->SetCurrentConfig(0);
 		configManager->RemoveCurrentConfig();
+		configManager->SetCurrentConfig(0);
 	}
 
 	ImGui::SameLine();

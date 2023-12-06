@@ -199,13 +199,8 @@ void ShowMacroConfigManagerWindow(bool* p_open)
 		}
 	}
 	if (utils::ConfirmEx(&show_del_confirm, u8"É¾³ýÅäÖÃ", u8"ÊÇ·ñÈ·ÈÏÉ¾³ý")) {
+		configManager->RemoveCurrentConfig();
 		configManager->SetCurrentConfig(0);
-		for (auto it = configManager->m_ConfigList.begin(); it != configManager->m_ConfigList.end(); ++it) {
-			if (it->name == configManager->GetCurrentConfig().name) {
-				configManager->m_ConfigList.erase(it);
-				break;
-			}
-		}
 	}
 
 	ImGui::SameLine();
