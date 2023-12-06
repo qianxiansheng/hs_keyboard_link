@@ -98,14 +98,14 @@ int AutoRunRegisterSet()
 		RegCloseKey(hKey);
 
 		if (result == ERROR_SUCCESS) {
-			std::wcout << L"程序已设置为开机自动启动。" << std::endl;
+			std::cout << L"程序已设置为开机自动启动。" << std::endl;
 		}
 		else {
-			std::wcerr << L"设置开机自动启动失败，错误码：" << result << std::endl;
+			std::cerr << L"设置开机自动启动失败，错误码：" << result << std::endl;
 		}
 	}
 	else {
-		std::wcerr << L"打开注册表键失败，错误码：" << result << std::endl;
+		std::cerr << L"打开注册表键失败，错误码：" << result << std::endl;
 	}
 
 	return 0;

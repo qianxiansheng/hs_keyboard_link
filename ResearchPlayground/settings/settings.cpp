@@ -113,8 +113,7 @@ void ShowSettingsWindow(bool* p_open)
 	ToggleButton("##TOGGLE_AUTO_RUN", &autoRunCurr);
 	if (autoRunPrev != autoRunCurr)
 	{
-		autoRunPrev = autoRunCurr;
-		global_setting_auto_run = autoRunCurr;
+		global_setting_auto_run = autoRunPrev = autoRunCurr;
 		if (global_setting_auto_run) {
 			AutoRunRegisterSet();
 		} else {
@@ -138,8 +137,7 @@ void ShowSettingsWindow(bool* p_open)
 	ToggleButton("##TOGGLE_ENABLE_SLEEP", &enableSleepCurr);
 	if (enableSleepPrev != enableSleepCurr)
 	{
-		enableSleepPrev = enableSleepCurr;
-		global_setting_enable_sleep = enableSleepCurr;
+		global_setting_enable_sleep = enableSleepPrev = enableSleepCurr;
 		if (global_setting_enable_sleep) {
 			/* Enable Sleep Mode */
 		} else {

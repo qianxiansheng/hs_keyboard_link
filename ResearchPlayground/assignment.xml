@@ -1,33 +1,17 @@
 <?xml version="1.0"?>
 <CONFIGURATION>
-  <CONFIG name="default">
-    <LAYER type="default">
-      <ASSIGNMENT keymapid="73" fid="66" src="DELETE" dst="F12" type="0" subtype="0" hid="69"/>
-      <ASSIGNMENT keymapid="25" fid="15" src="Y" dst="O" type="0" subtype="0" hid="18"/>
-      <ASSIGNMENT keymapid="12" fid="46" src="L" dst="BACKSLASH" type="0" subtype="0" hid="49"/>
-      <ASSIGNMENT keymapid="37" fid="41" src="ENTER" dst="SPACE" type="0" subtype="0" hid="44"/>
-      <ASSIGNMENT keymapid="15" fid="64" src="O" dst="F10" type="0" subtype="0" hid="67"/>
-      <ASSIGNMENT keymapid="95" fid="85" src="KP_9" dst="KP_PLUS" type="0" subtype="0" hid="87"/>
-      <ASSIGNMENT keymapid="39" fid="21" src="BACKSPACE" dst="U" type="0" subtype="0" hid="24"/>
-      <ASSIGNMENT keymapid="94" fid="91" src="KP_8" dst="KP_5" type="0" subtype="0" hid="93"/>
-    </LAYER>
-    <LAYER type="fn1">
-      <ASSIGNMENT keymapid="18" fid="107" src="R" dst="Play" type="2" hid="0"/>
-      <ASSIGNMENT keymapid="20" fid="108" src="T" dst="Forward" type="2" hid="1"/>
-      <ASSIGNMENT keymapid="25" fid="109" src="Y" dst="Backward" type="2" hid="2"/>
-      <ASSIGNMENT keymapid="21" fid="110" src="U" dst="Terminate" type="2" hid="3"/>
-    </LAYER>
-    <LAYER type="fn2">
-      <ASSIGNMENT keymapid="41" fid="60" src="SPACE" dst="F6" type="0" subtype="0" hid="63"/>
-    </LAYER>
-  </CONFIG>
-  <CONFIG name="Hello">
+  <CONFIG name="New Config 0">
     <LAYER type="default">
       <ASSIGNMENT keymapid="23" fid="79" src="W" dst="UP" type="0" subtype="0" hid="82"/>
       <ASSIGNMENT keymapid="19" fid="78" src="S" dst="DOWN" type="0" subtype="0" hid="81"/>
       <ASSIGNMENT keymapid="1" fid="77" src="A" dst="LEFT" type="0" subtype="0" hid="80"/>
       <ASSIGNMENT keymapid="4" fid="76" src="D" dst="RIGHT" type="0" subtype="0" hid="79"/>
     </LAYER>
+    <LAYER type="fn1"/>
+    <LAYER type="fn2"/>
+  </CONFIG>
+  <CONFIG name="New Config 1">
+    <LAYER type="default"/>
     <LAYER type="fn1"/>
     <LAYER type="fn2"/>
   </CONFIG>

@@ -1,39 +1,19 @@
 <?xml version="1.0"?>
 <MACROS>
-  <MACRO name="&#x5B8F;1" id="-858993460">
-    <ACTION name="A" fid="1" hid="4" start="2" end="188"/>
-    <ACTION name="D" fid="4" hid="7" start="117" end="264"/>
-    <ACTION name="D" fid="4" hid="7" start="316" end="422"/>
-    <ACTION name="A" fid="1" hid="4" start="529" end="753"/>
-    <ACTION name="S" fid="19" hid="22" start="643" end="810"/>
-    <ACTION name="Q" fid="17" hid="20" start="931" end="1312"/>
-    <ACTION name="D" fid="4" hid="7" start="1602" end="1754"/>
-    <ACTION name="D" fid="4" hid="7" start="1809" end="1926"/>
-    <ACTION name="D" fid="4" hid="7" start="1967" end="2087"/>
-    <ACTION name="D" fid="4" hid="7" start="2145" end="2248"/>
-    <ACTION name="D" fid="4" hid="7" start="2306" end="2424"/>
-    <ACTION name="D" fid="4" hid="7" start="2475" end="2607"/>
-    <ACTION name="Q" fid="17" hid="20" start="2679" end="2883"/>
-    <ACTION name="W" fid="23" hid="26" start="2736" end="2892"/>
-    <ACTION name="D" fid="4" hid="7" start="2753" end="2934"/>
-    <ACTION name="Q" fid="17" hid="20" start="3928" end="4270"/>
-    <ACTION name="W" fid="23" hid="26" start="4156" end="4292"/>
-    <ACTION name="D" fid="4" hid="7" start="3911" end="4300"/>
-    <ACTION name="Q" fid="17" hid="20" start="4346" end="4479"/>
-    <ACTION name="Q" fid="17" hid="20" start="4585" end="4695"/>
-    <ACTION name="W" fid="23" hid="26" start="4601" end="4725"/>
-    <ACTION name="D" fid="4" hid="7" start="4531" end="4856"/>
-  </MACRO>
   <MACRO name="&#x5B8F;2" id="-858993460">
-    <ACTION name="W" fid="23" hid="26" start="0" end="121"/>
-    <ACTION name="D" fid="4" hid="7" start="118" end="228"/>
-    <ACTION name="D" fid="4" hid="7" start="275" end="372"/>
-    <ACTION name="D" fid="4" hid="7" start="417" end="549"/>
-    <ACTION name="D" fid="4" hid="7" start="576" end="688"/>
-    <ACTION name="D" fid="4" hid="7" start="725" end="848"/>
-    <ACTION name="LEFT_SHIFT" fid="99" hid="2" start="1832" end="2296"/>
-    <ACTION name="LEFT_SHIFT" fid="99" hid="2" start="2404" end="2646"/>
-    <ACTION name="LEFT_UI" fid="101" hid="8" start="2725" end="2865"/>
+    <ACTION name="D" fid="4" hid="7" start="0" end="170"/>
+    <ACTION name="W" fid="23" hid="26" start="186" end="367"/>
+    <ACTION name="D" fid="4" hid="7" start="336" end="517"/>
+    <ACTION name="A" fid="1" hid="4" start="589" end="796"/>
+    <ACTION name="W" fid="23" hid="26" start="859" end="1031"/>
+    <ACTION name="D" fid="4" hid="7" start="845" end="1408"/>
+    <ACTION name="D" fid="4" hid="7" start="1499" end="1758"/>
+    <ACTION name="D" fid="4" hid="7" start="1993" end="2678"/>
+    <ACTION name="A" fid="1" hid="4" start="2283" end="2690"/>
+    <ACTION name="W" fid="23" hid="26" start="2795" end="3004"/>
+    <ACTION name="D" fid="4" hid="7" start="2912" end="3141"/>
+    <ACTION name="A" fid="1" hid="4" start="3370" end="3710"/>
+    <ACTION name="D" fid="4" hid="7" start="3352" end="3763"/>
   </MACRO>
   <MACRO name="&#x5B8F;3" id="-858993460">
     <ACTION name="D" fid="4" hid="7" start="0" end="147"/>
