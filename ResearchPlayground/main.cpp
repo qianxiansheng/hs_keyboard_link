@@ -132,7 +132,7 @@ static ImVec2 operator+(const ImVec2& a, const int b) {
 }
 #endif
 
-extern HWND hwnd;
+extern HWND hWnd;
 
 static void CustomizeTitle()
 {
@@ -167,14 +167,14 @@ static void CustomizeTitle()
 		{
 			isDraging = true;
 			prevMousePos = io.MousePos;
-			SetCapture(hwnd);
+			SetCapture(hWnd);
 		}
 		if (io.MouseDoubleClicked[0])
 		{
-			if (IsZoomed(hwnd))
-				ShowWindow(hwnd, SW_RESTORE);
+			if (IsZoomed(hWnd))
+				ShowWindow(hWnd, SW_RESTORE);
 			else
-				ShowWindow(hwnd, SW_MAXIMIZE);
+				ShowWindow(hWnd, SW_MAXIMIZE);
 		}
 	}
 	if (isDraging)
@@ -184,8 +184,8 @@ static void CustomizeTitle()
 		int deltaX = io.MousePos.x - prevMousePos.x;
 		int deltaY = io.MousePos.y - prevMousePos.y;
 		RECT windowRect;
-		GetWindowRect(hwnd, &windowRect);
-		MoveWindow(hwnd, 
+		GetWindowRect(hWnd, &windowRect);
+		MoveWindow(hWnd,
 			windowRect.left + deltaX, 
 			windowRect.top + deltaY,
 			windowRect.right - windowRect.left, 
@@ -216,14 +216,14 @@ static void CustomizeTitle()
 		ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
 		int deltaX = io.MousePos.x - prevMousePos.x;
 		RECT windowRect;
-		GetWindowRect(hwnd, &windowRect);
+		GetWindowRect(hWnd, &windowRect);
 
 		int diff = (windowRect.right - windowRect.left + deltaX) - minWidth;
 
 		if (diff < 0)
 			deltaX -= diff;
 
-		MoveWindow(hwnd,
+		MoveWindow(hWnd,
 			windowRect.left,
 			windowRect.top,
 			windowRect.right - windowRect.left + deltaX,
@@ -255,14 +255,14 @@ static void CustomizeTitle()
 		ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
 		int deltaX = io.MousePos.x - prevMousePos.x;
 		RECT windowRect;
-		GetWindowRect(hwnd, &windowRect);
+		GetWindowRect(hWnd, &windowRect);
 
 		int diff = (windowRect.right - windowRect.left - deltaX) - minWidth;
 
 		if (diff < 0)
 			deltaX += diff;
 
-		MoveWindow(hwnd,
+		MoveWindow(hWnd,
 			windowRect.left + deltaX,
 			windowRect.top,
 			windowRect.right - windowRect.left - deltaX,
@@ -294,14 +294,14 @@ static void CustomizeTitle()
 		ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNS);
 		int deltaY = io.MousePos.y - prevMousePos.y;
 		RECT windowRect;
-		GetWindowRect(hwnd, &windowRect);
+		GetWindowRect(hWnd, &windowRect);
 
 		int diff = (windowRect.bottom - windowRect.top + deltaY) - minWidth;
 
 		if (diff < 0)
 			deltaY -= diff;
 
-		MoveWindow(hwnd,
+		MoveWindow(hWnd,
 			windowRect.left,
 			windowRect.top,
 			windowRect.right - windowRect.left,
@@ -333,14 +333,14 @@ static void CustomizeTitle()
 		ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNS);
 		int deltaY = io.MousePos.y - prevMousePos.y;
 		RECT windowRect;
-		GetWindowRect(hwnd, &windowRect);
+		GetWindowRect(hWnd, &windowRect);
 
 		int diff = (windowRect.bottom - windowRect.top - deltaY) - minWidth;
 
 		if (diff < 0)
 			deltaY += diff;
 
-		MoveWindow(hwnd,
+		MoveWindow(hWnd,
 			windowRect.left,
 			windowRect.top + deltaY,
 			windowRect.right - windowRect.left,
@@ -388,16 +388,16 @@ static void CustomizeTitle()
 	// Maximize button
 	static bool btnMouseDown2 = false;
 	drawItem(ImVec2(titleRect.Max.x - (2 * itemHeight), titleRect.Min.y), 0xFF00FFFF, 0xFF00BFBF, 0xFF007F7F, &btnMouseDown2, [&](void) {
-		if (IsZoomed(hwnd))
-			ShowWindow(hwnd, SW_RESTORE);
+		if (IsZoomed(hWnd))
+			ShowWindow(hWnd, SW_RESTORE);
 		else
-			ShowWindow(hwnd, SW_MAXIMIZE);
+			ShowWindow(hWnd, SW_MAXIMIZE);
 	});
 
 	// Minimize button
 	static bool btnMouseDown3 = false;
 	drawItem(ImVec2(titleRect.Max.x - (3 * itemHeight), titleRect.Min.y), 0xFF00FF00, 0xFF00BF00, 0xFF007F00, &btnMouseDown3, [&](void) {
-		ShowWindow(hwnd, SW_MINIMIZE); 
+		ShowWindow(hWnd, SW_MINIMIZE);
 	});
 
 }
@@ -406,7 +406,7 @@ static void ShowRootWindowMenu()
 {
 	if (ImGui::BeginMenuBar()) {
 
-		//CustomizeTitle();
+		CustomizeTitle();
 
 		if (ImGui::BeginMenu("View")) {
 
@@ -481,18 +481,5 @@ int main_gui()
 {
 	ShowRootWindow(&show_root_window);
 
-
-
 	return 0;
 }
-
-
-//int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR, _In_ int nShowCmd)
-//{
-//	return main_(__argc, __argv);
-//}
-//
-//int main()
-//{
-//	return main_(__argc, __argv);
-//}
