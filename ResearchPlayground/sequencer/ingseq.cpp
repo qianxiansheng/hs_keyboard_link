@@ -8,8 +8,7 @@
 #include "util/utils.h"
 #include "function/function.h"
 
-
-#include "gui_win32_gl3.h"
+#include "keylink.h"
 
 int MySequence::GetFrameMin() const {
 	return mFrameMin;

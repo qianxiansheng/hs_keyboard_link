@@ -111,9 +111,6 @@
     <ClCompile Include="configuration\assignment_config.cpp">
       <Filter>源文件\configuration</Filter>
     </ClCompile>
-    <ClCompile Include="gui_win32_gl3.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="svgloader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -141,6 +138,9 @@
     <ClCompile Include="settings\program_setting.cpp">
       <Filter>源文件\settings</Filter>
     </ClCompile>
+    <ClCompile Include="keylink.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="keyboard\keyboard.h">
@@ -158,5 +158,18 @@
     <ClInclude Include="settings\program_setting.h">
       <Filter>源文件\settings</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ResearchPlayground.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="app.ico">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

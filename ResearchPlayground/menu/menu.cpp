@@ -7,7 +7,6 @@
 #include "layout.h"
 #include "resources.h"
 
-#include "gui_win32_gl3.h"
 
 
 #ifndef IMGUI_DEFINE_MATH_OPERATORS

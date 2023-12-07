@@ -10,7 +10,6 @@
 #include "imgui/imgui_internal.h"
 
 #include "layout.h"
-#include "gui_win32_gl3.h"
 
 #include "keyboard/keyboard.h"
 #include "sequencer/ingseq.h"
@@ -407,7 +406,7 @@ static void ShowRootWindowMenu()
 {
 	if (ImGui::BeginMenuBar()) {
 
-		CustomizeTitle();
+		//CustomizeTitle();
 
 		if (ImGui::BeginMenu("View")) {
 
@@ -488,12 +487,12 @@ int main_gui()
 }
 
 
-int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR, _In_ int nShowCmd)
-{
-	return main_(__argc, __argv);
-}
-
-int main()
-{
-	return main_(__argc, __argv);
-}
+//int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR, _In_ int nShowCmd)
+//{
+//	return main_(__argc, __argv);
+//}
+//
+//int main()
+//{
+//	return main_(__argc, __argv);
+//}

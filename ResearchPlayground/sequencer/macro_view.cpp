@@ -12,8 +12,6 @@
 #include "configuration/macro_config.h"
 #include "resources.h"
 
-#include "gui_win32_gl3.h"
-
 
 void ShowMacroViewWindow(bool* p_open)
 {
