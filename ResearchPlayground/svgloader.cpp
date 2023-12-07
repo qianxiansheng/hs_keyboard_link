@@ -207,7 +207,7 @@ SVGPathData parseSvgPathData(char* data)
     {
         if (*p == '\0')
         {
-            printf("%c %s\n", cmd, pData + a);
+            //printf("%c %s\n", cmd, pData + a);
             parseSvgPathArgs(cmd, pData + a, output);
             break;
         }
@@ -245,7 +245,7 @@ SVGPathData parseSvgPathData(char* data)
                 char tmp = *p;
 
                 *p = '\0';
-                printf("%c %s\n", cmd, pData + a);
+                //printf("%c %s\n", cmd, pData + a);
                 parseSvgPathArgs(cmd, pData + a, output);
 
                 cmd = tmp;

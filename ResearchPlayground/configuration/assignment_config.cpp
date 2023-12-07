@@ -9,7 +9,7 @@
 #include "util/utils.h"
 
 #include "function/function.h"
-#include "resource.h"
+#include "resources.h"
 
 
 void InitAssignmentConfigManagerWindow()

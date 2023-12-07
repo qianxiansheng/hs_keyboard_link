@@ -5,7 +5,7 @@
 #include "util/utils.h"
 
 #include "layout.h"
-#include "resource.h"
+#include "resources.h"
 
 #include "gui_win32_gl3.h"
 

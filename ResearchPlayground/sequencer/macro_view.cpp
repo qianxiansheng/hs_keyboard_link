@@ -10,7 +10,7 @@
 
 #include "function/function.h"
 #include "configuration/macro_config.h"
-#include "resource.h"
+#include "resources.h"
 
 #include "gui_win32_gl3.h"
 

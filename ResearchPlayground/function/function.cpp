@@ -6,7 +6,7 @@
 #include "imgui/imgui_internal.h"
 
 #include "keyboard/keyboard.h"
-#include "resource.h"
+#include "resources.h"
 #include "configuration/kl_persistence.h"
 
 // initial static member

@@ -1,4 +1,4 @@
-#include "resource.h"
+#include "resources.h"
 
 #include "glad/glad/glad.h"
 #include "stb_image.h"

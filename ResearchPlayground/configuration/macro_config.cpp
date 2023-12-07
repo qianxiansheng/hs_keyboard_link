@@ -8,7 +8,7 @@
 
 #include "util/utils.h"
 
-#include "resource.h"
+#include "resources.h"
 
 #include "sequencer/ingseq.h"
 #include "kl_persistence.h"
