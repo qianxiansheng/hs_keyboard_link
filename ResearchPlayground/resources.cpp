@@ -104,7 +104,7 @@ KLImageManager::KLImageManager() {
         image.width = width;
         image.height = height;
         image.channels = channels;
-        image.texID = (ImTextureID)textureID;
+        image.texID = VOID_PTR_CAST(textureID);
     }
 }
 

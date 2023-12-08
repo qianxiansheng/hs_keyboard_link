@@ -73,7 +73,7 @@ void ShowMenuWindow(bool* p_open)
 	auto& imgmacro1 = imageManager->GetImage("frame_macro_gray");
 	auto& imgmacro2 = imageManager->GetImage("frame_macro_orange");
 
-	ImVec2 size(imgsetti1.width, imgsetti1.height);
+	ImVec2 size((float)imgsetti1.width, (float)imgsetti1.height);
 
 	static int selected = 0;
 
@@ -102,7 +102,7 @@ void ShowMenuWindow(bool* p_open)
 	static int fps = 0;
 	static int frame_cnt = 0;
 	frame_cnt++;
-	static long long time = 0.0f;
+	static long long time = 0;
 	long long curr = utils::get_current_system_time_us();
 	if (curr - time >= 1000000)
 	{

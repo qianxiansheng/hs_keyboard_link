@@ -521,12 +521,12 @@ void DrawFunctionLayout()
 	ImGui::SameLine();
 	
 	auto& imgSave = imageManager->GetImage("btn_save");
-	if (ImGui::ImageButton(imgSave.texID, ImVec2(imgSave.width, imgSave.height))) {
+	if (ImGui::ImageButton(imgSave.texID, ImVec2((float)imgSave.width, (float)imgSave.height))) {
 		configManager->SaveConfig();
 	}
 	ImGui::SameLine();
 	auto& imgReset = imageManager->GetImage("btn_reset");
-	if (ImGui::ImageButton(imgReset.texID, ImVec2(imgReset.width, imgReset.height))) {
+	if (ImGui::ImageButton(imgReset.texID, ImVec2((float)imgReset.width, (float)imgReset.height))) {
 
 		auto manager = KLFunctionConfigManager::GetInstance();
 
@@ -553,7 +553,7 @@ void DrawFunctionLayout()
 
 	ImGui::SetWindowFontScale(0.6f);
 
-	for (int i = 0; i < functionLayoutSize; ++i)
+	for (uint32_t i = 0; i < functionLayoutSize; ++i)
 	{
 		pos.x += d * functionLayout[i].x;
 		pos.y += d * functionLayout[i].y;

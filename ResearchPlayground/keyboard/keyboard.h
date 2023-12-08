@@ -504,8 +504,8 @@ struct KeyboardGLContext
 {
     int x = 0;
     int y = 0;
-    int w = 600;
-    int h = 300;
+    int w = KL_KB_VIEW_WIDTH;
+    int h = KL_KB_VIEW_HEIGHT;
 
     std::unique_ptr<Shader> shader;
     Camera camera;

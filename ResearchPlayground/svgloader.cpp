@@ -4,6 +4,7 @@
 #include "imgui/imgui_internal.h"
 #include "libxml/parser.h"
 
+#define CDT_USE_64_BIT_INDEX_TYPE
 #include "CDT.h"
 
 #ifndef IMGUI_DEFINE_MATH_OPERATORS

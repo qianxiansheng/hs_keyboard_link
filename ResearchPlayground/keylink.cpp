@@ -188,7 +188,7 @@ LRESULT KeyProc(int code, WPARAM wParam, LPARAM lParam)
             // 在这里处理按键事件
             std::cout << "Key pressed, VK code: " << pKbStruct->vkCode << std::endl;
 
-            auto it = kv_to_hid_map.find(pKbStruct->vkCode);
+            auto it = kv_to_hid_map.find((USHORT)pKbStruct->vkCode);
             if (it != kv_to_hid_map.end())
                 UserInputKeyDown(it->second);
         }
@@ -196,7 +196,7 @@ LRESULT KeyProc(int code, WPARAM wParam, LPARAM lParam)
             // 在这里处理按键事件
             std::cout << "Key pressed, VK code: " << pKbStruct->vkCode << std::endl;
 
-            auto it = kv_to_hid_map.find(pKbStruct->vkCode);
+            auto it = kv_to_hid_map.find((USHORT)pKbStruct->vkCode);
             if (it != kv_to_hid_map.end())
                 UserInputKeyUp(it->second);
         }
@@ -311,7 +311,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance,
         KeyboardGLDraw();
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glViewport(0.0f, 0.0f, APP_WIDTH, APP_HEIGHT);
+        glViewport(0, 0, APP_WIDTH, APP_HEIGHT);
 
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -704,7 +704,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         if (VK_PROCESSKEY == wParam)
             return 0;
         std::cout << "Key pressed, VK code: " << wParam << std::endl;
-        auto& function = kv_to_hid_map[wParam];
+        auto& function = kv_to_hid_map[(USHORT)wParam];
         UserInputKeyDown(function);
         return 0;
     }
@@ -712,7 +712,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_SYSKEYUP:
     {
         std::cout << "Key pressed, VK code: " << wParam << std::endl;
-        auto& function = kv_to_hid_map[wParam];
+        auto& function = kv_to_hid_map[(USHORT)wParam];
         UserInputKeyUp(function);
         return 0;
     }

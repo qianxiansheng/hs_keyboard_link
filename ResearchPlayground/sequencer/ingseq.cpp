@@ -143,7 +143,7 @@ void UserInputKeyUp(KLFunction& function)
 	if (!recording)
 		return;
 
-	int64_t timePoint = utils::get_current_system_time_ms() - timeBase;
+	int timePoint = (int)(utils::get_current_system_time_ms() - timeBase);
 	if (function.id == KLF_NONE)
 		return;
 	auto it = key_down_stack.find(function.id);

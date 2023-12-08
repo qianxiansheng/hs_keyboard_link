@@ -657,7 +657,7 @@ void KeyboardGLDraw()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, kbv_draw_ctx.FBO);
 
-	glViewport(0.0f, 0.0f, kbv_draw_ctx.w, kbv_draw_ctx.h);
+	glViewport(0, 0, kbv_draw_ctx.w, kbv_draw_ctx.h);
 
 	glClearColor(
 		kbv_draw_ctx.clear_color.r, kbv_draw_ctx.clear_color.g, 
@@ -679,7 +679,7 @@ void KeyboardGLDraw()
 	glBufferSubData(GL_ARRAY_BUFFER, 0, kbv_draw_ctx.vertices.size() * sizeof(float), kbv_draw_ctx.vertices.data());
 
 	glBindVertexArray(kbv_draw_ctx.VAO);
-	glDrawArrays(GL_TRIANGLES, 0, kbv_draw_ctx.vertices.size() / 10);
+	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)(kbv_draw_ctx.vertices.size() / 10));
 
 }
 void KeyboardGLDestroy()
@@ -733,9 +733,9 @@ void ShowKeyboardWindow(bool* p_open)
 
 	// Draw texture
 	ImGui::Image(
-		(ImTextureID)kbv_draw_ctx.texColorBuffer,	// TextureID
-		ImVec2(kbv_draw_ctx.w, kbv_draw_ctx.h),		// Width and Height
-		ImVec2(0, 1), ImVec2(1, 0)					// UV mapping
+		VOID_PTR_CAST(kbv_draw_ctx.texColorBuffer),			// TextureID
+		ImVec2((float)kbv_draw_ctx.w, (float)kbv_draw_ctx.h),	// Width and Height
+		ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f)					// UV mapping
 	);
 
 	ImGui::End();

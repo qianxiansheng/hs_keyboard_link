@@ -184,8 +184,8 @@ static void CustomizeTitle()
 	{
 		ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeAll);
 
-		int deltaX = io.MousePos.x - prevMousePos.x;
-		int deltaY = io.MousePos.y - prevMousePos.y;
+		int deltaX = (int)(io.MousePos.x - prevMousePos.x);
+		int deltaY = (int)(io.MousePos.y - prevMousePos.y);
 		RECT windowRect;
 		GetWindowRect(hWnd, &windowRect);
 		MoveWindow(hWnd,
@@ -217,7 +217,7 @@ static void CustomizeTitle()
 	{
 		draw_list->AddRectFilled(dragResizeHRRect.Min, dragResizeHRRect.Max, 0xFFFFFF00);
 		ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
-		int deltaX = io.MousePos.x - prevMousePos.x;
+		int deltaX = (int)(io.MousePos.x - prevMousePos.x);
 		RECT windowRect;
 		GetWindowRect(hWnd, &windowRect);
 
@@ -233,7 +233,7 @@ static void CustomizeTitle()
 			windowRect.bottom - windowRect.top, TRUE);
 
 		if (diff < 0)
-			prevMousePos.x = windowRect.right + deltaX;
+			prevMousePos.x = (float)windowRect.right + deltaX;
 		else
 			prevMousePos = io.MousePos;
 
@@ -256,7 +256,7 @@ static void CustomizeTitle()
 	{
 		draw_list->AddRectFilled(dragResizeHLRect.Min, dragResizeHLRect.Max, 0xFFFFFF00);
 		ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
-		int deltaX = io.MousePos.x - prevMousePos.x;
+		int deltaX = (int)(io.MousePos.x - prevMousePos.x);
 		RECT windowRect;
 		GetWindowRect(hWnd, &windowRect);
 
@@ -272,7 +272,7 @@ static void CustomizeTitle()
 			windowRect.bottom - windowRect.top, TRUE);
 
 		if (diff < 0)
-			prevMousePos.x = windowRect.left + deltaX;
+			prevMousePos.x = (float)windowRect.left + deltaX;
 		else
 			prevMousePos = io.MousePos;
 
@@ -295,7 +295,7 @@ static void CustomizeTitle()
 	{
 		draw_list->AddRectFilled(dragResizeVBRect.Min, dragResizeVBRect.Max, 0xFFFFFF00);
 		ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNS);
-		int deltaY = io.MousePos.y - prevMousePos.y;
+		int deltaY = (int)(io.MousePos.y - prevMousePos.y);
 		RECT windowRect;
 		GetWindowRect(hWnd, &windowRect);
 
@@ -311,7 +311,7 @@ static void CustomizeTitle()
 			windowRect.bottom - windowRect.top + deltaY, TRUE);
 
 		if (diff < 0)
-			prevMousePos.x = windowRect.bottom + deltaY;
+			prevMousePos.x = (float)windowRect.bottom + deltaY;
 		else
 			prevMousePos = io.MousePos;
 
@@ -334,7 +334,7 @@ static void CustomizeTitle()
 	{
 		draw_list->AddRectFilled(dragResizeVTRect.Min, dragResizeVTRect.Max, 0xFFFFFF00);
 		ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNS);
-		int deltaY = io.MousePos.y - prevMousePos.y;
+		int deltaY = (int)(io.MousePos.y - prevMousePos.y);
 		RECT windowRect;
 		GetWindowRect(hWnd, &windowRect);
 
@@ -350,7 +350,7 @@ static void CustomizeTitle()
 			windowRect.bottom - windowRect.top - deltaY, TRUE);
 
 		if (diff < 0)
-			prevMousePos.x = windowRect.bottom - deltaY;
+			prevMousePos.x = (float)windowRect.bottom - deltaY;
 		else
 			prevMousePos = io.MousePos;
 
@@ -362,7 +362,7 @@ static void CustomizeTitle()
 	auto drawItem = [&](ImVec2&& pos, ImU32 col, ImU32 col2, ImU32 col3, bool* click_status, const std::function<void(void)>& func) {
 		ImRect itemRect = ImRect(pos, pos + itemHeight);
 
-		int radius = (itemHeight >> 1) - itemMargin;
+		float radius = ((float)itemHeight / 2.0f) - itemMargin;
 
 		if (itemRect.Contains(io.MousePos))
 		{

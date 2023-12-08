@@ -21,7 +21,7 @@ void* CreateTexture(uint8_t* data, int w, int h, char fmt)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, (fmt == 0) ? GL_BGRA : GL_RGBA, GL_UNSIGNED_BYTE, data);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	return (void*)tex;
+	return VOID_PTR_CAST(tex);
 }
 
 void DeleteTexture(void* tex)

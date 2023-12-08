@@ -43,11 +43,11 @@
     <Filter Include="源文件\settings">
       <UniqueIdentifier>{4672e547-fd90-4243-85a0-bf5b16b6ff3a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\light">
-      <UniqueIdentifier>{b82a4def-057f-40c0-8da7-4ef1a2bd75dd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="源文件\configuration">
       <UniqueIdentifier>{9b2fecb3-354b-4aab-8820-b1a826772bc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\light">
+      <UniqueIdentifier>{b82a4def-057f-40c0-8da7-4ef1a2bd75dd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

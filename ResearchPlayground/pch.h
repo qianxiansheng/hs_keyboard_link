@@ -8,6 +8,9 @@
 #define DEFAULT_FONT		"c:\\Windows\\Fonts\\msyh.ttc"
 //#define DEFAULT_FONT		"DroidSans.ttf"
 
+#define KL_KB_VIEW_WIDTH 600
+#define KL_KB_VIEW_HEIGHT 300
+
 #define WINNAME_MENU "menu"
 #define WINNAME_KEYBOARD "keyboard"
 #define WINNAME_SEQUNCER "sequncer"
@@ -28,6 +31,8 @@ constexpr auto ASSIGNMENT_FILE_NAME = "assignment.xml";
 constexpr auto MACROS_FILE_NAME = "macros.xml";
 constexpr auto LANGUAGE_FILE_NAME = "language.xml";
 constexpr auto SETTINGS_FILE_NAME = "settings.xml";
+
+#define VOID_PTR_CAST(pint) reinterpret_cast<void*>(static_cast<uintptr_t>(pint))
 
 #ifdef _WIN32
 	//define something for Windows (32-bit and 64-bit, this part is common)

@@ -47,7 +47,7 @@ void ShowMacroViewWindow(bool* p_open)
 
 		// Demonstrate using clipper for large vertical lists
 		ImGuiListClipper clipper;
-		clipper.Begin(config.actions.size());
+		clipper.Begin((int)config.actions.size());
 		while (clipper.Step())
 		{
 			for (int row = clipper.DisplayStart; row < clipper.DisplayEnd; row++)
