@@ -34,7 +34,8 @@
     <ENTRY type="30" value="&#x65B0;&#x5EFA;"/>
     <ENTRY type="31" value="&#x9884;&#x89C8;"/>
 
-    
+    <ENTRY type="100" value="&#x5F00;&#x59CB;"/>
+    <ENTRY type="101" value="&#x7ED3;&#x675F;"/>
   </LANGUAGE>
   <LANGUAGE type="1">
     <ENTRY type="1" value="Global"/>
@@ -69,5 +70,7 @@
     <ENTRY type="29" value="delete"/>
     <ENTRY type="30" value="new"/>
     <ENTRY type="31" value="preview"/>
+    
+    <ENTRY type="100" value="start"/>
   </LANGUAGE>
 </PROFILE>

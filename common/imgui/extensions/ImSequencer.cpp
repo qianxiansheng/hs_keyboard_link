@@ -26,6 +26,7 @@
 #include "ImSequencer.h"
 #include "imgui.h"
 #include "imgui_internal.h"
+#include "language.h"
 #include <cstdlib>
 
 namespace ImSequencer
@@ -58,7 +59,7 @@ namespace ImSequencer
       int cy = (int)(io.MousePos.y);
       static float framePixelWidth = 0.01f;
       static float framePixelWidthTarget = 0.1f;
-      int legendWidth = 200;
+      int legendWidth = 300;
 
       static int movingEntry = -1;
       static int movingPos = -1;
@@ -170,8 +171,16 @@ namespace ImSequencer
          ImRect topRect(ImVec2(canvas_pos.x + legendWidth, canvas_pos.y), ImVec2(canvas_pos.x + canvas_size.x, canvas_pos.y + ItemHeight));
 
 
+         ImU32 textColor = 0xFFaFaFaF;
+         ImVec2 textStartOffset(100.0f, 0.0f);
+         ImVec2 textEndOffset(150.0f, 0.0f);
+
          //header
          draw_list->AddRectFilled(canvas_pos, ImVec2(canvas_size.x + canvas_pos.x, canvas_pos.y + ItemHeight), 0xFF3D3837, 0);
+         
+         draw_list->AddText(canvas_pos + ImVec2(8.0f, 0.0f) + textStartOffset, textColor, KLLABLEA(KLL_KEY_SEQ_START_MS));
+         draw_list->AddText(canvas_pos + ImVec2(8.0f, 0.0f) + textEndOffset, textColor, KLLABLEA(KLL_KEY_SEQ_END_MS));
+         
          if (sequenceOptions & SEQUENCER_ADD)
          {
             if (SequencerAddDelButton(draw_list, ImVec2(canvas_pos.x + legendWidth - ItemHeight, canvas_pos.y + 2), true) && io.MouseReleased[0])
@@ -254,9 +263,17 @@ namespace ImSequencer
          for (int i = 0; i < sequenceCount; i++)
          {
             int type;
-            sequence->Get(i, NULL, NULL, &type, NULL);
+            int* start;
+            int* end;
+            sequence->Get(i, &start, &end, &type, NULL);
             ImVec2 tpos(contentMin.x + 3, contentMin.y + i * ItemHeight + 2);
             draw_list->AddText(tpos, 0xFFFFFFFF, sequence->GetItemLabel(i));
+
+            char buf[16];
+            sprintf(buf, "%d", *start);
+            draw_list->AddText(tpos + textStartOffset, textColor, buf);
+            sprintf(buf, "%d", *end);
+            draw_list->AddText(tpos + textEndOffset, textColor, buf);
 
             if (sequenceOptions & SEQUENCER_DEL)
             {
