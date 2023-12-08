@@ -390,3 +390,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/ResearchPlayground/settings.xml
+/ResearchPlayground/macros.xml
+/ResearchPlayground/assignment.xml
