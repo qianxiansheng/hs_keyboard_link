@@ -199,12 +199,14 @@ void ShowINGSequencerWindow(bool* p_open)
 
 	if (!IsRecording()) {
 		if (ImGui::Button(u8"开始录制")) {
+			EnableKeyHook(true);
 			BeginRecord();
 		}
 	}
 	else
 	{
 		if (ImGui::Button(u8"结束录制")) {
+			EnableKeyHook(false);
 			EndRecord();
 		}
 	}
@@ -243,7 +245,6 @@ void ShowINGSequencerWindow(bool* p_open)
 
 	auto g = ImGui::GetCurrentContext();
 
-	EnableKeyHook(memcmp(g->NavWindow->Name, g->CurrentWindow->Name, strlen(g->CurrentWindow->Name)) == 0);
 	ImSequencer::Sequencer(&mySequence, &expanded, &selectedEntry, &firstFrame, ImSequencer::SEQUENCER_EDIT_STARTEND | ImSequencer::SEQUENCER_ADD | ImSequencer::SEQUENCER_DEL | ImSequencer::SEQUENCER_COPYPASTE | ImSequencer::SEQUENCER_CHANGE_FRAME);
 
 
