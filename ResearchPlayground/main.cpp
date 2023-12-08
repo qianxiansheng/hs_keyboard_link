@@ -24,6 +24,8 @@
 
 #include "language.h"
 
+#include "keylink.h"
+
 #define IMIDTEXT(name, i) ((std::string(name) + std::to_string(i)).c_str())
 
 static bool show_root_window = true;
@@ -36,6 +38,7 @@ static bool opt_showmenuwindow = true;
 static bool opt_showfunctionwindow = true;
 
 extern MySequence mySequence;
+extern bool global_setting_x_system_tray;
 
 const ImWchar* GetGlyphRangesChineseFullAndDirection()
 {
@@ -382,7 +385,14 @@ static void CustomizeTitle()
 	// Close button
 	static bool btnMouseDown1 = false;
 	drawItem(ImVec2(titleRect.Max.x - itemHeight, titleRect.Min.y), 0xFF0000FF, 0xFF0000BF, 0xFF00007F, &btnMouseDown1, [&](void) {
-		PostQuitMessage(0);
+		
+		if (global_setting_x_system_tray) {
+			ShowWindow(hWnd, SW_HIDE);
+			HideApplication();
+		}
+		else {
+			PostQuitMessage(0);
+		}
 	});
 
 	// Maximize button

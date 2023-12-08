@@ -9,4 +9,7 @@ void AssignmentConfigRead(const char* filename);
 void MacroConfigWrite(const char* filename);
 void MacroConfigRead(const char* filename);
 
+void SettingsWrite(const char* filename);
+void SettingsRead(const char* filename);
+
 #endif

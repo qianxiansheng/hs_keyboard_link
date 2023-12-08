@@ -442,6 +442,13 @@ struct tm utils::time_to_tm(time_t as_time_t)
 	return tm;
 }
 
+long long utils::get_current_system_time_us()
+{
+	std::chrono::system_clock::time_point time_point_now = std::chrono::system_clock::now();
+	std::chrono::system_clock::duration duration_since_epoch = time_point_now.time_since_epoch();
+	return std::chrono::duration_cast<std::chrono::microseconds>(duration_since_epoch).count();
+}
+
 long long utils::get_current_system_time_ms()
 {
 	std::chrono::system_clock::time_point time_point_now = std::chrono::system_clock::now();

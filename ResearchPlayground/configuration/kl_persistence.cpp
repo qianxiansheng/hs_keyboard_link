@@ -344,3 +344,65 @@ void MacroConfigRead(const char* filename)
 
     xmlFreeDoc(doc);
 }
+
+
+constexpr auto SETTINGS_NODE = "SETTINGS";
+constexpr auto PARAM_NODE = "PARAM";
+
+extern bool global_setting_x_system_tray;
+
+void SettingsWrite(const char* filename)
+{
+    auto manager = KLFunctionConfigManager::GetInstance();
+
+    xmlDocPtr doc = xmlNewDoc(BAD_CAST"1.0");
+    assert(doc);
+
+    xmlNodePtr root_node = xmlNewNode(NULL, BAD_CAST SETTINGS_NODE);
+    assert(root_node);
+
+    xmlDocSetRootElement(doc, root_node);
+
+    {
+        xmlNodePtr paramNode = xmlNewNode(NULL, BAD_CAST PARAM_NODE);
+        assert(paramNode);
+        xmlNewPropStr(paramNode, "name", "x_system_tray");
+        xmlNewPropInt(paramNode, "value", global_setting_x_system_tray);
+        xmlAddChild(root_node, paramNode);
+    }
+
+    xmlSaveFormatFile(filename, doc, 1);
+
+    xmlFreeDoc(doc);
+}
+
+void SettingsRead(const char* filename)
+{
+    xmlDocPtr doc = xmlParseFile(filename);
+    if (!doc)
+        return;
+
+    xmlNodePtr root_node = xmlDocGetRootElement(doc);
+    if (!root_node)
+        return;
+    assert(root_node->type == XML_ELEMENT_NODE);
+    if (!xmlStrEqual(root_node->name, BAD_CAST SETTINGS_NODE))
+        return;
+
+    for (xmlNodePtr curNode = root_node->children; curNode; curNode = curNode->next) {
+        if (!xmlStrEqual(curNode->name, BAD_CAST PARAM_NODE))
+            continue;
+
+        xmlChar* name = xmlGetProp(curNode, BAD_CAST "name");
+        xmlChar* value = xmlGetProp(curNode, BAD_CAST "value");
+        
+        if (xmlStrEqual(name, BAD_CAST "x_system_tray"))
+        {
+            global_setting_x_system_tray = atoi((char*)value);
+        }
+    }
+
+
+    xmlFreeDoc(doc);
+}
+

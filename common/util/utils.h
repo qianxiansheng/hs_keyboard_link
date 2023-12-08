@@ -44,6 +44,7 @@ namespace utils {
 	void my_sleep(unsigned long milliseconds);
 	struct tm time_to_tm(time_t as_time_t);
 
+	long long get_current_system_time_us();
 	long long get_current_system_time_ms();
 	long long get_current_system_time_s();
 

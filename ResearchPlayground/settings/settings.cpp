@@ -8,6 +8,7 @@
 
 #include "language.h"
 #include "settings/program_setting.h"
+#include "configuration/kl_persistence.h"
 
 
 #define ImGuiDCXAxisAlign(v) ImGui::SetCursorPos(ImVec2((v), ImGui::GetCursorPos().y))
@@ -56,6 +57,8 @@ void ToggleButton(const char* str_id, bool* v)
 void InitSettingsWindow()
 {
 	global_setting_auto_run = AutoRunRegisterCheck();
+
+	SettingsRead(SETTINGS_FILE_NAME);
 }
 
 void ShowSettingsWindow(bool* p_open)
@@ -155,6 +158,15 @@ void ShowSettingsWindow(bool* p_open)
 	ImGui::Button(KLLABLEB(KLL_KEY_RESET_BTN, "RESET_BTN"));
 	ImGui::SameLine();
 	utils::HelpMarker(KLLABLEA(KLL_KEY_RESTORE_FACTORY_SETTINGS));
+
+
+	static int frame_cnt = 0;
+	if (frame_cnt++ >= 500)
+	{
+		SettingsWrite(SETTINGS_FILE_NAME);
+
+		frame_cnt = 0;
+	}
 
 	ImGui::End();
 }

@@ -23,6 +23,7 @@
 #include "function/function.h"
 #include "sequencer/ingseq.h"
 #include "keyboard/keyboard.h"
+#include "util/utils.h"
 
 #define MAX_LOADSTRING 100
 
@@ -44,6 +45,8 @@ static int              g_Height;
 // Global Keyboard hook
 static HHOOK            g_hook;
 static bool             g_hook_enabled = false;
+
+static bool             g_hidden = false;
 
 extern std::unordered_map<KLFunctionID, KLFunction> function_map;
 
@@ -170,6 +173,9 @@ extern bool main_init(int argc, char* argv[]);
 extern void main_shutdown(void);
 extern int main_gui();
 
+// Notify Icon
+static BOOL AddNotificationIcon(HWND hwnd);
+static BOOL DeleteNotificationIcon();
 
 LRESULT KeyProc(int code, WPARAM wParam, LPARAM lParam)
 {
@@ -178,7 +184,7 @@ LRESULT KeyProc(int code, WPARAM wParam, LPARAM lParam)
         KBDLLHOOKSTRUCT* pKbStruct = reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
 
         // 检查按键消息
-        if (wParam == WM_KEYDOWN) {
+        if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
             // 在这里处理按键事件
             std::cout << "Key pressed, VK code: " << pKbStruct->vkCode << std::endl;
 
@@ -186,7 +192,7 @@ LRESULT KeyProc(int code, WPARAM wParam, LPARAM lParam)
             if (it != kv_to_hid_map.end())
                 UserInputKeyDown(it->second);
         }
-        else if (wParam == WM_KEYUP) {
+        else if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP) {
             // 在这里处理按键事件
             std::cout << "Key pressed, VK code: " << pKbStruct->vkCode << std::endl;
 
@@ -213,6 +219,18 @@ void EnableKeyHook(bool enable)
         UnhookWindowsHookEx(g_hook);
     }
     g_hook_enabled = enable;
+}
+
+
+void HideApplication()
+{
+    g_hidden = true;
+    printf("hidden\n");
+}
+void RestoreApplication()
+{
+    g_hidden = false;
+    printf("restore\n");
 }
 
 
@@ -253,6 +271,19 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance,
         // Poll and handle messages (inputs, window resize, etc.)
         // See the WndProc() function below for our to dispatch events to the Win32 backend.
         MSG msg;
+        if (g_hidden)
+        {
+            int r = 0;
+            while (r = ::GetMessage(&msg, NULL, 0U, 0U))
+            {
+                ::TranslateMessage(&msg);
+                ::DispatchMessage(&msg);
+                if (!g_hidden)
+                    break;
+            }
+            if (r == 0)
+                done = true;
+        }
         while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
         {
             ::TranslateMessage(&msg);
@@ -262,6 +293,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance,
         }
         if (done)
             break;
+
+        /* Limit the FPS */
+        static const int fixed_fps = 60;
+        static const int fixed_frame_time = 1000000 / 60;
+        static long long last = utils::get_current_system_time_us();
+        long long curr = utils::get_current_system_time_us();
+        long long frameTime = curr - last;
+        if (frameTime < fixed_frame_time)
+            std::this_thread::sleep_for(std::chrono::microseconds(fixed_frame_time - frameTime));
+        last = curr;
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
@@ -301,6 +342,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance,
         // Present
         ::SwapBuffers(g_MainWindow.hDC);
     }
+    DeleteNotificationIcon();
 
     KeyboardGLDestroy();
     main_shutdown();
@@ -331,12 +373,15 @@ static ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
     wcex.hInstance = hInstance;
-    wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
+    //wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
+    wcex.hIcon = NULL;
     wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
-    wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+    //wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+    wcex.hbrBackground = NULL;
     wcex.lpszMenuName = NULL;
     wcex.lpszClassName = szWindowClass;
-    wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_ICON1));
+    //wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_ICON1));
+    wcex.hIconSm = NULL;
 
     return RegisterClassExW(&wcex);
 }
@@ -355,7 +400,7 @@ static BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
     hInst = hInstance; // 将实例句柄存储在全局变量中
 
-    hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+    hWnd = CreateWindowW(szWindowClass, szTitle, WS_POPUP,
         APP_X, APP_Y, APP_WIDTH, APP_HEIGHT, nullptr, nullptr, hInstance, nullptr);
 
     if (!hWnd)
@@ -552,11 +597,12 @@ static void Hook_Renderer_SwapBuffers(ImGuiViewport* viewport, void*)
 #include <shellapi.h>
 #include <commctrl.h>
 
-UINT const WMAPP_NOTIFYCALLBACK = WM_APP + 1;
+UINT const WMAPP_NOTIFYCALLBACK = WM_USER + 1;
+NOTIFYICONDATA nid;
 
 static BOOL AddNotificationIcon(HWND hwnd)
 {
-    NOTIFYICONDATA nid = { sizeof(nid) };
+    nid.cbSize = { sizeof(nid) };
     nid.hWnd = hwnd;
     // add the icon, setting the icon, tooltip, and callback message.
     // the icon will be identified with the GUID
@@ -565,6 +611,25 @@ static BOOL AddNotificationIcon(HWND hwnd)
     LoadIconMetric(hInst, MAKEINTRESOURCE(IDI_ICON1), LIM_SMALL, &nid.hIcon);
     //LoadString(g_hInst, IDS_TOOLTIP, nid.szTip, ARRAYSIZE(nid.szTip));
     return Shell_NotifyIcon(NIM_ADD, &nid);
+}
+
+static BOOL DeleteNotificationIcon()
+{
+    return Shell_NotifyIcon(NIM_DELETE, &nid);
+}
+
+// 显示右键菜单
+static void ShowContextMenu(HWND hwnd, POINT pt) {
+    HMENU hMenu = CreatePopupMenu();
+    AppendMenu(hMenu, MF_STRING, 1, L"Exit");
+    AppendMenu(hMenu, MF_SEPARATOR, 0, NULL);
+
+    SetForegroundWindow(hwnd);
+
+    UINT clicked = TrackPopupMenu(hMenu, TPM_RETURNCMD | TPM_NONOTIFY, pt.x, pt.y, 0, hwnd, NULL);
+    SendMessage(hwnd, WM_COMMAND, clicked, 0);
+
+    DestroyMenu(hMenu);
 }
 
 // Forward declare message handler from imgui_impl_win32.cpp
@@ -582,6 +647,11 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     switch (msg)
     {
+    case WM_GETICON:
+    {
+        HICON hIcon = (HICON)LoadIcon(hInst, MAKEINTRESOURCE(IDI_ICON1));
+        return (LRESULT)hIcon;
+    }
     case WM_CREATE:
         // add the notification icon
         if (!AddNotificationIcon(hWnd))
@@ -590,6 +660,27 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 L"Please read the ReadMe.txt file for troubleshooting",
                 L"Error adding icon", MB_OK);
             return -1;
+        }
+        break;
+    case WMAPP_NOTIFYCALLBACK:
+        // 处理通知图标消息
+        switch (lParam) {
+        case WM_LBUTTONDBLCLK:
+            RestoreApplication();
+            // 双击通知图标时还原窗口
+            ShowWindow(hWnd, SW_RESTORE);
+            break;
+        case WM_RBUTTONDOWN:
+        case WM_CONTEXTMENU:
+            POINT pt;
+            GetCursorPos(&pt);
+            ShowContextMenu(hWnd, pt);
+            break;
+        }
+        break;
+    case WM_COMMAND:
+        if (wParam == 1) { // "Exit"选项的ID为1
+            PostQuitMessage(0);
         }
         break;
     case WM_SIZE:
@@ -604,6 +695,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             return 0;
         break;
     case WM_DESTROY:
+        DeleteNotificationIcon();
         ::PostQuitMessage(0);
         return 0;
     case WM_KEYDOWN:
