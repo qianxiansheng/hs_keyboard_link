@@ -48,6 +48,10 @@ static bool             g_hook_enabled = false;
 
 static bool             g_hidden = false;
 
+static const float      g_dpi_fixed = 96.0f;
+static float            g_dpi_screen = 96.0f;
+static float            g_dpi_scale = 1.0f;
+
 extern std::unordered_map<KLFunctionID, KLFunction> function_map;
 
 std::unordered_map<USHORT, KLFunction> kv_to_hid_map = {
@@ -222,6 +226,14 @@ void EnableKeyHook(bool enable)
 }
 
 
+void UpdateDPI(float screen_dpi)
+{
+    g_dpi_screen = screen_dpi;
+    g_dpi_scale = screen_dpi / g_dpi_fixed;
+
+    
+}
+
 void HideApplication()
 {
     g_hidden = true;
@@ -258,6 +270,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance,
         ::UnregisterClassW(szWindowClass, hInst);
         return FALSE;
     }
+
+    UpdateDPI(GetDpiForWindow(hWnd));
 
     InitImGuiContext();
 
@@ -541,7 +555,6 @@ static void InitImGuiContext()
         platform_io.Renderer_SwapBuffers = Hook_Renderer_SwapBuffers;
         platform_io.Platform_RenderWindow = Hook_Platform_RenderWindow;
     }
-
 }
 
 //
@@ -632,6 +645,8 @@ static void ShowContextMenu(HWND hwnd, POINT pt) {
     DestroyMenu(hMenu);
 }
 
+extern KeyboardGLContext kbv_draw_ctx;
+
 // Forward declare message handler from imgui_impl_win32.cpp
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -698,24 +713,46 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         DeleteNotificationIcon();
         ::PostQuitMessage(0);
         return 0;
-    case WM_KEYDOWN:
-    case WM_SYSKEYDOWN:
+    case WM_DPICHANGED:
     {
-        if (VK_PROCESSKEY == wParam)
-            return 0;
-        std::cout << "Key pressed, VK code: " << wParam << std::endl;
-        auto& function = kv_to_hid_map[(USHORT)wParam];
-        UserInputKeyDown(function);
-        return 0;
+        // 获取新的 DPI 缩放因子
+        int newDpiX = HIWORD(wParam);
+        int newDpiY = LOWORD(wParam);
+
+        UpdateDPI(newDpiX);
+    }
+    break;
+    case WM_KEYDOWN:
+    {
+        //float deltaTime = 0.01f;
+        //if (wParam == 'W')
+        //{
+        //    kbv_draw_ctx.camera.ProcessKeyboard(FORWARD, deltaTime);
+        //}
+        //else if (wParam == 'S')
+        //{
+        //    kbv_draw_ctx.camera.ProcessKeyboard(BACKWARD, deltaTime);
+        //}
+        //else if (wParam == 'A')
+        //{
+        //    kbv_draw_ctx.camera.ProcessKeyboard(LEFT, deltaTime);
+        //}
+        //else if (wParam == 'D')
+        //{
+        //    kbv_draw_ctx.camera.ProcessKeyboard(RIGHT, deltaTime);
+        //}
+        //else if (wParam == 'Q')
+        //{
+        //    kbv_draw_ctx.camera.ProcessKeyboard(UP, deltaTime);
+        //}
+        //else if (wParam == 'E')
+        //{
+        //    kbv_draw_ctx.camera.ProcessKeyboard(DOWN, deltaTime);
+        //}
+        break;
     }
     case WM_KEYUP:
-    case WM_SYSKEYUP:
-    {
-        std::cout << "Key pressed, VK code: " << wParam << std::endl;
-        auto& function = kv_to_hid_map[(USHORT)wParam];
-        UserInputKeyUp(function);
-        return 0;
-    }
+        break;
     }
     return ::DefWindowProcW(hWnd, msg, wParam, lParam);
 }

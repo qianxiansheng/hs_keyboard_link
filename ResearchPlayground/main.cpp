@@ -67,8 +67,17 @@ bool main_init(int argc, char* argv[])
 	ImGui::StyleColorsLight();
 
 	// Font
-	io.Fonts->AddFontFromFileTTF(DEFAULT_FONT, 18.0f, NULL, GetGlyphRangesChineseFullAndDirection());
+	io.Fonts->AddFontDefault();
 
+	// 添加第二个字体，设置优先级为1
+	ImFontConfig config;
+	config.MergeMode = true;
+	config.PixelSnapH = true;
+	config.OversampleH = 3;
+	config.OversampleV = 1;
+	io.Fonts->AddFontFromFileTTF(DEFAULT_FONT, 13.0f, &config, GetGlyphRangesChineseFullAndDirection());
+
+	io.Fonts->Build();
 
 	ImGuiStyle& style = ImGui::GetStyle();
 	//style.ScaleAllSizes(0.5f);

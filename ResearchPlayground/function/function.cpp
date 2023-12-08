@@ -510,36 +510,6 @@ void InitDefaultConfig(KLFunctionConfig& temp_config)
 void DrawFunctionLayout()
 {
 	auto imageManager = KLImageManager::GetInstance();
-	auto configManager = KLFunctionConfigManager::GetInstance();
-
-	static int e;
-	ImGui::RadioButton("Default", &e, KL_LAYER_TYPE_DEFAULT); 
-	ImGui::SameLine();
-	ImGui::RadioButton("Fn1"    , &e, KL_LAYER_TYPE_FN1); 
-	ImGui::SameLine();
-	ImGui::RadioButton("Fn2"    , &e, KL_LAYER_TYPE_FN2); 
-	ImGui::SameLine();
-	
-	auto& imgSave = imageManager->GetImage("btn_save");
-	if (ImGui::ImageButton(imgSave.texID, ImVec2((float)imgSave.width, (float)imgSave.height))) {
-		configManager->SaveConfig();
-	}
-	ImGui::SameLine();
-	auto& imgReset = imageManager->GetImage("btn_reset");
-	if (ImGui::ImageButton(imgReset.texID, ImVec2((float)imgReset.width, (float)imgReset.height))) {
-
-		auto manager = KLFunctionConfigManager::GetInstance();
-
-		auto& functions = manager->GetCurrentConfig().layers[manager->m_CurrentLayerType];
-
-		KEY_MapId_t mid = KeyboardGetActiveMapID();
-		KLFunctionID fid = FindFunctionIDByMapID(mid);
-
-		functions[mid] = FindFunctionByFunctionID(fid);
-	}
-
-	KLFunctionConfigManager::GetInstance()->m_CurrentLayerType = (KLFunctionLayerType)e;
-
 
 	ImVec2 startPoint = ImGui::GetCursorScreenPos();
 	ImVec2 pos = startPoint;
@@ -551,7 +521,7 @@ void DrawFunctionLayout()
 	const float padding = d / 10.0f;
 	const float rouding = 0.0f;
 
-	ImGui::SetWindowFontScale(0.6f);
+	ImGui::SetWindowFontScale(1.0f);
 
 	for (uint32_t i = 0; i < functionLayoutSize; ++i)
 	{
@@ -617,8 +587,6 @@ void DrawFunctionLayout()
 
 	ImGui::SetCursorScreenPos(pos);
 	ImGui::SetWindowFontScale(1);
-
-	ImGui::Text("==========================================================");
 }
 
 

@@ -10,6 +10,7 @@
 
 #include "function/function.h"
 #include "layout.h"
+#include "resources.h"
 
 /* kb map */
 uint8_t KEY_GetMapIdByRowAndCol(uint8_t row, uint8_t col) {
@@ -579,7 +580,6 @@ void RenderModelUpdateAssignment(glm::vec3 mousePos_3DC)
 	}
 }
 
-
 void KeyboardGLInit()
 {
 	auto& style = ImGui::GetStyle();
@@ -594,12 +594,16 @@ void KeyboardGLInit()
 		}
 	}
 
+	float x = 11.5f;
+	float y = -3.6f;
+	float z = 10.0f;
+
 	kbv_draw_ctx.onhover = assignment_layout_kbv_hover_cb;
-	kbv_draw_ctx.camera.Position = glm::vec3(10.4f, -3.5f, 14.4f);
+	kbv_draw_ctx.camera.Position = glm::vec3(x, y, z);
 	kbv_draw_ctx.projection_matrix = glm::perspective(glm::radians(kbv_draw_ctx.camera.Zoom), (float)kbv_draw_ctx.w / (float)kbv_draw_ctx.h, 0.1f, 100.0f);
 	kbv_draw_ctx.view_matrix = kbv_draw_ctx.camera.GetViewMatrix();
 	kbv_draw_ctx.model_matrix = glm::mat4(1.0f);
-	kbv_draw_ctx.clear_color = glm::vec4(bgcolor.x, bgcolor.y, bgcolor.z, bgcolor.w);
+	//kbv_draw_ctx.clear_color = glm::vec4(bgcolor.x, bgcolor.y, bgcolor.z, bgcolor.w);
 	kbv_draw_ctx.shader = std::make_unique<Shader>("3.2.blending.vs", "3.2.blending.fs");
 
 	RenderModelInit();
@@ -688,7 +692,38 @@ void KeyboardGLDestroy()
 	// TODO:
 }
 
+static bool MyButton(const char* vgname, ImVec2 size)
+{
+	auto imageManager = KLImageManager::GetInstance();
+	auto& io = ImGui::GetIO();
+	auto drawList = ImGui::GetWindowDrawList();
+	ImVec2 pos = ImGui::GetCursorScreenPos();
+	ImRect rect(pos, ImVec2(pos.x + size.x, pos.y + size.y));
 
+	bool clicked = false;
+
+	ImGui::ItemSize(size, 0.0f);
+	if (rect.Contains(io.MousePos))
+	{
+		if (io.MouseClicked[0])
+			clicked = true;
+
+		ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+		if (io.MouseDown[0])
+		{
+			imageManager->DrawGraph(drawList, vgname, pos, size, 0xFF00007F);
+		}
+		else
+		{
+			imageManager->DrawGraph(drawList, vgname, pos, size, 0xFF0000FF);
+		}
+	}
+	else
+	{
+		imageManager->DrawGraph(drawList, vgname, pos, size, 0xFFdbdbdb);
+	}
+	return clicked;
+}
 
 void ShowKeyboardWindow(bool* p_open)
 {
@@ -703,6 +738,23 @@ void ShowKeyboardWindow(bool* p_open)
 	auto& DC = win->DC;
 	auto& io = ImGui::GetIO();
 
+	auto layoutManager = KLWindowLayoutManager::GetInstance();
+	auto imageManager = KLImageManager::GetInstance();
+	auto configManager = KLFunctionConfigManager::GetInstance();
+
+
+	if (KL_LAYOUT_ASSIGNMENT == layoutManager->GetLayoutType())
+	{
+		static int e;
+		ImGui::RadioButton("Default", &e, KL_LAYER_TYPE_DEFAULT);
+		ImGui::SameLine();
+		ImGui::RadioButton("Fn1", &e, KL_LAYER_TYPE_FN1);
+		ImGui::SameLine();
+		ImGui::RadioButton("Fn2", &e, KL_LAYER_TYPE_FN2);
+
+		KLFunctionConfigManager::GetInstance()->m_CurrentLayerType = (KLFunctionLayerType)e;
+	}
+
 	/* Update the position of texture view */
 	kbv_draw_ctx.mouse_pos.x = io.MousePos.x - DC.CursorPos.x;
 	kbv_draw_ctx.mouse_pos.y = io.MousePos.y - DC.CursorPos.y;
@@ -713,10 +765,6 @@ void ShowKeyboardWindow(bool* p_open)
 	glm::mat4 modelViewMatrix = kbv_draw_ctx.view_matrix * kbv_draw_ctx.model_matrix;
 	glm::vec3 mousePos_NDC(kbv_draw_ctx.mouse_pos.x, kbv_draw_ctx.h - kbv_draw_ctx.mouse_pos.y, 0.1f);
 	glm::vec3 mousePos_3DC = glm::unProject(mousePos_NDC, modelViewMatrix, kbv_draw_ctx.projection_matrix, viewport);
-
-
-	auto layoutManager = KLWindowLayoutManager::GetInstance();
-
 
 	if (KL_LAYOUT_ASSIGNMENT == layoutManager->GetLayoutType())
 	{
@@ -731,12 +779,27 @@ void ShowKeyboardWindow(bool* p_open)
 		RenderModelUpdate();
 	}
 
+
 	// Draw texture
 	ImGui::Image(
-		VOID_PTR_CAST(kbv_draw_ctx.texColorBuffer),			// TextureID
+		VOID_PTR_CAST(kbv_draw_ctx.texColorBuffer),				// TextureID
 		ImVec2((float)kbv_draw_ctx.w, (float)kbv_draw_ctx.h),	// Width and Height
 		ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f)					// UV mapping
 	);
+
+	if (KL_LAYOUT_ASSIGNMENT == layoutManager->GetLayoutType())
+	{
+		ImVec2 size(16.0f, 16.0f);
+		if (MyButton("btn_save", size)) {
+			configManager->SaveConfig();
+		}
+		ImGui::SameLine();
+		if (MyButton("btn_erase", size)) {
+			auto& functions = configManager->GetCurrentConfig().layers[configManager->m_CurrentLayerType];
+			KEY_MapId_t mid = KeyboardGetActiveMapID();
+			functions[mid] = FindDefaultFunctionByMapID(mid);
+		}
+	}
 
 	ImGui::End();
 }

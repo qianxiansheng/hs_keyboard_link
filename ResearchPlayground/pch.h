@@ -1,15 +1,15 @@
-#pragma once
+﻿#pragma once
 
 #define APP_X				100
 #define APP_Y				50
 #define APP_WIDTH			1080
 #define APP_HEIGHT			600
 #define APP_TITLE           L"Keyboard Link"
-#define DEFAULT_FONT		"c:\\Windows\\Fonts\\msyh.ttc"
+#define DEFAULT_FONT		u8"C:\\Windows\\Fonts\\SIMYOU.TTF"
 //#define DEFAULT_FONT		"DroidSans.ttf"
 
-#define KL_KB_VIEW_WIDTH 600
-#define KL_KB_VIEW_HEIGHT 300
+#define KL_KB_VIEW_WIDTH	800
+#define KL_KB_VIEW_HEIGHT	220
 
 #define WINNAME_MENU "menu"
 #define WINNAME_KEYBOARD "keyboard"
