@@ -176,11 +176,25 @@ std::unordered_map<KLFunctionID, KLFunction> function_map = {
 	{KLF_WIN_R     , KLFunction(KLF_WIN_R     , "RIGHT_WIN"    , KEY_TYPE_MODIFIER, HID_KEYB_MODIFIER_RIGHT_UI   )},
 	{KLF_FN        , KLFunction(KLF_FN        , "FN"           , KEY_TYPE_VENDOR_DEFINE,    HID_KEYB_VENDOR_FN   )},
 
+	{KLF_MEDIA_PLAY             , KLFunction(KLF_MEDIA_PLAY             , "PLAY"           , HID_MEDIA_PLAY               )},
+	{KLF_MEDIA_TERMINATE        , KLFunction(KLF_MEDIA_TERMINATE        , "TERMINATE"      , HID_MEDIA_TERMINATE          )},
+	{KLF_MEDIA_BACKWARD         , KLFunction(KLF_MEDIA_BACKWARD         , "BACKWARD"       , HID_MEDIA_BACKWARD           )},
+	{KLF_MEDIA_FORWARD          , KLFunction(KLF_MEDIA_FORWARD          , "FORWARD"        , HID_MEDIA_FORWARD            )},
+	{KLF_MEDIA_VOLUME_INC       , KLFunction(KLF_MEDIA_VOLUME_INC       , "VOLUME_INC"     , HID_MEDIA_VOLUME_INC         )},
+	{KLF_MEDIA_VOLUME_DEC       , KLFunction(KLF_MEDIA_VOLUME_DEC       , "VOLUME_DEC"     , HID_MEDIA_VOLUME_DEC         )},
+	{KLF_MEDIA_MUTE             , KLFunction(KLF_MEDIA_MUTE             , "MUTE"           , HID_MEDIA_MUTE               )},
+	{KLF_MEDIA_HOME             , KLFunction(KLF_MEDIA_HOME             , "HOME"           , HID_MEDIA_HOME               )},
+	{KLF_MEDIA_CALC             , KLFunction(KLF_MEDIA_CALC             , "CALC"           , HID_MEDIA_CALC               )},
+	{KLF_MEDIA_EMAIL            , KLFunction(KLF_MEDIA_EMAIL            , "EMAIL"          , HID_MEDIA_EMAIL              )},
+	{KLF_MEDIA_COMPUTER         , KLFunction(KLF_MEDIA_COMPUTER         , "COMPUTER"       , HID_MEDIA_COMPUTER           )},
+	{KLF_MEDIA_COLLECT			, KLFunction(KLF_MEDIA_COLLECT          , "COLLECT"        , HID_MEDIA_COLLECT            )},
+	{KLF_MEDIA_BRIGHTNESS_INC   , KLFunction(KLF_MEDIA_BRIGHTNESS_INC   , "BRIGHTNESS_INC" , HID_MEDIA_BRIGHTNESS_INC     )},
+	{KLF_MEDIA_BRIGHTNESS_DEC   , KLFunction(KLF_MEDIA_BRIGHTNESS_DEC   , "BRIGHTNESS_DEC" , HID_MEDIA_BRIGHTNESS_DEC     )},
 
-	{KLF_MEDIA_PLAY       , KLFunction(KLF_MEDIA_PLAY       , "Play"     , HID_MEDIA_PLAY       )},
-	{KLF_MEDIA_FORWARD    , KLFunction(KLF_MEDIA_FORWARD    , "Forward"  , HID_MEDIA_FORWARD    )},
-	{KLF_MEDIA_BACKWARD   , KLFunction(KLF_MEDIA_BACKWARD   , "Backward" , HID_MEDIA_BACKWARD   )},
-	{KLF_MEDIA_TERMINATE  , KLFunction(KLF_MEDIA_TERMINATE  , "Terminate", HID_MEDIA_TERMINATE  )},
+	{KLF_MEDIA_PREV			    , KLFunction(KLF_MEDIA_PREV             , "PREV"           , HID_MEDIA_PREV)},
+	{KLF_MEDIA_NEXT             , KLFunction(KLF_MEDIA_NEXT             , "NEXT"           , HID_MEDIA_NEXT)},
+	{KLF_MEDIA_FULLSCREEN       , KLFunction(KLF_MEDIA_FULLSCREEN       , "FULLSCREEN"     , HID_MEDIA_FULLSCREEN)},
+
 };
 
 KEY_MapId_t mid;
@@ -298,11 +312,26 @@ std::unordered_map<KEY_MapId_t, KLFunctionID> default_map_function_map = {
 };
 
 KLFunctionLayout functionLayout[] = {
+	
+	KLFunctionLayout(KLF_MEDIA_PLAY            , "func_play"                , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
+	KLFunctionLayout(KLF_MEDIA_BACKWARD        , "func_backward"            , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
+	KLFunctionLayout(KLF_MEDIA_FORWARD         , "func_forward"             , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
+	KLFunctionLayout(KLF_MEDIA_TERMINATE       , "func_terminate"           , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
+	KLFunctionLayout(KLF_MEDIA_PREV			   , "func_prev"                , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
+	KLFunctionLayout(KLF_MEDIA_NEXT			   , "func_next"                , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
 
-	KLFunctionLayout(KLF_MEDIA_PLAY     , "func_play"     , {0.0f, 0.0f, 1.0f, 1.0f}, KL_FUNC_FLAG_IMAGE),
-	KLFunctionLayout(KLF_MEDIA_FORWARD  , "func_forward"  , {0.0f, 0.0f, 1.0f, 1.0f}, KL_FUNC_FLAG_IMAGE),
-	KLFunctionLayout(KLF_MEDIA_BACKWARD , "func_backward" , {0.0f, 0.0f, 1.0f, 1.0f}, KL_FUNC_FLAG_IMAGE),
-	KLFunctionLayout(KLF_MEDIA_TERMINATE, "func_terminate", {0.0f, 0.0f, 1.0f, 1.0f}, KL_FUNC_FLAG_IMAGE),
+	KLFunctionLayout(KLF_MEDIA_VOLUME_INC	   , "func_volume_increment"	, {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
+	KLFunctionLayout(KLF_MEDIA_VOLUME_DEC	   , "func_volume_decrement"	, {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
+	KLFunctionLayout(KLF_MEDIA_MUTE			   , "func_mute"                , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
+	KLFunctionLayout(KLF_MEDIA_HOME			   , "func_home"                , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
+	KLFunctionLayout(KLF_MEDIA_CALC			   , "func_calc"                , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
+	KLFunctionLayout(KLF_MEDIA_EMAIL		   , "func_email"               , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
+	KLFunctionLayout(KLF_MEDIA_COMPUTER		   , "func_computer"            , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
+	KLFunctionLayout(KLF_MEDIA_COLLECT		   , "func_collect"	            , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
+	KLFunctionLayout(KLF_MEDIA_BRIGHTNESS_INC  , "func_brightness_increment", {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
+	KLFunctionLayout(KLF_MEDIA_BRIGHTNESS_DEC  , "func_brightness_decrement", {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
+	KLFunctionLayout(KLF_MEDIA_FULLSCREEN	   , "func_full_screen"         , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
+
 
 	KLFunctionLayout(KLF_ESC     , "Esc"         , {0.0f, 0.5f, 1.0f, 1.0f}),
 	KLFunctionLayout(KLF_F1      , "F1"          , {1.0f, 0.0f, 1.0f, 1.0f}),
@@ -573,7 +602,7 @@ void DrawFunctionLayout()
 			functionLayout[i].id == KLF_KP_6 ||
 			functionLayout[i].id == KLF_KP_ENTER ||
 			functionLayout[i].id == KLF_KP_DEL ||
-			functionLayout[i].id == KLF_MEDIA_TERMINATE)
+			functionLayout[i].id == KLF_MEDIA_FULLSCREEN)
 		{
 			pos.x = startPoint.x;
 			pos.y += d;

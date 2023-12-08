@@ -4,6 +4,13 @@
 #include "stb_image.h"
 
 KLImageDefine image_resources_define[] = {
+    {"image/func_brightness_increment.png"    , "func_brightness_increment"        },
+    {"image/func_brightness_decrement.png"    , "func_brightness_decrement"        },
+    {"image/func_collect.png"         , "func_collect"         },
+    {"image/func_computer.png"        , "func_computer"        },
+    {"image/func_home.png"            , "func_home"            },
+    {"image/func_calc.png"            , "func_calc"            },
+    {"image/func_email.png"           , "func_email"           },
     {"image/func_fastbackward.png"    , "func_backward"        },
     {"image/func_fastforward.png"     , "func_forward"         },
     {"image/func_full_screen.png"     , "func_full_screen"     },
@@ -12,7 +19,7 @@ KLImageDefine image_resources_define[] = {
     {"image/func_play.png"            , "func_play"            },
     {"image/func_prev.png"            , "func_prev"            },
     {"image/func_terminate.png"       , "func_terminate"       },
-    {"image/func_voiume_increment.png", "func_voiume_increment"},
+    {"image/func_volume_increment.png", "func_volume_increment"},
     {"image/func_volume_decrement.png", "func_volume_decrement"},
 
     {"image/btn_del_blue.png"         , "btn_del_blue"         },
