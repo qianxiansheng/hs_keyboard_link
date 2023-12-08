@@ -590,7 +590,11 @@ void DrawFunctionLayout()
 
 			auto& functions = manager->GetCurrentConfig().layers[manager->m_CurrentLayerType];
 
-			functions[KeyboardGetActiveMapID()] = FindFunctionByFunctionID(functionLayout[i].id);
+			auto kmId = KeyboardGetActiveMapID();
+			if (kmId != KM_NONE)
+			{
+				functions[kmId] = FindFunctionByFunctionID(functionLayout[i].id);
+			}
 		}
 
 		pos.x += d * functionLayout[i].w;

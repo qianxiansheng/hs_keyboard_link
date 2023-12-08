@@ -184,7 +184,7 @@ KeyboardInstance* KeyboardGetInstance()
 }
 KEY_MapId_t KeyboardGetActiveMapID()
 {
-	return keyBtnViewList[kbv_draw_ctx.active_index].id;
+	return kbv_draw_ctx.active_index;
 }
 
 
