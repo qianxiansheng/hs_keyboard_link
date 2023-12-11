@@ -153,6 +153,11 @@ void UserInputKeyUp(KLFunction& function)
 		a.mFrameEnd = timePoint;
 		mySequence.myItems.push_back(a);
 
+		if (mySequence.mFrameMax < a.mFrameEnd)
+		{
+			mySequence.mFrameMax = a.mFrameEnd;
+		}
+
 		key_down_stack.erase(it);
 	}
 }
