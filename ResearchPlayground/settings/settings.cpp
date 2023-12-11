@@ -102,7 +102,7 @@ void ShowSettingsWindow(bool* p_open)
 
 	/* Global Setting Language */
 	ImGui::SeparatorText(KLLABLEA(KLL_KEY_LANGUAGE));
-	static int item_current_2 = 0;
+	static int item_current_2 = KLLanguageManager::GetInstance()->GetLanguage();
 	static int prev_item = 0;
 	ImGui::Combo("##LANGUAGE", &item_current_2, u8"¼òÌåÖĞÎÄ\0English\0\0");
 	if (prev_item != item_current_2)

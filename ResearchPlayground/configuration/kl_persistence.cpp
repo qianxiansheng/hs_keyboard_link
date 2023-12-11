@@ -7,6 +7,7 @@
 #include "macro_config.h"
 #include "function/function.h"
 #include "common/util/utils.h"
+#include "language.h"
 
 
 constexpr auto CONFIGURATION_NODE = "CONFIGURATION";
@@ -370,6 +371,13 @@ void SettingsWrite(const char* filename)
         xmlNewPropInt(paramNode, "value", global_setting_x_system_tray);
         xmlAddChild(root_node, paramNode);
     }
+    {
+        xmlNodePtr paramNode = xmlNewNode(NULL, BAD_CAST PARAM_NODE);
+        assert(paramNode);
+        xmlNewPropStr(paramNode, "name", "lang");
+        xmlNewPropInt(paramNode, "value", KLLanguageManager::GetInstance()->GetLanguage());
+        xmlAddChild(root_node, paramNode);
+    }
 
     xmlSaveFormatFile(filename, doc, 1);
 
@@ -399,6 +407,17 @@ void SettingsRead(const char* filename)
         if (xmlStrEqual(name, BAD_CAST "x_system_tray"))
         {
             global_setting_x_system_tray = atoi((char*)value);
+        }
+        if (xmlStrEqual(name, BAD_CAST "lang"))
+        {
+            KLLangType langType = (KLLangType)atoi((char*)value);
+            if (langType == KLL_TYPE_SIMPLE_CHINESE) {
+                KLLanguageManager::GetInstance()->SetLanguage(KLL_TYPE_SIMPLE_CHINESE);
+            } else if (langType == KLL_TYPE_ENGLISH) {
+                KLLanguageManager::GetInstance()->SetLanguage(KLL_TYPE_ENGLISH);
+            } else {
+                KLLanguageManager::GetInstance()->SetLanguage(KLL_TYPE_SIMPLE_CHINESE);
+            }
         }
     }
 
