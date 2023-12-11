@@ -19,6 +19,7 @@
 #define MODIFIED_COLOR glm::vec4(0.0f, 0.0f, 1.0f, 0.5f)
 #define MODIFIED_ACTIVE_COLOR glm::vec4(1.0f, 0.0f, 1.0f, 0.5f)
 #define DEFAULT_COLOR glm::vec4(0.7f, 0.7f, 0.7f, 0.5f)
+#define BOARD_DEFAULT_COLOR glm::vec4(0.0f, 0.0f, 0.0f, 0.8f)
 
 #define SECTOR 180.0f
 #define KEY_DEPTH 90.0f
@@ -492,6 +493,9 @@ struct KeyBtnView
 
     GLuint VBO, VAO;
     std::vector<float> vertices;
+
+    GLuint LightVBO, LightVAO;
+    std::vector<float> LightVertices;
     glm::vec4 color;
 
     int brightness;
@@ -513,10 +517,17 @@ struct KeyboardGLContext
     int h = 0;
 
     std::unique_ptr<Shader> shader;
+    std::unique_ptr<Shader> shader_board;
+
     Camera camera;
     glm::vec2 mouse_pos;
 
     glm::vec4 clear_color;
+
+    /* background board */
+    std::vector<float> BoardVertices;
+    GLuint BoardVAO;
+    GLuint BoardVBO;
 
     GLuint FBO;
     GLuint UBO;

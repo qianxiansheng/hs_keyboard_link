@@ -257,10 +257,20 @@ void DrawKeycap(glm::vec3 pos, glm::vec3 shap, float padding, float thickness, g
 	p[10] = p[2] + glm::vec3(-padding, -padding, shap.z);
 	p[11] = p[3] + glm::vec3(padding, -padding, shap.z);
 
-	p[12] = p[8] + glm::vec3(thickness, thickness, -thickness);
-	p[13] = p[9] + glm::vec3(-thickness, thickness, -thickness);
-	p[14] = p[10] + glm::vec3(-thickness, -thickness, -thickness);
-	p[15] = p[11] + glm::vec3(thickness, -thickness, -thickness);
+	if (shap.z > 0.0f)
+	{
+		p[12] = p[8] + glm::vec3(thickness, thickness, -thickness);
+		p[13] = p[9] + glm::vec3(-thickness, thickness, -thickness);
+		p[14] = p[10] + glm::vec3(-thickness, -thickness, -thickness);
+		p[15] = p[11] + glm::vec3(thickness, -thickness, -thickness);
+	}
+	else
+	{
+		p[12] = p[8] + glm::vec3(thickness, thickness, thickness);
+		p[13] = p[9] + glm::vec3(-thickness, thickness, thickness);
+		p[14] = p[10] + glm::vec3(-thickness, -thickness, thickness);
+		p[15] = p[11] + glm::vec3(thickness, -thickness, thickness);
+	}
 
 	for (int i = 0; i < 16; ++i)
 		p[i] *= glm::vec3(1.0f, -1.0f, 1.0f);
@@ -282,6 +292,25 @@ void DrawKeycap(glm::vec3 pos, glm::vec3 shap, float padding, float thickness, g
 
 	DrawSurfaceRect(p[11], p[10], p[9], p[8], rgba, output);
 	DrawSurfaceRect(p[12], p[13], p[14], p[15], rgba, output);
+}
+
+void DrawLight(glm::vec3 pos, glm::vec3 shap, float lightW, float lightH, glm::vec4 rgba, std::vector<float>& output)
+{
+	float halfW = lightW / 2;
+	float halfH = lightH / 2;
+	float halfWShap = shap.x / 2;
+	float halfHShap = shap.y / 2;
+
+	glm::vec3 p[4];
+	p[0] = pos + glm::vec3(halfWShap - halfW, halfHShap - halfH, 0.0f);
+	p[1] = pos + glm::vec3(halfWShap + halfW, halfHShap - halfH, 0.0f);
+	p[2] = pos + glm::vec3(halfWShap + halfW, halfHShap + halfH, 0.0f);
+	p[3] = pos + glm::vec3(halfWShap - halfW, halfHShap + halfH, 0.0f);
+
+	for (int i = 0; i < 4; ++i)
+		p[i] *= glm::vec3(1.0f, -1.0f, 1.0f);
+
+	DrawSurfaceRect(p[0], p[1], p[2], p[3], rgba, output);
 }
 
 void KeyCapInit(glm::vec3 pos, glm::vec3 shap, float padding, float* face_vertex)
@@ -309,9 +338,26 @@ void KeyCapInit(glm::vec3 pos, glm::vec3 shap, float padding, float* face_vertex
 	face_vertex[11] = p[3].z;
 }
 
+void DrawBackgroundBoard(glm::vec3 pos, glm::vec3 shap, float margin, float thickness, glm::vec4 rgba, std::vector<float>& output)
+{
+	glm::vec3 p = glm::vec3(pos.x - margin - thickness, pos.y - margin - thickness, pos.z);
+	glm::vec3 s = glm::vec3(
+		shap.x + 2 * (margin + thickness), 
+		shap.y + 2 * (margin + thickness), 
+		shap.z
+	);
+	DrawKeycap(p, s, 0.0f, thickness, rgba, output);
+}
+
 void RenderModelInit()
 {
 	glm::vec3 global_pos(0.0f, 0.0f, 0.0f);
+	glm::vec3 bbMax(0.0f, 0.0f, 0.0f);
+
+	float board_concave = 0.2f;
+	float board_thickness = 0.5f;
+
+	bbMax.z = -(board_concave + board_thickness);
 
 	for (auto& it : keyBtnViewList)
 	{
@@ -325,7 +371,17 @@ void RenderModelInit()
 
 		KeyCapInit(pos1, shape, 0.1f, keyBtnView.face_vertex);
 		DrawKeycap(pos1, shape, PADDING, THINKNESS, DEFAULT_COLOR, keyBtnView.vertices);
+		
+		
+		DrawLight(glm::vec3(pos1.x, pos1.y, pos1.z - board_concave + 0.001f), shape, shape.x / 2, shape.y / 2, DEFAULT_COLOR, keyBtnView.LightVertices);
+	
+		if (bbMax.x < (pos1.x + shape.x))
+			bbMax.x = (pos1.x + shape.x);
+		if (bbMax.y < (pos1.y + shape.y))
+			bbMax.y = (pos1.y + shape.y);
 	}
+
+	DrawBackgroundBoard(global_pos, bbMax, 0.2f, board_thickness, BOARD_DEFAULT_COLOR, kbv_draw_ctx.BoardVertices);
 }
 
 bool FunctionIsModified(KEY_MapId_t kmID)
@@ -441,7 +497,7 @@ void LightUpdate()
 {
 	static int frame_cnt = 0;
 	static int anim_cnt = 0;
-	if (frame_cnt++ > 20)
+	if (frame_cnt++ > 5)
 	{
 		anim_cnt++;
 
@@ -451,7 +507,7 @@ void LightUpdate()
 		{
 			for (uint32_t j = 0; j < KB_COL_NUM; ++j)
 			{
-				light[i][j] = (j + anim_cnt) % 5;
+				light[i][j] = 4 - (j + anim_cnt) % 5;
 			}
 		}
 		frame_cnt = 0;
@@ -572,33 +628,32 @@ void KeyboardGLInit(int width, int height)
 		}
 	}
 
-	float x = 10.950008f;
+	float x = 11.050007f;
 	float y = -3.875001f;
-	float z = 26.774744f;
+	float z = 28.924711f;
 
 	kbv_draw_ctx.onhover = assignment_layout_kbv_hover_cb;
 	kbv_draw_ctx.camera.Position = glm::vec3(x, y, z);
 	kbv_draw_ctx.projection_matrix = glm::perspective(glm::radians(kbv_draw_ctx.camera.Zoom), (float)kbv_draw_ctx.w / (float)kbv_draw_ctx.h, 0.1f, 100.0f);
 	kbv_draw_ctx.view_matrix = kbv_draw_ctx.camera.GetViewMatrix();
 	kbv_draw_ctx.model_matrix = glm::mat4(1.0f);
-	//kbv_draw_ctx.clear_color = glm::vec4(bgcolor.x, bgcolor.y, bgcolor.z, bgcolor.w);
+	kbv_draw_ctx.clear_color = glm::vec4(bgcolor.x, bgcolor.y, bgcolor.z, bgcolor.w);
 
-	if (kbv_draw_ctx.shader == nullptr)
-		kbv_draw_ctx.shader = std::make_unique<Shader>("3.2.blending.vs", "3.2.blending.fs");
+	if (kbv_draw_ctx.shader == nullptr) 
+		kbv_draw_ctx.shader = std::make_unique<Shader>("shader/3.2.blending.vs", "shader/3.2.blending.fs");
+	if (kbv_draw_ctx.shader_board == nullptr)
+		kbv_draw_ctx.shader = std::make_unique<Shader>("shader/board.vs", "shader/board.fs");
 
 	RenderModelInit();
 
-	for (auto& it : keyBtnViewList)
 	{
-		KeyBtnView& btn = it.second;
-		// first, configure the cube's VAO (and VBO)
-		glGenVertexArrays(1, &btn.VAO);
-		glGenBuffers(1, &btn.VBO);
+		glGenVertexArrays(1, &kbv_draw_ctx.BoardVAO);
+		glGenBuffers(1, &kbv_draw_ctx.BoardVBO);
 
-		glBindBuffer(GL_ARRAY_BUFFER, btn.VBO);
-		glBufferData(GL_ARRAY_BUFFER, btn.vertices.size() * sizeof(float), btn.vertices.data(), GL_STREAM_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, kbv_draw_ctx.BoardVBO);
+		glBufferData(GL_ARRAY_BUFFER, kbv_draw_ctx.BoardVertices.size() * sizeof(float), kbv_draw_ctx.BoardVertices.data(), GL_STREAM_DRAW);
 
-		glBindVertexArray(btn.VAO);
+		glBindVertexArray(kbv_draw_ctx.BoardVAO);
 
 		// position attribute
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)0);
@@ -609,6 +664,51 @@ void KeyboardGLInit(int width, int height)
 		// color attribute
 		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(6 * sizeof(float)));
 		glEnableVertexAttribArray(2);
+	}
+
+
+	for (auto& it : keyBtnViewList)
+	{
+		KeyBtnView& btn = it.second;
+		// first, configure the cube's VAO (and VBO)
+		{
+			glGenVertexArrays(1, &btn.VAO);
+			glGenBuffers(1, &btn.VBO);
+
+			glBindBuffer(GL_ARRAY_BUFFER, btn.VBO);
+			glBufferData(GL_ARRAY_BUFFER, btn.vertices.size() * sizeof(float), btn.vertices.data(), GL_STREAM_DRAW);
+
+			glBindVertexArray(btn.VAO);
+
+			// position attribute
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)0);
+			glEnableVertexAttribArray(0);
+			// normal attribute
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(3 * sizeof(float)));
+			glEnableVertexAttribArray(1);
+			// color attribute
+			glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(6 * sizeof(float)));
+			glEnableVertexAttribArray(2);
+		}
+		{
+			glGenVertexArrays(1, &btn.LightVAO);
+			glGenBuffers(1, &btn.LightVBO);
+
+			glBindBuffer(GL_ARRAY_BUFFER, btn.LightVBO);
+			glBufferData(GL_ARRAY_BUFFER, btn.LightVertices.size() * sizeof(float), btn.LightVertices.data(), GL_STREAM_DRAW);
+
+			glBindVertexArray(btn.LightVAO);
+
+			// position attribute
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)0);
+			glEnableVertexAttribArray(0);
+			// normal attribute
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(3 * sizeof(float)));
+			glEnableVertexAttribArray(1);
+			// color attribute
+			glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(6 * sizeof(float)));
+			glEnableVertexAttribArray(2);
+		}
 	}
 	
 	glGenBuffers(1, &kbv_draw_ctx.UBO);
@@ -665,11 +765,24 @@ void KeyboardGLDraw()
 	kbv_draw_ctx.shader->setMat4("projection", kbv_draw_ctx.projection_matrix);
 	kbv_draw_ctx.shader->setMat4("view", kbv_draw_ctx.view_matrix);
 
+
+	kbv_draw_ctx.shader->setVec4("color", BOARD_DEFAULT_COLOR);
+
+	glBindVertexArray(kbv_draw_ctx.BoardVAO);
+	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)(kbv_draw_ctx.BoardVertices.size() / 10));
+
 	for (auto& it : keyBtnViewList)
 	{
 		KeyBtnView& btn = it.second;	// render the cube
 
+		glm::vec4 lightColor(btn.color.r, btn.color.g, btn.color.b, 1.0f);
+		kbv_draw_ctx.shader->setVec4("color", lightColor);
+
+		glBindVertexArray(btn.LightVAO);
+		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)(btn.LightVertices.size() / 10));
+
 		kbv_draw_ctx.shader->setVec4("color", btn.color);
+		
 		glBindVertexArray(btn.VAO);
 		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)(btn.vertices.size() / 10));
 	}
@@ -681,7 +794,12 @@ void KeyboardGLDestroy()
 		KeyBtnView& btn = it.second;
 		glDeleteVertexArrays(1, &btn.VAO);
 		glDeleteBuffers(1, &btn.VBO);
+		glDeleteVertexArrays(1, &btn.LightVAO);
+		glDeleteBuffers(1, &btn.LightVBO);
 	}
+	glDeleteVertexArrays(1, &kbv_draw_ctx.BoardVAO);
+	glDeleteBuffers(1, &kbv_draw_ctx.BoardVBO);
+
 	glDeleteBuffers(1, &kbv_draw_ctx.UBO);
 
 	glDeleteFramebuffers(1, &kbv_draw_ctx.FBO);
@@ -801,7 +919,7 @@ void ShowKeyboardWindow(bool* p_open)
 		ImVec2(texMapU_Min, (1.0f - texMapV_Min)), ImVec2(texMapU_Max, (1.0f - texMapV_Max))// UV mapping
 	);
 
-	// ImGui::Text("%f %f %f", kbv_draw_ctx.camera.Position.x, kbv_draw_ctx.camera.Position.y, kbv_draw_ctx.camera.Position.z);
+	ImGui::Text("%f %f %f", kbv_draw_ctx.camera.Position.x, kbv_draw_ctx.camera.Position.y, kbv_draw_ctx.camera.Position.z);
 
 	if (KL_LAYOUT_ASSIGNMENT == layoutManager->GetLayoutType())
 	{
