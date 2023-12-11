@@ -12,6 +12,8 @@
 #include "layout.h"
 #include "resources.h"
 
+#include "keylink.h"
+
 /* kb map */
 uint8_t KEY_GetMapIdByRowAndCol(uint8_t row, uint8_t col) {
 	return usr_key_map[row][col];
@@ -570,9 +572,9 @@ void KeyboardGLInit(int width, int height)
 		}
 	}
 
-	float x = 11.5f;
-	float y = -3.6f;
-	float z = 10.0f;
+	float x = 10.950008f;
+	float y = -3.875001f;
+	float z = 26.774744f;
 
 	kbv_draw_ctx.onhover = assignment_layout_kbv_hover_cb;
 	kbv_draw_ctx.camera.Position = glm::vec3(x, y, z);
@@ -656,6 +658,7 @@ void KeyboardGLDraw()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	kbv_draw_ctx.view_matrix = kbv_draw_ctx.camera.GetViewMatrix();
 	// draw objects
 	kbv_draw_ctx.shader->use();
 	kbv_draw_ctx.shader->setMat4("model", kbv_draw_ctx.model_matrix);
@@ -750,8 +753,8 @@ void ShowKeyboardWindow(bool* p_open)
 	}
 
 	/* Update the position of texture view */
-	kbv_draw_ctx.mouse_pos.x = io.MousePos.x - DC.CursorPos.x;
-	kbv_draw_ctx.mouse_pos.y = io.MousePos.y - DC.CursorPos.y;
+	kbv_draw_ctx.mouse_pos.x = io.MousePos.x - DC.CursorPos.x + (KL_KB_VIEW_TEX_X * dpiScale());
+	kbv_draw_ctx.mouse_pos.y = io.MousePos.y - DC.CursorPos.y + (KL_KB_VIEW_TEX_Y * dpiScale());
 	kbv_draw_ctx.mouse_down = io.MouseDown[0];
 
 	/* Convert mouse screen coordinates to world coordinates */
@@ -773,12 +776,18 @@ void ShowKeyboardWindow(bool* p_open)
 	}
 
 
-	// Draw texture
+	/* Draw texture */
+	float texMapV_Min = KL_KB_VIEW_TEX_Y / KL_KB_VIEW_HEIGHT;
+	float texMapV_Max = (KL_KB_VIEW_TEX_Y + KL_KB_VIEW_TEX_H) / KL_KB_VIEW_HEIGHT;
+	float texMapU_Min = KL_KB_VIEW_TEX_X / KL_KB_VIEW_WIDTH;
+	float texMapU_Max = (KL_KB_VIEW_TEX_X + KL_KB_VIEW_TEX_W) / KL_KB_VIEW_WIDTH;
 	ImGui::Image(
 		VOID_PTR_CAST(kbv_draw_ctx.texColorBuffer),				// TextureID
-		ImVec2((float)kbv_draw_ctx.w, (float)kbv_draw_ctx.h),	// Width and Height
-		ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f)					// UV mapping
+		ImVec2(KL_KB_VIEW_TEX_W * dpiScale(), KL_KB_VIEW_TEX_H * dpiScale()),     // Width and Height
+		ImVec2(texMapU_Min, (1.0f - texMapV_Min)), ImVec2(texMapU_Max, (1.0f - texMapV_Max))// UV mapping
 	);
+
+	// ImGui::Text("%f %f %f", kbv_draw_ctx.camera.Position.x, kbv_draw_ctx.camera.Position.y, kbv_draw_ctx.camera.Position.z);
 
 	if (KL_LAYOUT_ASSIGNMENT == layoutManager->GetLayoutType())
 	{

@@ -10,7 +10,11 @@
 //#define DEFAULT_FONT		"DroidSans.ttf"
 
 #define KL_KB_VIEW_WIDTH	800
-#define KL_KB_VIEW_HEIGHT	220
+#define KL_KB_VIEW_HEIGHT	600
+#define KL_KB_VIEW_TEX_X    90.0f
+#define KL_KB_VIEW_TEX_Y    180.0f
+#define KL_KB_VIEW_TEX_W    620.0f
+#define KL_KB_VIEW_TEX_H    220.0f
 
 #define WINNAME_MENU "menu"
 #define WINNAME_KEYBOARD "keyboard"

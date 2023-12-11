@@ -757,31 +757,31 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     break;
     case WM_KEYDOWN:
     {
-        //float deltaTime = 0.01f;
-        //if (wParam == 'W')
-        //{
-        //    kbv_draw_ctx.camera.ProcessKeyboard(FORWARD, deltaTime);
-        //}
-        //else if (wParam == 'S')
-        //{
-        //    kbv_draw_ctx.camera.ProcessKeyboard(BACKWARD, deltaTime);
-        //}
-        //else if (wParam == 'A')
-        //{
-        //    kbv_draw_ctx.camera.ProcessKeyboard(LEFT, deltaTime);
-        //}
-        //else if (wParam == 'D')
-        //{
-        //    kbv_draw_ctx.camera.ProcessKeyboard(RIGHT, deltaTime);
-        //}
-        //else if (wParam == 'Q')
-        //{
-        //    kbv_draw_ctx.camera.ProcessKeyboard(UP, deltaTime);
-        //}
-        //else if (wParam == 'E')
-        //{
-        //    kbv_draw_ctx.camera.ProcessKeyboard(DOWN, deltaTime);
-        //}
+        float deltaTime = 0.01f;
+        if (wParam == 'W')
+        {
+            kbv_draw_ctx.camera.ProcessKeyboard(FORWARD, deltaTime);
+        }
+        else if (wParam == 'S')
+        {
+            kbv_draw_ctx.camera.ProcessKeyboard(BACKWARD, deltaTime);
+        }
+        else if (wParam == 'A')
+        {
+            kbv_draw_ctx.camera.ProcessKeyboard(LEFT, deltaTime);
+        }
+        else if (wParam == 'D')
+        {
+            kbv_draw_ctx.camera.ProcessKeyboard(RIGHT, deltaTime);
+        }
+        else if (wParam == 'Q')
+        {
+            kbv_draw_ctx.camera.ProcessKeyboard(UP, deltaTime);
+        }
+        else if (wParam == 'E')
+        {
+            kbv_draw_ctx.camera.ProcessKeyboard(DOWN, deltaTime);
+        }
         break;
     }
     case WM_KEYUP:
