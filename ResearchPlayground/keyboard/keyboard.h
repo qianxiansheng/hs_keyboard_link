@@ -490,8 +490,13 @@ struct KeyBtnView
     bool hover;
     bool active;
 
+    GLuint VBO, VAO;
+    std::vector<float> vertices;
+    glm::vec4 color;
+
+    int brightness;
+
     float face_vertex[12];
-    int color;
 
     KeyBtnView() {};
     KeyBtnView(const char* tag, KEY_MapId_t id, int offsetX, int offsetY, int width = SL, int height = SL);
@@ -513,10 +518,8 @@ struct KeyboardGLContext
 
     glm::vec4 clear_color;
 
-    std::vector<float> vertices;
-
-    GLuint VBO, VAO;
     GLuint FBO;
+    GLuint UBO;
     GLuint texColorBuffer;
     GLuint rbo;
 

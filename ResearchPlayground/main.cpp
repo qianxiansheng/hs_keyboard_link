@@ -435,12 +435,12 @@ static void ShowRootWindowMenu()
 
 			ImGui::MenuItem("Demo Window", NULL, &opt_showdemowindow);
 			ImGui::Separator();
-			auto layoutManager = KLWindowLayoutManager::GetInstance();
-			auto& wtbl = layoutManager->window_table;
-			for (auto itw = wtbl.begin(); itw != wtbl.end(); ++itw)
-			{
-				ImGui::MenuItem(itw->name.c_str(), NULL, &itw->open);
-			}
+			//auto layoutManager = KLWindowLayoutManager::GetInstance();
+			//auto& wtbl = layoutManager->window_table;
+			//for (auto itw = wtbl.begin(); itw != wtbl.end(); ++itw)
+			//{
+			//	ImGui::MenuItem(itw->name.c_str(), NULL, &itw->open);
+			//}
 			ImGui::EndMenu();
 		}
 

@@ -430,7 +430,7 @@ KLFunctionLayout functionLayout[] = {
 	KLFunctionLayout(KLF_DOT     , ">\n."        ),
 	KLFunctionLayout(KLF_SLASH   , "?\n/"        ),
 	KLFunctionLayout(KLF_SHIFT_R , "SHIFT"       , {0.0f, 0.0f, 2.75f, 1.0f}),
-	KLFunctionLayout(KLF_UP      , "¡ü"           , {1.25f, 0.0f, 1.0f, 1.0f}),
+	KLFunctionLayout(KLF_UP      , u8"¡ü"         , {1.25f, 0.0f, 1.0f, 1.0f}),
 	KLFunctionLayout(KLF_KP_1    , "1"           , {1.25f, 0.0f, 1.0f, 1.0f}),
 	KLFunctionLayout(KLF_KP_2    , "2"           ),
 	KLFunctionLayout(KLF_KP_3    , "3"           ),
@@ -445,9 +445,9 @@ KLFunctionLayout functionLayout[] = {
 	KLFunctionLayout(KLF_FN      , "FN"          , {0.0f, 0.0f, 1.25f, 1.0f}),
 	KLFunctionLayout(KLF_CTRL_R  , "CTRL"        , {0.0f, 0.0f, 1.25f, 1.0f}),
 	
-	KLFunctionLayout(KLF_LEFT    , "¡û"           , {0.25f, 0.0f, 1.0f, 1.0f}),
-	KLFunctionLayout(KLF_DOWN    , "¡ý"           ),
-	KLFunctionLayout(KLF_RIGHT   , "¡ú"           ),
+	KLFunctionLayout(KLF_LEFT    , u8"¡û"         , {0.25f, 0.0f, 1.0f, 1.0f}),
+	KLFunctionLayout(KLF_DOWN    , u8"¡ý"         ),
+	KLFunctionLayout(KLF_RIGHT   , u8"¡ú"         ),
 	KLFunctionLayout(KLF_KP_0    , "0"           , {0.25f, 0.0f, 2.0f, 1.0f}),
 	KLFunctionLayout(KLF_KP_DEL  , ".\nDel"      ),
 
@@ -554,7 +554,7 @@ void DrawFunctionLayout()
 		else
 		{
 			dl->AddRectFilled(keyRect.Min, keyRect.Max, hover ? 0xFFFF0000 : 0xFFFFFFFF, rouding);
-			dl->AddText(ImVec2(pos.x + padding, pos.y + padding), 0xFF000000, utils::gbk_to_utf8(functionLayout[i].name).c_str());
+			dl->AddText(ImVec2(pos.x + padding, pos.y + padding), 0xFF000000, functionLayout[i].name);
 		}
 		if (mouse_down)
 		{

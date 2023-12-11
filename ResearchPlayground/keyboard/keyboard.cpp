@@ -319,7 +319,10 @@ void RenderModelInit()
 		pos1 /= SECTOR;
 		shape /= SECTOR;
 
+		keyBtnView.color = DEFAULT_COLOR;
+
 		KeyCapInit(pos1, shape, 0.1f, keyBtnView.face_vertex);
+		DrawKeycap(pos1, shape, PADDING, THINKNESS, DEFAULT_COLOR, keyBtnView.vertices);
 	}
 }
 
@@ -428,26 +431,6 @@ void assignment_layout_kbv_hover_cb(KeyBtnView& view)
 	}
 }
 
-
-
-void RenderModelUpdate()
-{
-	kbv_draw_ctx.vertices.resize(0);
-
-	glm::vec3 global_pos(0.0f, 0.0f, 0.0f);
-
-	for (auto& it : keyBtnViewList)
-	{
-		auto& keyBtnView = it.second;
-		glm::vec3 pos1(global_pos.x + keyBtnView.x, global_pos.y + keyBtnView.y, 0.0f);
-		glm::vec3 shape(keyBtnView.w, keyBtnView.h, KEY_DEPTH);
-		pos1 /= SECTOR;
-		shape /= SECTOR;
-
-		DrawKeycap(pos1, shape, PADDING, THINKNESS, DEFAULT_COLOR, kbv_draw_ctx.vertices);
-	}
-}
-
 static uint8_t light[KEY_ROW_NUM][KB_COL_NUM] = {
 	0
 };
@@ -488,29 +471,21 @@ void RenderModelUpdateLight()
 			{
 				auto& keyBtnView = it->second;
 
-				keyBtnView.color = light[i][j];
+				keyBtnView.brightness = light[i][j];
 			}
 		}
 	}
 
-	kbv_draw_ctx.vertices.resize(0);
-
-	glm::vec3 global_pos(0.0f, 0.0f, 0.0f);
-
 	for (auto& it : keyBtnViewList)
 	{
 		auto& keyBtnView = it.second;
-		glm::vec3 pos1(global_pos.x + keyBtnView.x, global_pos.y + keyBtnView.y, 0.0f);
-		glm::vec3 shape(keyBtnView.w, keyBtnView.h, KEY_DEPTH);
-		pos1 /= SECTOR;
-		shape /= SECTOR;
 
 		float a = 0.7f;
-		float c = ((float)keyBtnView.color / 4) * 0.6f + 0.1f;
+		float c = ((float)keyBtnView.brightness / 4) * 0.6f + 0.1f;
 
 		glm::vec4 color(a, a, a, c);
 
-		DrawKeycap(pos1, shape, PADDING, THINKNESS, color, kbv_draw_ctx.vertices);
+		keyBtnView.color = glm::vec4((a, a, a, c));
 	}
 }
 
@@ -542,41 +517,33 @@ void RenderModelUpdateAssignment(glm::vec3 mousePos_3DC)
 		}
 	}
 
-	kbv_draw_ctx.vertices.resize(0);
-
 	glm::vec3 global_pos(0.0f, 0.0f, 0.0f);
 
 	for (auto& it : keyBtnViewList)
 	{
 		auto& keyBtnView = it.second;
-		glm::vec3 pos1(global_pos.x + keyBtnView.x, global_pos.y + keyBtnView.y, 0.0f);
-		glm::vec3 shape(keyBtnView.w, keyBtnView.h, KEY_DEPTH);
-		pos1 /= SECTOR;
-		shape /= SECTOR;
 
 		bool modified = FunctionIsModified(keyBtnView.id);
-		glm::vec4 color;
 		if (keyBtnView.id == kbv_draw_ctx.active_index && modified)
 		{
-			color = MODIFIED_ACTIVE_COLOR;
+			keyBtnView.color = MODIFIED_ACTIVE_COLOR;
 		}
 		else if (keyBtnView.id == kbv_draw_ctx.active_index)
 		{
-			color = ACTIVE_COLOR;
+			keyBtnView.color = ACTIVE_COLOR;
 		}
 		else if (keyBtnView.hover)
 		{
-			color = HOVER_COLOR;
+			keyBtnView.color = HOVER_COLOR;
 		}
 		else if (modified)
 		{
-			color = MODIFIED_COLOR;
+			keyBtnView.color = MODIFIED_COLOR;
 		}
 		else
 		{
-			color = DEFAULT_COLOR;
+			keyBtnView.color = DEFAULT_COLOR;
 		}
-		DrawKeycap(pos1, shape, PADDING, THINKNESS, color, kbv_draw_ctx.vertices);
 	}
 }
 
@@ -618,27 +585,34 @@ void KeyboardGLInit(int width, int height)
 		kbv_draw_ctx.shader = std::make_unique<Shader>("3.2.blending.vs", "3.2.blending.fs");
 
 	RenderModelInit();
-	RenderModelUpdate();
 
-	// first, configure the cube's VAO (and VBO)
-	glGenVertexArrays(1, &kbv_draw_ctx.VAO);
-	glGenBuffers(1, &kbv_draw_ctx.VBO);
+	for (auto& it : keyBtnViewList)
+	{
+		KeyBtnView& btn = it.second;
+		// first, configure the cube's VAO (and VBO)
+		glGenVertexArrays(1, &btn.VAO);
+		glGenBuffers(1, &btn.VBO);
 
-	glBindBuffer(GL_ARRAY_BUFFER, kbv_draw_ctx.VBO);
-	glBufferData(GL_ARRAY_BUFFER, kbv_draw_ctx.vertices.size() * sizeof(float), kbv_draw_ctx.vertices.data(), GL_STREAM_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, btn.VBO);
+		glBufferData(GL_ARRAY_BUFFER, btn.vertices.size() * sizeof(float), btn.vertices.data(), GL_STREAM_DRAW);
 
-	glBindVertexArray(kbv_draw_ctx.VAO);
+		glBindVertexArray(btn.VAO);
 
-	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	// normal attribute
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-	// color attribute
-	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(2);
+		// position attribute
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+		// normal attribute
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(1);
+		// color attribute
+		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(6 * sizeof(float)));
+		glEnableVertexAttribArray(2);
+	}
 	
+	glGenBuffers(1, &kbv_draw_ctx.UBO);
+	glBindBuffer(GL_UNIFORM_BUFFER, kbv_draw_ctx.UBO);
+	glBufferData(GL_UNIFORM_BUFFER, 4, NULL, GL_STATIC_DRAW); // 分配4字节的内存
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	// create framebuffer
 	glGenFramebuffers(1, &kbv_draw_ctx.FBO);
@@ -688,18 +662,24 @@ void KeyboardGLDraw()
 	kbv_draw_ctx.shader->setMat4("projection", kbv_draw_ctx.projection_matrix);
 	kbv_draw_ctx.shader->setMat4("view", kbv_draw_ctx.view_matrix);
 
-	// render the cube
-	glBindBuffer(GL_ARRAY_BUFFER, kbv_draw_ctx.VBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, kbv_draw_ctx.vertices.size() * sizeof(float), kbv_draw_ctx.vertices.data());
+	for (auto& it : keyBtnViewList)
+	{
+		KeyBtnView& btn = it.second;	// render the cube
 
-	glBindVertexArray(kbv_draw_ctx.VAO);
-	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)(kbv_draw_ctx.vertices.size() / 10));
-
+		kbv_draw_ctx.shader->setVec4("color", btn.color);
+		glBindVertexArray(btn.VAO);
+		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)(btn.vertices.size() / 10));
+	}
 }
 void KeyboardGLDestroy()
 {
-	glDeleteVertexArrays(1, &kbv_draw_ctx.VAO);
-	glDeleteBuffers(1, &kbv_draw_ctx.VBO);
+	for (auto& it : keyBtnViewList)
+	{
+		KeyBtnView& btn = it.second;
+		glDeleteVertexArrays(1, &btn.VAO);
+		glDeleteBuffers(1, &btn.VBO);
+	}
+	glDeleteBuffers(1, &kbv_draw_ctx.UBO);
 
 	glDeleteFramebuffers(1, &kbv_draw_ctx.FBO);
 	glDeleteBuffers(1, &kbv_draw_ctx.texColorBuffer);
@@ -790,7 +770,6 @@ void ShowKeyboardWindow(bool* p_open)
 	}
 	else
 	{
-		RenderModelUpdate();
 	}
 
 
