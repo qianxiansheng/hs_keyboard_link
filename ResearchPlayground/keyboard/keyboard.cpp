@@ -580,8 +580,17 @@ void RenderModelUpdateAssignment(glm::vec3 mousePos_3DC)
 	}
 }
 
-void KeyboardGLInit()
+void KeyboardGLReCreate(int width, int height)
 {
+	KeyboardGLDestroy();
+	KeyboardGLInit(width, height);
+}
+
+void KeyboardGLInit(int width, int height)
+{
+	kbv_draw_ctx.w = width;
+	kbv_draw_ctx.h = height;
+
 	auto& style = ImGui::GetStyle();
 	ImVec4 bgcolor = style.Colors[ImGuiCol_WindowBg];
 
@@ -604,7 +613,9 @@ void KeyboardGLInit()
 	kbv_draw_ctx.view_matrix = kbv_draw_ctx.camera.GetViewMatrix();
 	kbv_draw_ctx.model_matrix = glm::mat4(1.0f);
 	//kbv_draw_ctx.clear_color = glm::vec4(bgcolor.x, bgcolor.y, bgcolor.z, bgcolor.w);
-	kbv_draw_ctx.shader = std::make_unique<Shader>("3.2.blending.vs", "3.2.blending.fs");
+
+	if (kbv_draw_ctx.shader == nullptr)
+		kbv_draw_ctx.shader = std::make_unique<Shader>("3.2.blending.vs", "3.2.blending.fs");
 
 	RenderModelInit();
 	RenderModelUpdate();
@@ -627,7 +638,7 @@ void KeyboardGLInit()
 	// color attribute
 	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
-
+	
 
 	// create framebuffer
 	glGenFramebuffers(1, &kbv_draw_ctx.FBO);
@@ -645,13 +656,12 @@ void KeyboardGLInit()
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, kbv_draw_ctx.texColorBuffer, 0);
 
 	// Depth stencil attachment
-	GLuint rbo;
-	glGenRenderbuffers(1, &rbo);
-	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+	glGenRenderbuffers(1, &kbv_draw_ctx.rbo);
+	glBindRenderbuffer(GL_RENDERBUFFER, kbv_draw_ctx.rbo);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, kbv_draw_ctx.w, kbv_draw_ctx.w);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, kbv_draw_ctx.rbo);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
@@ -688,8 +698,12 @@ void KeyboardGLDraw()
 }
 void KeyboardGLDestroy()
 {
-	//glDeleteVertexArrays(VAO);
-	// TODO:
+	glDeleteVertexArrays(1, &kbv_draw_ctx.VAO);
+	glDeleteBuffers(1, &kbv_draw_ctx.VBO);
+
+	glDeleteFramebuffers(1, &kbv_draw_ctx.FBO);
+	glDeleteBuffers(1, &kbv_draw_ctx.texColorBuffer);
+	glDeleteRenderbuffers(1, &kbv_draw_ctx.rbo);
 }
 
 static bool MyButton(const char* vgname, ImVec2 size)

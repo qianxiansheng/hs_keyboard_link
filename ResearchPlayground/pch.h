@@ -5,7 +5,8 @@
 #define APP_WIDTH			1080
 #define APP_HEIGHT			600
 #define APP_TITLE           L"Keyboard Link"
-#define DEFAULT_FONT		u8"C:\\Windows\\Fonts\\SIMYOU.TTF"
+#define EN_FONT				u8"DroidSans.ttf"
+#define ZH_FONT				u8"C:\\Windows\\Fonts\\SIMYOU.TTF"
 //#define DEFAULT_FONT		"DroidSans.ttf"
 
 #define KL_KB_VIEW_WIDTH	800
@@ -22,6 +23,7 @@
 #define WINNAME_ASSIGN_CONFIG_MGR "assign_config"
 #define WINNAME_MACRO_CONFIG_MGR "macro_config"
 #define WINNAME_MACRO_VIEW "macro_view"
+#define DOCKSPACE_ID "MyDockSpace"
 
 
 #define KL_CONFIG_MAX_NAME_SIZE 32

@@ -504,8 +504,8 @@ struct KeyboardGLContext
 {
     int x = 0;
     int y = 0;
-    int w = KL_KB_VIEW_WIDTH;
-    int h = KL_KB_VIEW_HEIGHT;
+    int w = 0;
+    int h = 0;
 
     std::unique_ptr<Shader> shader;
     Camera camera;
@@ -518,6 +518,7 @@ struct KeyboardGLContext
     GLuint VBO, VAO;
     GLuint FBO;
     GLuint texColorBuffer;
+    GLuint rbo;
 
     glm::mat4 projection_matrix;
     glm::mat4 view_matrix;
@@ -533,7 +534,8 @@ typedef KeyboardGLContext KeyboardInstance;
 
 void ShowKeyboardWindow(bool* p_open);
 
-void KeyboardGLInit();
+void KeyboardGLReCreate(int width, int height);
+void KeyboardGLInit(int width, int height);
 void KeyboardGLDraw();
 void KeyboardGLDestroy();
 

@@ -225,13 +225,46 @@ void EnableKeyHook(bool enable)
     g_hook_enabled = enable;
 }
 
-
 void UpdateDPI(float screen_dpi)
 {
     g_dpi_screen = screen_dpi;
     g_dpi_scale = screen_dpi / g_dpi_fixed;
 
-    
+    RECT windowRect;
+    if (GetWindowRect(hWnd, &windowRect))
+    {
+        SetWindowPos(hWnd, NULL, 
+            windowRect.left, 
+            windowRect.top, 
+            APP_WIDTH * g_dpi_scale, 
+            APP_HEIGHT * g_dpi_scale, SWP_NOMOVE | SWP_NOZORDER);
+    }
+
+    ImGuiIO& io = ImGui::GetIO();
+    io.FontGlobalScale = g_dpi_scale; // 适当调整缩放因子
+
+    KeyboardGLReCreate(KL_KB_VIEW_WIDTH * dpiScale(), KL_KB_VIEW_HEIGHT * dpiScale());
+
+    /* 调整Dock布局 */
+    auto window = ImGui::FindWindowByName(WINNAME_FUNCTION);
+    if (window != NULL)
+    {
+        ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, APP_HEIGHT * g_dpi_scale / 2));
+        ImGui::DockBuilderFinish(window->DockId);
+    }
+
+    /* 调整Dock布局 */
+    window = ImGui::FindWindowByName(WINNAME_LIGHT_MODIFY);
+    if (window != NULL)
+    {
+        ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, APP_HEIGHT * g_dpi_scale / 2));
+        ImGui::DockBuilderFinish(window->DockId);
+    }
+}
+
+float dpiScale()
+{
+    return g_dpi_scale;
 }
 
 void HideApplication()
@@ -271,12 +304,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
 
-    UpdateDPI(GetDpiForWindow(hWnd));
-
     InitImGuiContext();
 
+    UpdateDPI(GetDpiForWindow(hWnd));
+
     main_init(__argc, __argv);
-    KeyboardGLInit();
+    KeyboardGLInit(KL_KB_VIEW_WIDTH * dpiScale(), KL_KB_VIEW_HEIGHT * dpiScale());
 
     // 主消息循环
     bool done = false;

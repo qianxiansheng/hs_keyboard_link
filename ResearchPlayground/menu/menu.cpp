@@ -6,7 +6,7 @@
 
 #include "layout.h"
 #include "resources.h"
-
+#include "keylink.h"
 
 
 #ifndef IMGUI_DEFINE_MATH_OPERATORS
@@ -86,11 +86,28 @@ void ShowMenuWindow(bool* p_open)
 	{
 		selected = 1;
 		layoutManager->SetLayoutType(KL_LAYOUT_ASSIGNMENT);
+
+
+		/* 调整Dock布局 */
+		auto window = ImGui::FindWindowByName(WINNAME_FUNCTION);
+		if (window != NULL)
+		{
+			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, APP_HEIGHT * dpiScale() / 2));
+			ImGui::DockBuilderFinish(window->DockId);
+		}
 	}
 	if (MySelectImageBtn(imglight1.texID, imglight2.texID, size, selected == 2))
 	{
 		selected = 2;
 		layoutManager->SetLayoutType(KL_LAYOUT_LIGHT);
+
+		/* 调整Dock布局 */
+		auto window = ImGui::FindWindowByName(WINNAME_LIGHT_MODIFY);
+		if (window != NULL)
+		{
+			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, APP_HEIGHT * dpiScale() / 2));
+			ImGui::DockBuilderFinish(window->DockId);
+		}
 	}
 	if (MySelectImageBtn(imgmacro1.texID, imgmacro2.texID, size, selected == 3))
 	{

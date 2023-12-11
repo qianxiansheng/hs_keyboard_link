@@ -3,6 +3,8 @@
 
 #include "pch.h"
 
+float dpiScale();
+
 void EnableKeyHook(bool enable);
 void HideApplication();
 void RestoreApplication();

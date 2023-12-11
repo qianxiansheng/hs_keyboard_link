@@ -66,16 +66,20 @@ bool main_init(int argc, char* argv[])
 	// Theme
 	ImGui::StyleColorsLight();
 
-	// Font
-	io.Fonts->AddFontDefault();
-
 	// 添加第二个字体，设置优先级为1
 	ImFontConfig config;
-	config.MergeMode = true;
+	config.MergeMode = false;
 	config.PixelSnapH = true;
 	config.OversampleH = 3;
 	config.OversampleV = 1;
-	io.Fonts->AddFontFromFileTTF(DEFAULT_FONT, 13.0f, &config, GetGlyphRangesChineseFullAndDirection());
+	io.Fonts->AddFontFromFileTTF(EN_FONT, 13.0f, &config, NULL);
+	
+	// 添加第三个字体，设置优先级为2
+	config.MergeMode = true;
+	config.PixelSnapH = true;
+	config.OversampleH = 2;
+	config.OversampleV = 2;
+	io.Fonts->AddFontFromFileTTF(ZH_FONT, 13.0f, &config, GetGlyphRangesChineseFullAndDirection());
 
 	io.Fonts->Build();
 
@@ -151,7 +155,7 @@ static void CustomizeTitle()
 	auto window = ImGui::GetCurrentWindow();
 	auto rect = window->Rect();
 
-	int itemHeight = 24;
+	int itemHeight = 16 * dpiScale();
 	int itemMargin = 2;
 
 	ImGuiIO& io = ImGui::GetIO();
@@ -468,7 +472,7 @@ static void ShowRootWindow(bool* p_open)
 	}
 	ImGui::PopStyleVar();	// WindowPadding
 
-	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+	ImGuiID dockspace_id = ImGui::GetID(DOCKSPACE_ID);
 	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_AutoHideTabBar | ImGuiDockNodeFlags_NoUndocking | ImGuiDockNodeFlags_NoResize);
 
 	ShowRootWindowMenu();

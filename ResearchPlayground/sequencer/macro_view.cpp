@@ -34,14 +34,16 @@ void ShowMacroViewWindow(bool* p_open)
 	auto& config = configManager->GetCurrentConfig();
 
 	const float TEXT_BASE_HEIGHT = ImGui::GetTextLineHeightWithSpacing();
+	ImVec2 region = ImGui::GetContentRegionAvail();
+
 	ImGuiTableFlags flags = ImGuiTableFlags_ScrollY | ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInnerV;
-	ImVec2 outer_size = ImVec2(0.0f, TEXT_BASE_HEIGHT * 24);
+	ImVec2 outer_size = ImVec2(0.0f, region.y);
 	if (ImGui::BeginTable("##KLMACRO_VIEW", 3, flags, outer_size))
 	{
 		ImGui::TableSetupScrollFreeze(0, 1); // Make top row always visibl
 		ImGui::TableSetupColumn("HID");
 		ImGui::TableSetupColumn("Action");
-		ImGui::TableSetupColumn("Delay");
+		ImGui::TableSetupColumn("Delay(ms)");
 		ImGui::TableHeadersRow();
 		
 

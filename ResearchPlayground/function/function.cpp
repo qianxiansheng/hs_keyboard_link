@@ -9,6 +9,8 @@
 #include "resources.h"
 #include "configuration/kl_persistence.h"
 
+#include "keylink.h"
+
 // initial static member
 KLFunctionConfigManager* KLFunctionConfigManager::s_Instance = nullptr;
 std::once_flag KLFunctionConfigManager::s_OnceFlag;
@@ -517,7 +519,7 @@ void DrawFunctionLayout()
 
 	ImDrawList* dl = ImGui::GetWindowDrawList();
 
-	const float d = 32.0f;
+	const float d = 32.0f * dpiScale();
 	const float padding = d / 10.0f;
 	const float rouding = 0.0f;
 
