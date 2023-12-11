@@ -322,15 +322,17 @@ KLFunctionLayout functionLayout[] = {
 	KLFunctionLayout(KLF_MEDIA_PREV			   , "func_prev"                , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
 	KLFunctionLayout(KLF_MEDIA_NEXT			   , "func_next"                , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
 
-	KLFunctionLayout(KLF_MEDIA_VOLUME_INC	   , "func_volume_increment"	, {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
+	KLFunctionLayout(KLF_MEDIA_VOLUME_INC	   , "func_volume_increment"	, {0.5f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
 	KLFunctionLayout(KLF_MEDIA_VOLUME_DEC	   , "func_volume_decrement"	, {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
 	KLFunctionLayout(KLF_MEDIA_MUTE			   , "func_mute"                , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
 	KLFunctionLayout(KLF_MEDIA_HOME			   , "func_home"                , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
-	KLFunctionLayout(KLF_MEDIA_CALC			   , "func_calc"                , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
+	
+	KLFunctionLayout(KLF_MEDIA_CALC			   , "func_calc"                , {0.5f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
 	KLFunctionLayout(KLF_MEDIA_EMAIL		   , "func_email"               , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
 	KLFunctionLayout(KLF_MEDIA_COMPUTER		   , "func_computer"            , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
 	KLFunctionLayout(KLF_MEDIA_COLLECT		   , "func_collect"	            , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
-	KLFunctionLayout(KLF_MEDIA_BRIGHTNESS_INC  , "func_brightness_increment", {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
+	
+	KLFunctionLayout(KLF_MEDIA_BRIGHTNESS_INC  , "func_brightness_increment", {0.25f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
 	KLFunctionLayout(KLF_MEDIA_BRIGHTNESS_DEC  , "func_brightness_decrement", {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
 	KLFunctionLayout(KLF_MEDIA_FULLSCREEN	   , "func_full_screen"         , {0.0f, 0.0f, 1.0f, 1.0f} , KL_FUNC_FLAG_IMAGE),
 

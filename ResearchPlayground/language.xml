@@ -36,6 +36,18 @@
 
     <ENTRY type="100" value="&#x5F00;&#x59CB;"/>
     <ENTRY type="101" value="&#x7ED3;&#x675F;"/>
+    
+    <ENTRY type="120" value="&#x6D88;&#x606F;"/>
+    
+    <ENTRY type="130" value="&#x5220;&#x9664;&#x914D;&#x7F6E;"/>
+    <ENTRY type="131" value="&#x662F;&#x5426;&#x786E;&#x8BA4;&#x5220;&#x9664;"/>
+    <ENTRY type="132" value="&#x65B0;&#x5EFA;&#x914D;&#x7F6E;"/>
+    <ENTRY type="133" value="&#x91CD;&#x547D;&#x540D;"/>
+    <ENTRY type="134" value="&#x521B;&#x5EFA;&#x5931;&#x8D25;&#xFF0C;&#x914D;&#x7F6E;&#x540D;&#x5DF2;&#x5B58;&#x5728;"/>
+    <ENTRY type="135" value="&#x91CD;&#x547D;&#x540D;&#x5931;&#x8D25;&#xFF0C;&#x914D;&#x7F6E;&#x540D;&#x5DF2;&#x5B58;&#x5728;"/>
+    <ENTRY type="136" value="&#x8BF7;&#x81F3;&#x5C11;&#x4FDD;&#x7559;&#x4E00;&#x4E2A;&#x914D;&#x7F6E;"/>
+
+    
   </LANGUAGE>
   <LANGUAGE type="1">
     <ENTRY type="1" value="Global"/>
@@ -72,5 +84,15 @@
     <ENTRY type="31" value="preview"/>
     
     <ENTRY type="100" value="start"/>
+    
+    <ENTRY type="120" value="Message"/>
+    
+    <ENTRY type="130" value="Delete Configuration"/>
+    <ENTRY type="131" value="Are you sure you want to delete it?"/>
+    <ENTRY type="132" value="Create Configuration"/>
+    <ENTRY type="133" value="Rename"/>
+    <ENTRY type="134" value="Creation failed, configuration name already exists"/>
+    <ENTRY type="135" value="Renaming failed, configuration name already exists"/>
+    <ENTRY type="136" value="Please keep at least one configuration"/>
   </LANGUAGE>
 </PROFILE>

@@ -743,12 +743,26 @@ void ShowKeyboardWindow(bool* p_open)
 	if (KL_LAYOUT_ASSIGNMENT == layoutManager->GetLayoutType())
 	{
 		static int e;
-		ImGui::RadioButton("Default", &e, KL_LAYER_TYPE_DEFAULT);
-		ImGui::SameLine();
-		ImGui::RadioButton("Fn1", &e, KL_LAYER_TYPE_FN1);
-		ImGui::SameLine();
-		ImGui::RadioButton("Fn2", &e, KL_LAYER_TYPE_FN2);
-
+		ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
+		if (ImGui::BeginTabBar("FunctionLayerTab", tab_bar_flags))
+		{
+			if (ImGui::BeginTabItem("Default"))
+			{
+				e = KL_LAYER_TYPE_DEFAULT;
+				ImGui::EndTabItem();
+			}
+			if (ImGui::BeginTabItem("Fn1"))
+			{
+				e = KL_LAYER_TYPE_FN1;
+				ImGui::EndTabItem();
+			}
+			if (ImGui::BeginTabItem("Fn2"))
+			{
+				e = KL_LAYER_TYPE_FN2;
+				ImGui::EndTabItem();
+			}
+			ImGui::EndTabBar();
+		}
 		KLFunctionConfigManager::GetInstance()->m_CurrentLayerType = (KLFunctionLayerType)e;
 	}
 

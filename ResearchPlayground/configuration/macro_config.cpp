@@ -12,6 +12,7 @@
 
 #include "sequencer/ingseq.h"
 #include "kl_persistence.h"
+#include "language.h"
 
 // initial static member
 KLMacroConfigManager* KLMacroConfigManager::s_Instance = nullptr;
@@ -198,7 +199,9 @@ void ShowMacroConfigManagerWindow(bool* p_open)
 			show_del_confirm = true;
 		}
 	}
-	if (utils::ConfirmEx(&show_del_confirm, u8"删除配置", u8"是否确认删除")) {
+	if (utils::ConfirmEx(&show_del_confirm, 
+		KLLABLEB(KLL_KEY_DIALOG_DEL_CONFIG, "DLG_DEL_CONFIG"),
+		KLLABLEA(KLL_KEY_DIALOG_DEL_CONFIG_CONFIRM))) {
 		configManager->RemoveCurrentConfig();
 		configManager->SetCurrentConfig(0);
 	}
@@ -209,7 +212,7 @@ void ShowMacroConfigManagerWindow(bool* p_open)
 		strcpy(data, configManager->GetCurrentConfig().name.c_str());
 		show_rename = true;
 	}
-	if (utils::Prompt(&show_new, u8"新建配置", u8"", data, KL_CONFIG_MAX_NAME_SIZE)) {
+	if (utils::Prompt(&show_new, KLLABLEB(KLL_KEY_DIALOG_NEW_CONFIG, "DLG_NEW_CONFIG"), "", data, KL_CONFIG_MAX_NAME_SIZE)) {
 		if (configManager->IsConfigExists(data)) {
 			show_msg_1 = true;
 		}
@@ -217,7 +220,7 @@ void ShowMacroConfigManagerWindow(bool* p_open)
 			configManager->AddConfig(data);
 		}
 	}
-	if (utils::Prompt(&show_rename, u8"重命名", u8"", data, KL_CONFIG_MAX_NAME_SIZE)) {
+	if (utils::Prompt(&show_rename, KLLABLEB(KLL_KEY_DIALOG_REN_CONFIG, "DLG_REN_CONFIG"), "", data, KL_CONFIG_MAX_NAME_SIZE)) {
 		if (configManager->GetCurrentConfig().name != data && configManager->IsConfigExists(data)) {
 			show_msg_2 = true;
 		}
@@ -226,9 +229,9 @@ void ShowMacroConfigManagerWindow(bool* p_open)
 		}
 	}
 
-	utils::AlertEx(&show_msg_1, u8"消息##CONFIG_MSG_1", u8"创建失败，配置名已存在");
-	utils::AlertEx(&show_msg_2, u8"消息##CONFIG_MSG_2", u8"重命名失败，配置名已存在");
-	utils::AlertEx(&show_msg_3, u8"消息##CONFIG_MSG_3", u8"请至少保留一个配置");
+	utils::AlertEx(&show_msg_1, KLLABLEB(KLL_KEY_DIALOG_MSG, "CONFIG_MSG_1"), KLLABLEA(KLL_KEY_DIALOG_NEW_ERROR_CONFIG_EXISTSED));
+	utils::AlertEx(&show_msg_2, KLLABLEB(KLL_KEY_DIALOG_MSG, "CONFIG_MSG_2"), KLLABLEA(KLL_KEY_DIALOG_REN_ERROR_CONFIG_EXISTSED));
+	utils::AlertEx(&show_msg_3, KLLABLEB(KLL_KEY_DIALOG_MSG, "CONFIG_MSG_3"), KLLABLEA(KLL_KEY_DIALOG_DEL_ERROR_KEEP_AT_LEAST_ONE));
 
 	ImGui::SameLine();
 	if (MyButton("btn_export", size))
