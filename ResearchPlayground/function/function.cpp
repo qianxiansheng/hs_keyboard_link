@@ -15,6 +15,8 @@
 KLFunctionConfigManager* KLFunctionConfigManager::s_Instance = nullptr;
 std::once_flag KLFunctionConfigManager::s_OnceFlag;
 
+extern KeyboardGLContext kbv_draw_ctx;
+
 void KLFunctionConfigManager::AddConfig(KLFunctionConfig& config)
 {
 	m_ConfigList.push_back(std::move(config));
@@ -527,6 +529,8 @@ void DrawFunctionLayout()
 
 	ImGui::SetWindowFontScale(1.0f);
 
+	KLFunction currentFunction = FindCurrentConfigFunctionByMapID(kbv_draw_ctx.active_index);
+
 	for (uint32_t i = 0; i < functionLayoutSize; ++i)
 	{
 		pos.x += d * functionLayout[i].x;
@@ -536,6 +540,8 @@ void DrawFunctionLayout()
 
 		bool hover = false;
 		bool mouse_down = false;
+		bool mouse_click = false;
+		ImU32 color = 0xFFFFFFFF;
 
 		if (keyRect.Contains(io.MousePos))
 		{
@@ -544,21 +550,29 @@ void DrawFunctionLayout()
 			ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
 			mouse_down = io.MouseDown[0];
+			mouse_click = io.MouseClicked[0];
 		}
+		
+		if (currentFunction.id == functionLayout[i].id)
+			color = 0xFFFFFF00;
+		else if (hover)
+			color = 0xFF7F7F00;
 
 		if (functionLayout[i].flagbits & KL_FUNC_FLAG_IMAGE)
 		{
 			auto& image = imageManager->GetImage(functionLayout[i].name);
 
-			dl->AddRectFilled(keyRect.Min, keyRect.Max, hover ? 0xFFFF0000 : 0xFFFFFFFF, rouding);
+			dl->AddRectFilled(keyRect.Min, keyRect.Max, color, rouding);
 			dl->AddImage(image.texID, keyRect.Min, keyRect.Max);
+			dl->AddRect(keyRect.Min, ImVec2(keyRect.Max.x + 1.0f, keyRect.Max.y + 1.0f), 0xFF000000, rouding);
 		}
 		else
 		{
-			dl->AddRectFilled(keyRect.Min, keyRect.Max, hover ? 0xFFFF0000 : 0xFFFFFFFF, rouding);
+			dl->AddRectFilled(keyRect.Min, keyRect.Max, color, rouding);
 			dl->AddText(ImVec2(pos.x + padding, pos.y + padding), 0xFF000000, functionLayout[i].name);
+			dl->AddRect(keyRect.Min, ImVec2(keyRect.Max.x + 1.0f, keyRect.Max.y + 1.0f), 0xFF000000, rouding);
 		}
-		if (mouse_down)
+		if (mouse_click)
 		{
 			auto manager = KLFunctionConfigManager::GetInstance();
 
