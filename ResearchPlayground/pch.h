@@ -30,6 +30,7 @@
 #define WINNAME_MACRO_VIEW "macro_view"
 #define DOCKSPACE_ID "MyDockSpace"
 
+#define WINWIDTH_LIGHT_CONFIG (150.0f)
 #define WINHEIGHT_FUNCTION_LIGHT_MODIFY ((APP_HEIGHT - 60.0f) / 2.0f)
 
 #define KL_CONFIG_MAX_NAME_SIZE 32

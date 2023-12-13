@@ -312,7 +312,7 @@ static void CustomizeTitle()
 	auto window = ImGui::GetCurrentWindow();
 	auto rect = window->Rect();
 
-	int itemHeight = 16 * dpiScale();
+	int itemHeight = (int)(16 * dpiScale());
 	int itemMargin = 2;
 
 	ImGuiIO& io = ImGui::GetIO();

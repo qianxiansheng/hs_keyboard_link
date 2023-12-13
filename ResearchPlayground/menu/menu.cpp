@@ -95,6 +95,13 @@ void ShowMenuWindow(bool* p_open)
 			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, WINHEIGHT_FUNCTION_LIGHT_MODIFY * dpiScale()));
 			ImGui::DockBuilderFinish(window->DockId);
 		}
+		/* 调整Dock布局 */
+		window = ImGui::FindWindowByName(WINNAME_ASSIGN_CONFIG_MGR);
+		if (window != NULL)
+		{
+			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(WINWIDTH_LIGHT_CONFIG * dpiScale(), 100.0f));
+			ImGui::DockBuilderFinish(window->DockId);
+		}
 	}
 	if (MySelectImageBtn(imglight1.texID, imglight2.texID, size, selected == 2))
 	{
@@ -108,11 +115,26 @@ void ShowMenuWindow(bool* p_open)
 			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, WINHEIGHT_FUNCTION_LIGHT_MODIFY * dpiScale()));
 			ImGui::DockBuilderFinish(window->DockId);
 		}
+		/* 调整Dock布局 */
+		window = ImGui::FindWindowByName(WINNAME_LIGHT);
+		if (window != NULL)
+		{
+			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(WINWIDTH_LIGHT_CONFIG * dpiScale(), 100.0f));
+			ImGui::DockBuilderFinish(window->DockId);
+		}
 	}
 	if (MySelectImageBtn(imgmacro1.texID, imgmacro2.texID, size, selected == 3))
 	{
 		selected = 3;
 		layoutManager->SetLayoutType(KL_LAYOUT_MACRO);
+
+		/* 调整Dock布局 */
+		auto window = ImGui::FindWindowByName(WINNAME_MACRO_CONFIG_MGR);
+		if (window != NULL)
+		{
+			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(WINWIDTH_LIGHT_CONFIG * dpiScale(), 100.0f));
+			ImGui::DockBuilderFinish(window->DockId);
+		}
 	}
 
 

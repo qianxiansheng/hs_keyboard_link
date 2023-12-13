@@ -236,14 +236,14 @@ void UpdateDPI(float screen_dpi)
         SetWindowPos(hWnd, NULL, 
             windowRect.left, 
             windowRect.top, 
-            APP_WIDTH * g_dpi_scale, 
-            APP_HEIGHT * g_dpi_scale, SWP_NOMOVE | SWP_NOZORDER);
+            (int)(APP_WIDTH  * g_dpi_scale), 
+            (int)(APP_HEIGHT * g_dpi_scale), SWP_NOMOVE | SWP_NOZORDER);
     }
 
     ImGuiIO& io = ImGui::GetIO();
     io.FontGlobalScale = g_dpi_scale; // 适当调整缩放因子
 
-    KeyboardGLReCreate(KL_KB_VIEW_WIDTH * dpiScale(), KL_KB_VIEW_HEIGHT * dpiScale());
+    KeyboardGLInit((int)(KL_KB_VIEW_WIDTH * dpiScale()), (int)(KL_KB_VIEW_HEIGHT * dpiScale()));
 
     /* 调整Dock布局 */
     auto window = ImGui::FindWindowByName(WINNAME_FUNCTION);
@@ -258,6 +258,30 @@ void UpdateDPI(float screen_dpi)
     if (window != NULL)
     {
         ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, WINHEIGHT_FUNCTION_LIGHT_MODIFY * g_dpi_scale));
+        ImGui::DockBuilderFinish(window->DockId);
+    }
+
+    /* 调整Dock布局 */
+    window = ImGui::FindWindowByName(WINNAME_LIGHT);
+    if (window != NULL)
+    {
+        ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(WINWIDTH_LIGHT_CONFIG * g_dpi_scale, 100.0f));
+        ImGui::DockBuilderFinish(window->DockId);
+    }
+
+    /* 调整Dock布局 */
+    window = ImGui::FindWindowByName(WINNAME_ASSIGN_CONFIG_MGR);
+    if (window != NULL)
+    {
+        ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(WINWIDTH_LIGHT_CONFIG * g_dpi_scale, 100.0f));
+        ImGui::DockBuilderFinish(window->DockId);
+    }
+
+    /* 调整Dock布局 */
+    window = ImGui::FindWindowByName(WINNAME_MACRO_CONFIG_MGR);
+    if (window != NULL)
+    {
+        ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(WINWIDTH_LIGHT_CONFIG * g_dpi_scale, 100.0f));
         ImGui::DockBuilderFinish(window->DockId);
     }
 }
@@ -306,10 +330,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance,
 
     InitImGuiContext();
 
-    UpdateDPI(GetDpiForWindow(hWnd));
+    UpdateDPI((float)GetDpiForWindow(hWnd));
 
     main_init(__argc, __argv);
-    KeyboardGLInit(KL_KB_VIEW_WIDTH * dpiScale(), KL_KB_VIEW_HEIGHT * dpiScale());
+    KeyboardGLInit((int)(KL_KB_VIEW_WIDTH * dpiScale()), (int)(KL_KB_VIEW_HEIGHT * dpiScale()));
 
     // 主消息循环
     bool done = false;
@@ -752,7 +776,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         int newDpiX = HIWORD(wParam);
         int newDpiY = LOWORD(wParam);
 
-        UpdateDPI(newDpiX);
+        UpdateDPI((float)newDpiX);
     }
     break;
     case WM_KEYDOWN:

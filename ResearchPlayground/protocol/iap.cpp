@@ -620,7 +620,7 @@ bool drv_set_func_map(const HIDDevice& dev)
 		try {
 			iap_business_read(dev, businessAckBuf, sizeof(businessAckBuf), DRV_PING_TIMEOUT);
 		}
-		catch (::recv_transfer_exception& e) {
+		catch (::recv_transfer_exception) {
 			return true;
 		}
 		catch (::timeout_exception) {
