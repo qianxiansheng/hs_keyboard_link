@@ -618,6 +618,8 @@ void ShowFunctionWindow(bool* p_open)
 	}
 	ImGui::GetCurrentWindow()->DockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
 
+
+
 	DrawFunctionLayout();
 
 

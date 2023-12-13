@@ -8,6 +8,9 @@
 #include <vector>
 #include "usb.h"
 
+#include "function/function.h"
+#include "keyboard/keyboard.h"
+
 #define log 
 
 enum IAPStatus
@@ -50,6 +53,7 @@ enum iap_cmd_e
 enum kldrv_cmd_e
 {
 	DRV_CMD_PING = 0xD0,
+	DRV_CMD_SET_FUNC_MAP = 0xD4,
 };
 
 enum iap_transfer_ctrl_flag_bit
@@ -85,6 +89,19 @@ enum iap_business_ack_code_e
 	ACK_CODE_HEADER_ENCRYPT_ERROR = 0xF8,
 };
 std::string iap_ack_str(iap_business_ack_code_e c);
+
+typedef enum {
+	IAP_TRANSPORT_ERR_NONE,
+	IAP_TRANSPORT_ERR_HEADER,
+	IAP_TRANSPORT_ERR_DIRECTION,
+	IAP_TRANSPORT_ERR_PACK_TYPE,
+	IAP_TRANSPORT_ERR_PACK_NUM,
+	IAP_TRANSPORT_ERR_LENGTH,
+	IAP_TRANSPORT_ERR_BCC,
+	IAP_TRANSPORT_ERR_BUFFER_OVERFLOW,
+
+} IAP_TransportErr_t;
+
 
 class IAPContext;
 
@@ -124,6 +141,12 @@ public:
 
 class transfer_pack_exception : public std::exception {};
 class business_pack_exception : public std::exception {};
+class recv_transfer_exception : public std::exception
+{
+public:
+	uint8_t errCode;
+	recv_transfer_exception(uint8_t _errCode) : exception(), errCode(_errCode){}
+};
 class timeout_exception : public std::exception {};
 
 void InitIAPContext(const HIDDevice& dev, std::vector<uint8_t> iap_bin, uint16_t blockSize, int maximumRetry, int readAckTimeout, uint16_t delay, onBusinessOkCallbackFunc callback, IAPContext* ctx);
@@ -135,3 +158,5 @@ void iap_run_switch_boot(IAPContext& ctx);
 void stop_ongoing_transfer();
 
 bool drv_ping(const HIDDevice& dev);
+
+bool drv_set_func_map(const HIDDevice& dev);

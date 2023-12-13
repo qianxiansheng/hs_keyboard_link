@@ -14,6 +14,10 @@
 
 #include "keylink.h"
 
+#include "ui_thread.h"
+#include "statusbar.h"
+#include "protocol/iap.h"
+
 /* kb map */
 uint8_t KEY_GetMapIdByRowAndCol(uint8_t row, uint8_t col) {
 	return usr_key_map[row][col];
@@ -926,6 +930,27 @@ void ShowKeyboardWindow(bool* p_open)
 		ImVec2 size(16.0f, 16.0f);
 		if (MyButton("btn_save", size)) {
 			configManager->SaveConfig();
+
+			auto deviceManager = KLDeviceManager::GetInstance();
+
+			if (deviceManager->HasDevice())
+			{
+				/* send cmd */
+				bool r = drv_set_func_map(deviceManager->GetCurrentDevice());
+				
+				if (r)
+				{
+					showAlert_(u8"保存成功");
+				}
+				else
+				{
+					showAlert_(u8"保存失败");
+				}
+			}
+			else
+			{
+				showAlert_(u8"设备未连接");
+			}
 		}
 		ImGui::SameLine();
 		if (MyButton("btn_erase", size)) {

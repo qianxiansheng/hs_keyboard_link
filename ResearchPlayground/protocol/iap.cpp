@@ -1,6 +1,7 @@
 #include "iap.h"
 #include <mutex>
 
+
 static uint8_t hid_report_buf[IAP_USB_HID_REPORT_SIZE] = { IAP_USB_HID_REPORT_ID };
 static uint8_t businessFlashWriteBuf[IAP_PRO_BUSINESS_FLASH_WRITE_BUF_MAX_SIZE] = { 0 };
 static uint8_t businessAckBuf[IAP_PRO_BUSINESS_ACK_MAX_SIZE] = { 0 };
@@ -133,6 +134,13 @@ uint16_t iap_transfer_read(const HIDDevice& dev, uint8_t* data, bool* isFirst, i
 	len = buf[4] | (buf[5] << 8);
 	//if (len != nRet - IAP_PRO_TRANSFER_ATT_SIZE)
 	//	throw transfer_pack_exception();
+
+	if (len == 1)
+	{
+		// transfer error
+		uint8_t error_code = buf[6];
+		throw ::recv_transfer_exception(error_code);
+	}
 
 	if (buf[len + 6] != utils::bcc(buf + 1, len + 5))
 		throw transfer_pack_exception();
@@ -526,3 +534,116 @@ bool drv_ping(const HIDDevice& dev)
 		return false;
 	}
 }
+
+extern const uint8_t usr_key_map[KEY_ROW_NUM][KB_COL_NUM];
+
+void drv_build_func_data(KLFunction& function, uint8_t* buf)
+{
+	buf[0] = KL_FUNC_TYPE_KB;
+	switch (function.type) {
+	case KL_FUNC_TYPE_KB:
+		buf[1] = function.payload.kb.subType;
+		buf[2] = 0x00;
+		buf[3] = function.payload.kb.hid;
+		break;
+	case KL_FUNC_TYPE_MOUSE:
+		buf[1] = 0x00;
+		buf[2] = 0x00;
+		buf[3] = 0x00;
+		break;
+	case KL_FUNC_TYPE_MEDIA:
+		buf[1] = 0x00;
+		buf[2] = 0x00;
+		buf[3] = function.payload.media.hid;
+		break;
+	case KL_FUNC_TYPE_MACRO:
+		buf[1] = 0x00;
+		buf[2] = 0x00;
+		buf[3] = 0x00;
+		break;
+	case KL_FUNC_TYPE_CUSTM:
+		buf[1] = 0x00;
+		buf[2] = 0x00;
+		buf[3] = 0x00;
+		break;
+	default:
+		buf[1] = 0x00;
+		buf[2] = 0x00;
+		buf[3] = 0x00;
+		break;
+	}
+}
+
+void drv_build_func_map_data(uint8_t* buf)
+{
+	auto manager = KLFunctionConfigManager::GetInstance();
+
+	auto& config = manager->GetCurrentConfig();
+
+	uint16_t idx = 0;
+
+	for (uint32_t i = 0; i < KEY_ROW_NUM; ++i)
+	{
+		for (uint32_t j = 0; j < KB_COL_NUM; ++j)
+		{
+			KEY_MapId_t kmId = (KEY_MapId_t)usr_key_map[i][j];
+
+			KLFunction& function = FindCurrentConfigFunctionByMapID(kmId);
+
+			drv_build_func_data(function, buf + idx);
+			idx += 4;
+		}
+	}
+}
+
+bool drv_set_func_map(const HIDDevice& dev)
+{
+	std::lock_guard<std::mutex> guard(transferMutex);
+
+	auto manager = KLFunctionConfigManager::GetInstance();
+
+	uint16_t fixedPayloadLen = 433;
+	uint8_t buf[1 + 2 + 433 + 2] = { 0 };
+	uint16_t i = 0;
+	buf[i++] = DRV_CMD_SET_FUNC_MAP;							// CMD
+	buf[i++] = fixedPayloadLen & 0xFF;							// LENGTH
+	buf[i++] = fixedPayloadLen >> 8;
+	buf[i++] = manager->m_CurrentLayerType;
+	drv_build_func_map_data(buf + i);
+	i += 432;
+	uint16_t crc = utils::crc16_modbus(buf, i);
+	buf[i++] = crc & 0xFF;										// CRC
+	buf[i++] = crc >> 8;
+
+	try {
+		iap_business(dev, buf, i);
+		try {
+			iap_business_read(dev, businessAckBuf, sizeof(businessAckBuf), DRV_PING_TIMEOUT);
+		}
+		catch (::recv_transfer_exception& e) {
+			return true;
+		}
+		catch (::timeout_exception) {
+			return false;
+		}
+		uint8_t ackCode = (iap_business_ack_code_e)businessAckBuf[1];
+		return true;
+	}
+	catch (std::exception) {
+		return false;
+	}
+
+	return false;
+}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,5 @@
-#ifndef __FUNCTION_H__
-#define __FUNCTION_H__
+#ifndef __KL_FUNCTION_H__
+#define __KL_FUNCTION_H__
 
 #include "../pch.h"
 #include "keyboard/keyboard.h"
@@ -242,6 +242,7 @@ struct KLFunction
 		strcpy(this->name, name);
 		this->type = KL_FUNC_TYPE_KB;
 		this->payload.kb.subType = subType;
+		this->payload.kb.__2 = 0x00;
 		this->payload.kb.hid = hid;
 	}
 	KLFunction(KLFunctionID id, const char* name, uint8_t hid)
@@ -249,6 +250,8 @@ struct KLFunction
 		this->id = id;
 		strcpy(this->name, name);
 		this->type = KL_FUNC_TYPE_MEDIA;
+		this->payload.media.__1 = 0x00;
+		this->payload.media.__2 = 0x00;
 		this->payload.media.hid = hid;
 	}
 };
