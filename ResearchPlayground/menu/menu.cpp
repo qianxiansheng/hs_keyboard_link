@@ -92,7 +92,7 @@ void ShowMenuWindow(bool* p_open)
 		auto window = ImGui::FindWindowByName(WINNAME_FUNCTION);
 		if (window != NULL)
 		{
-			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, APP_HEIGHT * dpiScale() / 2));
+			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, WINHEIGHT_FUNCTION_LIGHT_MODIFY * dpiScale()));
 			ImGui::DockBuilderFinish(window->DockId);
 		}
 	}
@@ -105,7 +105,7 @@ void ShowMenuWindow(bool* p_open)
 		auto window = ImGui::FindWindowByName(WINNAME_LIGHT_MODIFY);
 		if (window != NULL)
 		{
-			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, APP_HEIGHT * dpiScale() / 2));
+			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, WINHEIGHT_FUNCTION_LIGHT_MODIFY * dpiScale()));
 			ImGui::DockBuilderFinish(window->DockId);
 		}
 	}

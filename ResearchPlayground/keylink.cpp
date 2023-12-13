@@ -249,7 +249,7 @@ void UpdateDPI(float screen_dpi)
     auto window = ImGui::FindWindowByName(WINNAME_FUNCTION);
     if (window != NULL)
     {
-        ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, APP_HEIGHT * g_dpi_scale / 2));
+        ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, WINHEIGHT_FUNCTION_LIGHT_MODIFY * g_dpi_scale));
         ImGui::DockBuilderFinish(window->DockId);
     }
 
@@ -257,7 +257,7 @@ void UpdateDPI(float screen_dpi)
     window = ImGui::FindWindowByName(WINNAME_LIGHT_MODIFY);
     if (window != NULL)
     {
-        ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, APP_HEIGHT * g_dpi_scale / 2));
+        ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, WINHEIGHT_FUNCTION_LIGHT_MODIFY * g_dpi_scale));
         ImGui::DockBuilderFinish(window->DockId);
     }
 }

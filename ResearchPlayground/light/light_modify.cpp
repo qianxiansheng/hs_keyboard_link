@@ -8,7 +8,7 @@
 
 void ShowLightModifyWindow(bool* p_open)
 {
-	ImGuiWindowFlags window_flags = 0;
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoScrollbar;
 	if (!ImGui::Begin(WINNAME_LIGHT_MODIFY, p_open, window_flags)) {
 		ImGui::End();
 		return;

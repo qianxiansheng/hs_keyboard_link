@@ -21,6 +21,7 @@
 #define WINNAME_SEQUNCER "sequncer"
 #define WINNAME_FUNCTION "function"
 #define WINNAME_SETTINGS "settings"
+#define WINNAME_STATEBAR "statebar"
 #define WINNAME_LIGHT "light"
 #define WINNAME_LIGHT_MODIFY "light_modify"
 #define WINNAME_MACRO "macro"
@@ -29,6 +30,7 @@
 #define WINNAME_MACRO_VIEW "macro_view"
 #define DOCKSPACE_ID "MyDockSpace"
 
+#define WINHEIGHT_FUNCTION_LIGHT_MODIFY ((APP_HEIGHT - 60.0f) / 2.0f)
 
 #define KL_CONFIG_MAX_NAME_SIZE 32
 #define KL_CONFIG_MAX_NUM 99
@@ -39,6 +41,75 @@ constexpr auto LANGUAGE_FILE_NAME = "language.xml";
 constexpr auto SETTINGS_FILE_NAME = "settings.xml";
 
 #define VOID_PTR_CAST(pint) reinterpret_cast<void*>(static_cast<uintptr_t>(pint))
+
+
+/******************************************************************************************
+ * Protocol base on IAP
+ * 
+ * 
+ ******************************************************************************************/
+
+#define DEVICE_APP_VID 0x36B0
+#define DEVICE_APP_PID 0x3001
+#define DEVICE_APP_RID 0x2F
+
+#define IAP_HEADER_SIZE 128
+
+ // 7 = 1 + 1 + 2 + 2 + 1
+ // 1:header
+ // 1:ctrl_1
+ // 2:pack_ctrl 
+ // 2:length
+ // 1:bcc
+#define IAP_PRO_TRANSFER_ATT_SIZE 7
+// 5 = 1 + 2 + 2
+// 1:cmd
+// 2:length
+// 2:crc
+#define IAP_PRO_BUSINESS_ATT_SIZE 5
+// 7 = 1 + 1 + 1 + 2 + 2
+// 1:cmd
+// 1:errCode
+// 1:rspCmd
+// 2:length
+// 2:crc
+#define IAP_PRO_BUSINESS_ACK_ATT_SIZE 7
+// 6 = 2 + 4
+// 2:blockIdx
+// 4:offset
+#define IAP_PRO_BUSINESS_FLASH_WRITE_ATT_SIZE 6
+// 6 = 4 + 2
+// 4:offset
+// 2:size
+#define IAP_PRO_BUSINESS_READ_WRITE_ATT_SIZE 6
+
+#define IAP_USB_UID_EP_MPS              (64)
+#define IAP_USB_HID_REPORT_SIZE         (64)
+#define IAP_USB_HID_REPORT_ID           (0x2F)
+#define IAP_USB_HID_REPORT_CONTENT_SIZE (IAP_USB_HID_REPORT_SIZE - 1)   //ReportID:1
+#define IAP_PRO_TRANSFER_SIZE           (IAP_USB_HID_REPORT_CONTENT_SIZE)
+#define IAP_PRO_TRANSFER_PAYLOAD_SIZE   (IAP_PRO_TRANSFER_SIZE - IAP_PRO_TRANSFER_ATT_SIZE)
+
+#define IAP_PRO_TRANSFER_HEADER 0xAA
+
+#define IAP_PRO_MAX_BLOCK_SIZE 0x2000
+#define IAP_PRO_BUSINESS_FLASH_WRITE_PAYLOAD_MAX_SIZE   (IAP_PRO_MAX_BLOCK_SIZE + IAP_PRO_BUSINESS_FLASH_WRITE_ATT_SIZE)
+#define IAP_PRO_BUSINESS_FLASH_WRITE_BUF_MAX_SIZE       (IAP_PRO_BUSINESS_FLASH_WRITE_PAYLOAD_MAX_SIZE + IAP_PRO_BUSINESS_ATT_SIZE)
+#define IAP_PRO_BUSINESS_PAYLOAD_MAX_SIZE               (IAP_PRO_BUSINESS_FLASH_WRITE_PAYLOAD_MAX_SIZE)
+
+#define IAP_PRO_BUSINESS_FLASH_READ_PAYLOAD_MAX_SIZE    (IAP_PRO_MAX_BLOCK_SIZE + IAP_PRO_BUSINESS_READ_WRITE_ATT_SIZE)
+#define IAP_PRO_BUSINESS_FLASH_READ_BUF_MAX_SIZE        (IAP_PRO_BUSINESS_FLASH_READ_PAYLOAD_MAX_SIZE + IAP_PRO_BUSINESS_ACK_ATT_SIZE)
+#define IAP_PRO_BUSINESS_ACK_PAYLOAD_MAX_SIZE           (IAP_PRO_BUSINESS_FLASH_READ_PAYLOAD_MAX_SIZE)
+#define IAP_PRO_BUSINESS_ACK_MAX_SIZE                   (IAP_PRO_BUSINESS_ACK_PAYLOAD_MAX_SIZE + IAP_PRO_BUSINESS_ACK_ATT_SIZE)
+
+#define IAP_PACK_ERROR "PACK ERROR"
+
+#define DRV_PING_TIMEOUT 1000
+/******************************************************************************************/
+
+
+
+
 
 #ifdef _WIN32
 	//define something for Windows (32-bit and 64-bit, this part is common)

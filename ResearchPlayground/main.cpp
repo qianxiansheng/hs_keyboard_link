@@ -8,6 +8,10 @@
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
+#include "util/utils.h"
+#include "util/thread_pool.h"
+#include "protocol/usb.h"
+#include "ui_thread.h"
 
 #include "layout.h"
 
@@ -21,10 +25,13 @@
 #include "configuration/assignment_config.h"
 #include "configuration/macro_config.h"
 #include "sequencer/macro_view.h"
+#include "statusbar.h"
 
 #include "language.h"
 
 #include "keylink.h"
+
+#include "protocol/iap.h"
 
 #define IMIDTEXT(name, i) ((std::string(name) + std::to_string(i)).c_str())
 
@@ -32,10 +39,63 @@ static bool show_root_window = true;
 static bool opt_fullscreen = true;
 static bool opt_showdemowindow = false;
 
-static bool opt_showkeyboardwindow = true;
-static bool opt_showingsequencerwindow = false;
-static bool opt_showmenuwindow = true;
-static bool opt_showfunctionwindow = true;
+extern bool alert_flag;
+extern char alert_message[];
+extern char label_message[];
+
+static std::atomic_bool app_exit(false);
+
+static bool AppIsRunning()
+{
+	return !app_exit.load(std::memory_order_acquire);
+}
+
+/******************************************************************************************
+ * Application thread pool & Event loop
+ *
+ *
+ ******************************************************************************************/
+ThreadPool* pool;
+
+
+// Search Device
+static void SearchDevice(uint16_t vid, uint16_t pid, uint8_t rid, uint32_t milliseconds, HIDDevice* dev)
+{
+	auto overTime = std::chrono::system_clock::now() +
+		std::chrono::milliseconds(milliseconds);
+
+	while (AppIsRunning() && std::chrono::system_clock::now() < overTime)
+	{
+		if (OpenHIDInterface(vid, pid, rid, dev) == HID_FIND_SUCCESS)
+		{
+			printf("report ID:%02X\n", dev->reportId);
+			break;
+		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	}
+}
+static void SearchDeviceBootOrAPP(uint16_t bvid, uint16_t bpid, uint16_t avid, uint16_t apid, uint32_t milliseconds, HIDDevice* dev)
+{
+	auto overTime = std::chrono::system_clock::now() +
+		std::chrono::milliseconds(milliseconds);
+
+	while (AppIsRunning() && std::chrono::system_clock::now() < overTime)
+	{
+		if (OpenHIDInterface(bvid, bpid, dev) == HID_FIND_SUCCESS)
+		{
+			printf("report ID:%02X\n", dev->reportId);
+			break;
+		}
+		if (OpenHIDInterface(avid, apid, dev) == HID_FIND_SUCCESS)
+		{
+			printf("report ID:%02X\n", dev->reportId);
+			break;
+		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	}
+}
+
+
 
 extern MySequence mySequence;
 extern bool global_setting_x_system_tray;
@@ -57,14 +117,9 @@ const ImWchar* GetGlyphRangesChineseFullAndDirection()
 	return &ranges[0];
 }
 
-bool main_init(int argc, char* argv[])
+void BuildImGuiFont()
 {
-	// Enable Dock
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-
-	// Theme
-	ImGui::StyleColorsLight();
 
 	// 添加第二个字体，设置优先级为1
 	ImFontConfig config;
@@ -73,7 +128,7 @@ bool main_init(int argc, char* argv[])
 	config.OversampleH = 3;
 	config.OversampleV = 1;
 	io.Fonts->AddFontFromFileTTF(EN_FONT, 13.0f, &config, NULL);
-	
+
 	// 添加第三个字体，设置优先级为2
 	config.MergeMode = true;
 	config.PixelSnapH = true;
@@ -82,16 +137,16 @@ bool main_init(int argc, char* argv[])
 	io.Fonts->AddFontFromFileTTF(ZH_FONT, 13.0f, &config, GetGlyphRangesChineseFullAndDirection());
 
 	io.Fonts->Build();
+}
 
-	ImGuiStyle& style = ImGui::GetStyle();
-	//style.ScaleAllSizes(0.5f);
-
-	// Layout Manager
+void BuildLayoutManager()
+{
 	KLWindowInfo menu_win_info(WINNAME_MENU, ShowMenuWindow);
 	KLWindowInfo kbod_win_info(WINNAME_KEYBOARD, ShowKeyboardWindow);
 	KLWindowInfo sequ_win_info(WINNAME_SEQUNCER, ShowINGSequencerWindow);
 	KLWindowInfo func_win_info(WINNAME_FUNCTION, ShowFunctionWindow);
 	KLWindowInfo sett_win_info(WINNAME_SETTINGS, ShowSettingsWindow);
+	KLWindowInfo stat_win_info(WINNAME_STATEBAR, ShowStatusBarWindow);
 	KLWindowInfo light_win_info(WINNAME_LIGHT, ShowLightWindow);
 	KLWindowInfo light_modeify_win_info(WINNAME_LIGHT_MODIFY, ShowLightModifyWindow);
 	KLWindowInfo assign_cfg_mgr_win_info(WINNAME_ASSIGN_CONFIG_MGR, ShowAssignmentConfigManagerWindow);
@@ -103,39 +158,141 @@ bool main_init(int argc, char* argv[])
 	// Global settings
 	layoutManager->KLRegisterLayout(KL_LAYOUT_SETTING, menu_win_info);
 	layoutManager->KLRegisterLayout(KL_LAYOUT_SETTING, sett_win_info);
+	layoutManager->KLRegisterLayout(KL_LAYOUT_SETTING, stat_win_info);
+	
 
 	// key assignment
 	layoutManager->KLRegisterLayout(KL_LAYOUT_ASSIGNMENT, menu_win_info);
 	layoutManager->KLRegisterLayout(KL_LAYOUT_ASSIGNMENT, kbod_win_info);
 	layoutManager->KLRegisterLayout(KL_LAYOUT_ASSIGNMENT, func_win_info);
 	layoutManager->KLRegisterLayout(KL_LAYOUT_ASSIGNMENT, assign_cfg_mgr_win_info);
+	layoutManager->KLRegisterLayout(KL_LAYOUT_ASSIGNMENT, stat_win_info);
 
 	// light
 	layoutManager->KLRegisterLayout(KL_LAYOUT_LIGHT, menu_win_info);
 	layoutManager->KLRegisterLayout(KL_LAYOUT_LIGHT, kbod_win_info);
 	layoutManager->KLRegisterLayout(KL_LAYOUT_LIGHT, light_win_info);
 	layoutManager->KLRegisterLayout(KL_LAYOUT_LIGHT, light_modeify_win_info);
+	layoutManager->KLRegisterLayout(KL_LAYOUT_LIGHT, stat_win_info);
 
 	// macro
 	layoutManager->KLRegisterLayout(KL_LAYOUT_MACRO, menu_win_info);
-	layoutManager->KLRegisterLayout(KL_LAYOUT_MACRO, sequ_win_info); 
+	layoutManager->KLRegisterLayout(KL_LAYOUT_MACRO, sequ_win_info);
 	layoutManager->KLRegisterLayout(KL_LAYOUT_MACRO, macro_view_win_info);
 	layoutManager->KLRegisterLayout(KL_LAYOUT_MACRO, macro_cfg_mgr_win_info);
+	layoutManager->KLRegisterLayout(KL_LAYOUT_MACRO, stat_win_info);
+}
+
+void StartMonitorDeviceConnectivity(const HIDDevice& hidDevice);
+void StartScanDevice();
+
+void MonitorDeviceConnectivityTask(const HIDDevice& hidDevice)
+{
+	while (AppIsRunning())
+	{
+		/* Send ping cmd */
+		if (!drv_ping(hidDevice))
+		{
+			showLabel("The device has been lost.");
+
+			KLDeviceManager::GetInstance()->RemoveDevice(hidDevice);
+
+			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+			StartScanDevice();
+			
+			break;
+		}
+
+		/* Delay 2000ms */
+		for (uint8_t i = 0; i < 20; ++i)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+			if (!AppIsRunning())
+				return;
+		}
+	}
+}
+
+void ScanDeviceTask()
+{
+	HIDDevice hid = { 0 };
+	SearchDevice(DEVICE_APP_VID, DEVICE_APP_PID, DEVICE_APP_RID, 1800000, &hid);
+
+	if (hid.phandle == NULL)
+	{
+		showAlert_("Open Device Failed!");
+	}
+	else
+	{
+		showLabel("Open Success! APP");
+
+		auto deviceManager = KLDeviceManager::GetInstance();
+		deviceManager->AddDevice(hid);
+		deviceManager->SetCurrentDevice(0);		//TODO
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+		StartMonitorDeviceConnectivity(hid);
+	}
+}
+
+void StartMonitorDeviceConnectivity(const HIDDevice& hidDevice)
+{
+	pool->enqueue(MonitorDeviceConnectivityTask, hidDevice);
+}
+
+void StartScanDevice()
+{
+	pool->enqueue(ScanDeviceTask);
+}
+
+bool main_init(int argc, char* argv[])
+{
+	// Enable Dock
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+	// Theme
+	ImGui::StyleColorsLight();
+
+	// Thread pool
+	pool = new ThreadPool(10);
+
+	// UI Thread
+	InitUIThread();
+
+	// Font
+	BuildImGuiFont();
+
+	// Layout Manager
+	BuildLayoutManager();
 	
+	// Sequencer
 	mySequence.mFrameMin = 0;
 	mySequence.mFrameMax = 50000;
 
+	// Window Init
 	InitSettingsWindow();
 	InitAssignmentConfigManagerWindow();
 	InitMacroConfigWindow();
-
 	KLLanguageManager::GetInstance()->LoadConfig();
+
+	// HID
+	HIDInit();
+
+	// Start Search Device
+	StartScanDevice();
 
     return true;
 }
 
 void main_shutdown(void)
 {
+	app_exit.store(true, std::memory_order_release);
+	DestroyUIThread();
+	HIDExit();
+
+	delete pool;
 }
 
 
@@ -476,6 +633,8 @@ static void ShowRootWindow(bool* p_open)
 	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_AutoHideTabBar | ImGuiDockNodeFlags_NoUndocking | ImGuiDockNodeFlags_NoResize);
 
 	ShowRootWindowMenu();
+
+	utils::AlertEx(&alert_flag, "UIMSG", alert_message);
 
 	ImGui::End();
 

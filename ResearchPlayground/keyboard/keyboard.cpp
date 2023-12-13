@@ -842,7 +842,7 @@ static bool MyButton(const char* vgname, ImVec2 size)
 
 void ShowKeyboardWindow(bool* p_open)
 {
-	ImGuiWindowFlags window_flags = 0;
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoScrollbar;
 	if (!ImGui::Begin(WINNAME_KEYBOARD, p_open, window_flags)) {
 		ImGui::End();
 		return;
@@ -919,7 +919,7 @@ void ShowKeyboardWindow(bool* p_open)
 		ImVec2(texMapU_Min, (1.0f - texMapV_Min)), ImVec2(texMapU_Max, (1.0f - texMapV_Max))// UV mapping
 	);
 
-	ImGui::Text("%f %f %f", kbv_draw_ctx.camera.Position.x, kbv_draw_ctx.camera.Position.y, kbv_draw_ctx.camera.Position.z);
+	//ImGui::Text("%f %f %f", kbv_draw_ctx.camera.Position.x, kbv_draw_ctx.camera.Position.y, kbv_draw_ctx.camera.Position.z);
 
 	if (KL_LAYOUT_ASSIGNMENT == layoutManager->GetLayoutType())
 	{

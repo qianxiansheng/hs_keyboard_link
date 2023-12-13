@@ -28,7 +28,7 @@ int lightSize = sizeof(lights) / sizeof(lights[0]);
 
 void ShowLightWindow(bool* p_open)
 {
-	ImGuiWindowFlags window_flags = 0;
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoScrollbar;
 	if (!ImGui::Begin(WINNAME_LIGHT, p_open, window_flags)) {
 		ImGui::End();
 		return;

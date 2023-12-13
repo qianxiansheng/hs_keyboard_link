@@ -49,6 +49,9 @@
     <Filter Include="源文件\light">
       <UniqueIdentifier>{b82a4def-057f-40c0-8da7-4ef1a2bd75dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\protocol">
+      <UniqueIdentifier>{3d85a03a-9c59-482e-bab7-a12ef8a50c18}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -139,6 +142,21 @@
       <Filter>源文件\settings</Filter>
     </ClCompile>
     <ClCompile Include="keylink.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol\iap.cpp">
+      <Filter>源文件\protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol\usb.cpp">
+      <Filter>源文件\protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\util\myqueue.cpp">
+      <Filter>源文件\common</Filter>
+    </ClCompile>
+    <ClCompile Include="ui_thread.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="statusbar.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

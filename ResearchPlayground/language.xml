@@ -33,6 +33,12 @@
     <ENTRY type="29" value="&#x5220;&#x9664;"/>
     <ENTRY type="30" value="&#x65B0;&#x5EFA;"/>
     <ENTRY type="31" value="&#x9884;&#x89C8;"/>
+    <ENTRY type="32" value="&#x7B49;&#x5F85;&#x8BBE;&#x5907;&#x8FDE;&#x63A5;"/>
+    <ENTRY type="33" value="&#x8BBE;&#x5907;&#x5DF2;&#x8FDE;&#x63A5;"/>
+      
+
+
+      
 
     <ENTRY type="100" value="&#x5F00;&#x59CB;"/>
     <ENTRY type="101" value="&#x7ED3;&#x675F;"/>
@@ -46,7 +52,6 @@
     <ENTRY type="134" value="&#x521B;&#x5EFA;&#x5931;&#x8D25;&#xFF0C;&#x914D;&#x7F6E;&#x540D;&#x5DF2;&#x5B58;&#x5728;"/>
     <ENTRY type="135" value="&#x91CD;&#x547D;&#x540D;&#x5931;&#x8D25;&#xFF0C;&#x914D;&#x7F6E;&#x540D;&#x5DF2;&#x5B58;&#x5728;"/>
     <ENTRY type="136" value="&#x8BF7;&#x81F3;&#x5C11;&#x4FDD;&#x7559;&#x4E00;&#x4E2A;&#x914D;&#x7F6E;"/>
-
     
   </LANGUAGE>
   <LANGUAGE type="1">
@@ -82,6 +87,8 @@
     <ENTRY type="29" value="delete"/>
     <ENTRY type="30" value="new"/>
     <ENTRY type="31" value="preview"/>
+    <ENTRY type="32" value="Waiting for device connection"/>
+    <ENTRY type="33" value="device connected"/>
     
     <ENTRY type="100" value="start"/>
     
