@@ -10,6 +10,10 @@
 
 #include "protocol/iap.h"
 
+#include "ui_thread.h"
+#include "keylink.h"
+
+char label_message[];
 
 KLDeviceManager* KLDeviceManager::s_Instance = nullptr;
 std::once_flag KLDeviceManager::s_OnceFlag;
@@ -60,31 +64,54 @@ void ShowStatusBarWindow(bool* p_open)
 
 	auto deviceManager = KLDeviceManager::GetInstance();
 
-	if (deviceManager->HasDevice()) 
 	{
-		ImGui::Text("%s %s", KLLABLEA(KLL_KEY_DEVICE_CONNECTED), "");
-	}
-	else
-	{
-		static char dotbuf[7] = "";
-		static int dotcnt = 0;
-		static int framecnt = 0;
-		if (framecnt++ >= 30)
+		if (deviceManager->HasDevice()) 
 		{
-			if (dotcnt == 6)
-			{
-				dotcnt = 0;
-				strcpy(dotbuf, "");
-			}
-			else
-			{
-				dotbuf[dotcnt] = '.';
-				dotcnt++;
-				dotbuf[dotcnt] = '\0';
-			}
-			framecnt = 0;
+			ImGui::Text("%s %s", KLLABLEA(KLL_KEY_DEVICE_CONNECTED), "");
 		}
-		ImGui::Text("%s%s", KLLABLEA(KLL_KEY_WAIT_FOR_CONNECTION), dotbuf);
+		else
+		{
+			static char dotbuf[7] = "";
+			static int dotcnt = 0;
+			static int framecnt = 0;
+			if (framecnt++ >= 30)
+			{
+				if (dotcnt == 6)
+				{
+					dotcnt = 0;
+					strcpy(dotbuf, "");
+				}
+				else
+				{
+					dotbuf[dotcnt] = '.';
+					dotcnt++;
+					dotbuf[dotcnt] = '\0';
+				}
+				framecnt = 0;
+			}
+			ImGui::Text("%s%s", KLLABLEA(KLL_KEY_WAIT_FOR_CONNECTION), dotbuf);
+		}
+	}
+	ImGui::SameLine();
+	ImGuiDCXAxisAlign(DPI(300.0f));
+	{
+		ImGui::Text(label_message);
+	}
+	ImGui::SameLine();
+	ImGuiDCXAxisAlign(DPI(600.0f));
+	{
+		static int fps = 0;
+		static int frame_cnt = 0;
+		frame_cnt++;
+		static long long time = 0;
+		long long curr = utils::get_current_system_time_us();
+		if (curr - time >= 1000000)
+		{
+			time = curr;
+			fps = frame_cnt;
+			frame_cnt = 0;
+		}
+		ImGui::Text("FPS:%d", fps);
 	}
 
 	ImGui::End();

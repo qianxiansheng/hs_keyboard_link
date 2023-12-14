@@ -107,19 +107,6 @@ void ShowMenuWindow(bool* p_open)
 	}
 
 
-	static int fps = 0;
-	static int frame_cnt = 0;
-	frame_cnt++;
-	static long long time = 0;
-	long long curr = utils::get_current_system_time_us();
-	if (curr - time >= 1000000)
-	{
-		time = curr;
-		fps = frame_cnt;
-		frame_cnt = 0;
-	}
-	ImGui::Text("FPS:%d", fps);
-
 	ImGui::End();
 	ImGui::PopStyleVar();	//ImGuiStyleVar_WindowPadding
 }
