@@ -36,11 +36,12 @@ void ShowMacroViewWindow(bool* p_open)
 	const float TEXT_BASE_HEIGHT = ImGui::GetTextLineHeightWithSpacing();
 	ImVec2 region = ImGui::GetContentRegionAvail();
 
-	ImGuiTableFlags flags = ImGuiTableFlags_ScrollY | ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInnerV;
+	ImGuiTableFlags flags = ImGuiTableFlags_ScrollY | ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_SizingStretchProp;
 	ImVec2 outer_size = ImVec2(0.0f, region.y);
-	if (ImGui::BeginTable("##KLMACRO_VIEW", 3, flags, outer_size))
+	if (ImGui::BeginTable("##KLMACRO_VIEW", 4, flags, outer_size))
 	{
 		ImGui::TableSetupScrollFreeze(0, 1); // Make top row always visibl
+		ImGui::TableSetupColumn("No.");
 		ImGui::TableSetupColumn("HID");
 		ImGui::TableSetupColumn("Action");
 		ImGui::TableSetupColumn("Delay(ms)");
@@ -57,10 +58,12 @@ void ShowMacroViewWindow(bool* p_open)
 				auto& action = config.actions[row];
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
-				ImGui::Text(FindFunctionByFunctionID(action.fid).name);
+				ImGui::Text("%d", row);
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text(action.type == KL_MACRO_ACTYPE_UP ? "UP" : "DOWN");
+				ImGui::Text(FindFunctionByFunctionID(action.fid).name);
 				ImGui::TableSetColumnIndex(2);
+				ImGui::Text(action.type == KL_MACRO_ACTYPE_UP ? "UP" : "DOWN");
+				ImGui::TableSetColumnIndex(3);
 				ImGui::Text("%d", action.delay);
 			}
 		}
