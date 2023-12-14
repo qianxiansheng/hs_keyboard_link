@@ -52,6 +52,8 @@ static const float      g_dpi_fixed = 96.0f;
 static float            g_dpi_screen = 96.0f;
 static float            g_dpi_scale = 1.0f;
 
+extern bool global_setting_x_system_tray;
+
 extern std::unordered_map<KLFunctionID, KLFunction> function_map;
 
 std::unordered_map<USHORT, KLFunction> kv_to_hid_map = {
@@ -721,6 +723,15 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             return -1;
         }
         break;
+    case WM_CLOSE:
+        if (global_setting_x_system_tray) {
+            ShowWindow(hWnd, SW_HIDE);
+            HideApplication();
+        }
+        else {
+            PostQuitMessage(0);
+        }
+        return 0;
     case WMAPP_NOTIFYCALLBACK:
         // 处理通知图标消息
         switch (lParam) {
