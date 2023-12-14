@@ -87,54 +87,23 @@ void ShowMenuWindow(bool* p_open)
 		selected = 1;
 		layoutManager->SetLayoutType(KL_LAYOUT_ASSIGNMENT);
 
-
-		/* 调整Dock布局 */
-		auto window = ImGui::FindWindowByName(WINNAME_FUNCTION);
-		if (window != NULL)
-		{
-			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, DPI(WINHEIGHT_FUNCTION_LIGHT_MODIFY)));
-			ImGui::DockBuilderFinish(window->DockId);
-		}
-		/* 调整Dock布局 */
-		window = ImGui::FindWindowByName(WINNAME_ASSIGN_CONFIG_MGR);
-		if (window != NULL)
-		{
-			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(DPI(WINWIDTH_LIGHT_CONFIG), 100.0f));
-			ImGui::DockBuilderFinish(window->DockId);
-		}
+		UpdateWindowDockNodeHeight(WINNAME_FUNCTION, WINHEIGHT_FUNCTION_LIGHT_MODIFY);
+		UpdateWindowDockNodeWidth(WINNAME_ASSIGN_CONFIG_MGR, WINWIDTH_LIGHT_CONFIG);
 	}
 	if (MySelectImageBtn(imglight1.texID, imglight2.texID, size, selected == 2))
 	{
 		selected = 2;
 		layoutManager->SetLayoutType(KL_LAYOUT_LIGHT);
 
-		/* 调整Dock布局 */
-		auto window = ImGui::FindWindowByName(WINNAME_LIGHT_MODIFY);
-		if (window != NULL)
-		{
-			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, DPI(WINHEIGHT_FUNCTION_LIGHT_MODIFY)));
-			ImGui::DockBuilderFinish(window->DockId);
-		}
-		/* 调整Dock布局 */
-		window = ImGui::FindWindowByName(WINNAME_LIGHT);
-		if (window != NULL)
-		{
-			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(DPI(WINWIDTH_LIGHT_CONFIG), 100.0f));
-			ImGui::DockBuilderFinish(window->DockId);
-		}
+		UpdateWindowDockNodeHeight(WINNAME_LIGHT_MODIFY, WINHEIGHT_FUNCTION_LIGHT_MODIFY);
+		UpdateWindowDockNodeWidth(WINNAME_LIGHT, WINWIDTH_LIGHT_CONFIG);
 	}
 	if (MySelectImageBtn(imgmacro1.texID, imgmacro2.texID, size, selected == 3))
 	{
 		selected = 3;
 		layoutManager->SetLayoutType(KL_LAYOUT_MACRO);
 
-		/* 调整Dock布局 */
-		auto window = ImGui::FindWindowByName(WINNAME_MACRO_CONFIG_MGR);
-		if (window != NULL)
-		{
-			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(DPI(WINWIDTH_LIGHT_CONFIG ), 100.0f));
-			ImGui::DockBuilderFinish(window->DockId);
-		}
+		UpdateWindowDockNodeWidth(WINNAME_MACRO_CONFIG_MGR, WINWIDTH_LIGHT_CONFIG);
 	}
 
 

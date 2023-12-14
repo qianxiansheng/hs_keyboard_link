@@ -225,6 +225,26 @@ void EnableKeyHook(bool enable)
     g_hook_enabled = enable;
 }
 
+
+void UpdateWindowDockNodeWidth(const char* windowName, float width)
+{
+    auto window = ImGui::FindWindowByName(windowName);
+    if (window != NULL && window->DockNode != NULL)
+    {
+        ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(DPI(width), window->DockNode->Size.y));
+        ImGui::DockBuilderFinish(window->DockId);
+    }
+}
+void UpdateWindowDockNodeHeight(const char* windowName, float height)
+{
+    auto window = ImGui::FindWindowByName(windowName);
+    if (window != NULL && window->DockNode != NULL)
+    {
+        ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(window->DockNode->Size.x, DPI(height)));
+        ImGui::DockBuilderFinish(window->DockId);
+    }
+}
+
 void UpdateDPI(float screen_dpi)
 {
     g_dpi_screen = screen_dpi;
@@ -246,44 +266,11 @@ void UpdateDPI(float screen_dpi)
     KeyboardGLInit((int)DPI(KL_KB_VIEW_WIDTH), (int)DPI(KL_KB_VIEW_HEIGHT));
 
     /* 调整Dock布局 */
-    auto window = ImGui::FindWindowByName(WINNAME_FUNCTION);
-    if (window != NULL)
-    {
-        ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, WINHEIGHT_FUNCTION_LIGHT_MODIFY * g_dpi_scale));
-        ImGui::DockBuilderFinish(window->DockId);
-    }
-
-    /* 调整Dock布局 */
-    window = ImGui::FindWindowByName(WINNAME_LIGHT_MODIFY);
-    if (window != NULL)
-    {
-        ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, WINHEIGHT_FUNCTION_LIGHT_MODIFY * g_dpi_scale));
-        ImGui::DockBuilderFinish(window->DockId);
-    }
-
-    /* 调整Dock布局 */
-    window = ImGui::FindWindowByName(WINNAME_LIGHT);
-    if (window != NULL)
-    {
-        ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(WINWIDTH_LIGHT_CONFIG * g_dpi_scale, 100.0f));
-        ImGui::DockBuilderFinish(window->DockId);
-    }
-
-    /* 调整Dock布局 */
-    window = ImGui::FindWindowByName(WINNAME_ASSIGN_CONFIG_MGR);
-    if (window != NULL)
-    {
-        ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(WINWIDTH_LIGHT_CONFIG * g_dpi_scale, 100.0f));
-        ImGui::DockBuilderFinish(window->DockId);
-    }
-
-    /* 调整Dock布局 */
-    window = ImGui::FindWindowByName(WINNAME_MACRO_CONFIG_MGR);
-    if (window != NULL)
-    {
-        ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(WINWIDTH_LIGHT_CONFIG * g_dpi_scale, 100.0f));
-        ImGui::DockBuilderFinish(window->DockId);
-    }
+    UpdateWindowDockNodeHeight(WINNAME_FUNCTION, WINHEIGHT_FUNCTION_LIGHT_MODIFY);
+    UpdateWindowDockNodeHeight(WINNAME_LIGHT_MODIFY, WINHEIGHT_FUNCTION_LIGHT_MODIFY);
+    UpdateWindowDockNodeWidth(WINNAME_LIGHT, WINWIDTH_LIGHT_CONFIG);
+    UpdateWindowDockNodeWidth(WINNAME_ASSIGN_CONFIG_MGR, WINWIDTH_LIGHT_CONFIG);
+    UpdateWindowDockNodeWidth(WINNAME_MACRO_CONFIG_MGR, WINWIDTH_LIGHT_CONFIG);
 }
 
 float dpiScale()

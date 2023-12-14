@@ -9,10 +9,7 @@
 #include "language.h"
 #include "settings/program_setting.h"
 #include "configuration/kl_persistence.h"
-
-
-#define ImGuiDCXAxisAlign(v) ImGui::SetCursorPos(ImVec2((v), ImGui::GetCursorPos().y))
-#define ImGuiDCYMargin(v) ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y + (v)))
+#include "keylink.h"
 
 IdelTime idleTime[] = {
 	{30, 0},
@@ -70,94 +67,112 @@ void ShowSettingsWindow(bool* p_open)
 	}
 	ImGui::GetCurrentWindow()->DockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
 
-
-	/* Global Setting Device Info */
-	ImGui::SeparatorText(KLLABLEA(KLL_KEY_DEVICE_INFO));
-	char device_model[] = "-";
-	char chip_model[] = "-";
-	char hard_version[] = "-";
-	char soft_version[] = "-";
-	float c1 = 150.0f;
-
-	ImGui::Text(KLLABLEA(KLL_KEY_DEVICE_MODEL));
-	ImGui::SameLine();
-	ImGuiDCXAxisAlign(c1);
-	ImGui::Text("%s", device_model);
-
-	ImGui::Text(KLLABLEA(KLL_KEY_CHIP_MODEL));
-	ImGui::SameLine();
-	ImGuiDCXAxisAlign(c1);
-	ImGui::Text("%s", chip_model);
-
-	ImGui::Text(KLLABLEA(KLL_KEY_HARDWARE_VERSION));
-	ImGui::SameLine();
-	ImGuiDCXAxisAlign(c1);
-	ImGui::Text("%s", hard_version);
-
-	ImGui::Text(KLLABLEA(KLL_KEY_SOFTWARE_VERSION));
-	ImGui::SameLine();
-	ImGuiDCXAxisAlign(c1);
-	ImGui::Text("%s", soft_version);
-
-
-	/* Global Setting Language */
-	ImGui::SeparatorText(KLLABLEA(KLL_KEY_LANGUAGE));
-	static int item_current_2 = KLLanguageManager::GetInstance()->GetLanguage();
-	static int prev_item = 0;
-	ImGui::Combo("##LANGUAGE", &item_current_2, u8"简体中文\0English\0\0");
-	if (prev_item != item_current_2)
-		KLLanguageManager::GetInstance()->SetLanguage((KLLangType)item_current_2);
-	prev_item = item_current_2;
-
-	/* Global Setting Auto Run */
-	ImGui::SeparatorText(KLLABLEA(KLL_KEY_STARTUP));
-	static bool autoRunPrev = global_setting_auto_run;
-	static bool autoRunCurr = global_setting_auto_run;
-	ToggleButton("##TOGGLE_AUTO_RUN", &autoRunCurr);
-	if (autoRunPrev != autoRunCurr)
+	ImVec2 region = ImGui::GetContentRegionAvail();
+	ImGui::BeginChild("##DEVICE_SETTINGS", ImVec2(DPI(300.0f), region.y), true);
 	{
-		global_setting_auto_run = autoRunPrev = autoRunCurr;
-		if (global_setting_auto_run) {
-			AutoRunRegisterSet();
-		} else {
-			AutoRunRegisterDel();
+		ImGui::Text(u8"设备设置");
+		/* Global Setting Device Info */
+		ImGui::SeparatorText(KLLABLEA(KLL_KEY_DEVICE_INFO));
+		char device_model[] = "-";
+		char chip_model[] = "-";
+		char hard_version[] = "-";
+		char soft_version[] = "-";
+		float c1 = DPI(150.0f);
+
+		ImGui::Text(KLLABLEA(KLL_KEY_DEVICE_MODEL));
+		ImGui::SameLine();
+		ImGuiDCXAxisAlign(c1);
+		ImGui::Text("%s", device_model);
+
+		ImGui::Text(KLLABLEA(KLL_KEY_CHIP_MODEL));
+		ImGui::SameLine();
+		ImGuiDCXAxisAlign(c1);
+		ImGui::Text("%s", chip_model);
+
+		ImGui::Text(KLLABLEA(KLL_KEY_HARDWARE_VERSION));
+		ImGui::SameLine();
+		ImGuiDCXAxisAlign(c1);
+		ImGui::Text("%s", hard_version);
+
+		ImGui::Text(KLLABLEA(KLL_KEY_SOFTWARE_VERSION));
+		ImGui::SameLine();
+		ImGuiDCXAxisAlign(c1);
+		ImGui::Text("%s", soft_version);
+
+
+		/* Global Setting Sleepxit */
+		ImGui::SeparatorText(KLLABLEA(KLL_KEY_SLEEP));
+		static bool enableSleepPrev = global_setting_enable_sleep;
+		static bool enableSleepCurr = global_setting_enable_sleep;
+		ToggleButton("##TOGGLE_ENABLE_SLEEP", &enableSleepCurr);
+		if (enableSleepPrev != enableSleepCurr)
+		{
+			global_setting_enable_sleep = enableSleepPrev = enableSleepCurr;
+			if (global_setting_enable_sleep) {
+				/* Enable Sleep Mode */
+			}
+			else {
+				/* Disable Sleep Mode */
+			}
 		}
+		ImGui::SliderInt("##IDLE_TIME", &global_setting_idle_time_idx, 0, 9, "");
+		ImGui::SameLine();
+		ImGui::Text("%d %s", idleTime[global_setting_idle_time_idx].num, idleTime[global_setting_idle_time_idx].unit == 0 ? KLLABLEA(KLL_KEY_SECOND) : KLLABLEA(KLL_KEY_MINUTE));
+		ImGui::SameLine();
+		utils::HelpMarker(KLLABLEA(KLL_KEY_TOOLTIP_SLEEP));
+
+		/* Global Setting Restore Factory Settings */
+		ImGui::SeparatorText(KLLABLEA(KLL_KEY_RESET));
+		ImGui::Button(KLLABLEB(KLL_KEY_RESET_BTN, "RESET_BTN"));
+		ImGui::SameLine();
+		utils::HelpMarker(KLLABLEA(KLL_KEY_RESTORE_FACTORY_SETTINGS));
+
+		ImGui::EndChild();
 	}
+
 	ImGui::SameLine();
-	ImGui::Text(KLLABLEA(KLL_KEY_AUTO_RUN));
 
-	/* Global Setting Exit */
-	ImGui::SeparatorText(KLLABLEA(KLL_KEY_EXIT));
-	ImGui::Text(KLLABLEA(KLL_KEY_WHEN_CLICK_X));
-	if (ImGui::RadioButton(KLLABLEB(KLL_KEY_DIRECT_EXIT, "RADIO_DIRECT_EXIT"), !global_setting_x_system_tray)) global_setting_x_system_tray = false;
-	if (ImGui::RadioButton(KLLABLEB(KLL_KEY_RESIDES_SYSTEM_TRAY, "RADIO_SYSTEM_TRAY"), global_setting_x_system_tray)) global_setting_x_system_tray = true;
-
-
-	/* Global Setting Sleepxit */
-	ImGui::SeparatorText(KLLABLEA(KLL_KEY_SLEEP));
-	static bool enableSleepPrev = global_setting_enable_sleep;
-	static bool enableSleepCurr = global_setting_enable_sleep;
-	ToggleButton("##TOGGLE_ENABLE_SLEEP", &enableSleepCurr);
-	if (enableSleepPrev != enableSleepCurr)
+	ImGui::BeginChild("##APPLICATION_SETTINGS", ImVec2(DPI(300.0f), region.y), true);
 	{
-		global_setting_enable_sleep = enableSleepPrev = enableSleepCurr;
-		if (global_setting_enable_sleep) {
-			/* Enable Sleep Mode */
-		} else {
-			/* Disable Sleep Mode */
-		}
-	}
-	ImGui::SliderInt("##IDLE_TIME", &global_setting_idle_time_idx, 0, 9, "");
-	ImGui::SameLine();
-	ImGui::Text("%d %s", idleTime[global_setting_idle_time_idx].num, idleTime[global_setting_idle_time_idx].unit == 0 ? KLLABLEA(KLL_KEY_SECOND) : KLLABLEA(KLL_KEY_MINUTE));
-	ImGui::SameLine();
-	utils::HelpMarker(KLLABLEA(KLL_KEY_TOOLTIP_SLEEP));
+		ImGui::Text(u8"应用设置");
+		/* Global Setting Language */
+		ImGui::SeparatorText(KLLABLEA(KLL_KEY_LANGUAGE));
+		static int item_current_2 = KLLanguageManager::GetInstance()->GetLanguage();
+		static int prev_item = 0;
+		ImGui::Combo("##LANGUAGE", &item_current_2, u8"简体中文\0English\0\0");
+		if (prev_item != item_current_2)
+			KLLanguageManager::GetInstance()->SetLanguage((KLLangType)item_current_2);
+		prev_item = item_current_2;
 
-	/* Global Setting Restore Factory Settings */
-	ImGui::SeparatorText(KLLABLEA(KLL_KEY_RESET));
-	ImGui::Button(KLLABLEB(KLL_KEY_RESET_BTN, "RESET_BTN"));
-	ImGui::SameLine();
-	utils::HelpMarker(KLLABLEA(KLL_KEY_RESTORE_FACTORY_SETTINGS));
+		/* Global Setting Auto Run */
+		ImGui::SeparatorText(KLLABLEA(KLL_KEY_STARTUP));
+		static bool autoRunPrev = global_setting_auto_run;
+		static bool autoRunCurr = global_setting_auto_run;
+		ToggleButton("##TOGGLE_AUTO_RUN", &autoRunCurr);
+		if (autoRunPrev != autoRunCurr)
+		{
+			global_setting_auto_run = autoRunPrev = autoRunCurr;
+			if (global_setting_auto_run) {
+				AutoRunRegisterSet();
+			}
+			else {
+				AutoRunRegisterDel();
+			}
+		}
+		ImGui::SameLine();
+		ImGui::Text(KLLABLEA(KLL_KEY_AUTO_RUN));
+
+		/* Global Setting Exit */
+		ImGui::SeparatorText(KLLABLEA(KLL_KEY_EXIT));
+		ImGui::Text(KLLABLEA(KLL_KEY_WHEN_CLICK_X));
+		if (ImGui::RadioButton(KLLABLEB(KLL_KEY_DIRECT_EXIT, "RADIO_DIRECT_EXIT"), !global_setting_x_system_tray)) global_setting_x_system_tray = false;
+		if (ImGui::RadioButton(KLLABLEB(KLL_KEY_RESIDES_SYSTEM_TRAY, "RADIO_SYSTEM_TRAY"), global_setting_x_system_tray)) global_setting_x_system_tray = true;
+
+		ImGui::EndChild();
+	}
+
+
+
 
 
 	static int frame_cnt = 0;
