@@ -13,6 +13,7 @@
 #include "sequencer/ingseq.h"
 #include "kl_persistence.h"
 #include "language.h"
+#include "keylink.h"
 
 // initial static member
 KLMacroConfigManager* KLMacroConfigManager::s_Instance = nullptr;
@@ -22,9 +23,33 @@ void KLMacroConfigManager::AddConfig(KLMacro& config)
 {
 	m_ConfigList.push_back(std::move(config));
 }
+
+uint8_t KLMacroConfigManager::FindUnusedID()
+{
+	uint8_t id = std::numeric_limits<uint8_t>::max();
+	for (uint8_t i = 0; i < std::numeric_limits<uint8_t>::max(); ++i)
+	{
+		bool find = false;
+		for (const auto& config : m_ConfigList)
+		{
+			if (i == config.id)
+			{
+				find = true;
+				break;
+			}
+		}
+		if (!find)
+		{
+			id = i;
+			break;
+		}
+	}
+	return id;
+}
 void KLMacroConfigManager::AddConfig(const char* name)
 {
 	KLMacro config;
+	config.id = FindUnusedID();
 	config.name = name;
 	m_ConfigList.push_back(config);
 }
@@ -62,6 +87,23 @@ void KLMacroConfigManager::LoadConfig(const char* filename)
 	MacroConfigRead(filename);
 }
 
+void KLMacroConfigManager::SetCurrentConfig(uint32_t i)
+{
+	m_CurrentConfigIndex = i;
+}
+KLMacro& KLMacroConfigManager::GetCurrentConfig()
+{
+	return m_ConfigList[m_CurrentConfigIndex];
+}
+KLMacro* KLMacroConfigManager::GetConfigByID(uint8_t id)
+{
+	for (auto it = m_ConfigList.begin(); it != m_ConfigList.end(); ++it)
+	{
+		if (it->id == id)
+			return &*it;
+	}
+	return NULL;
+}
 
 void SyncActionsFromPairInfo(KLMacro& macro)
 {
@@ -164,7 +206,7 @@ void ShowMacroConfigManagerWindow(bool* p_open)
 	auto configManager = KLMacroConfigManager::GetInstance();
 	auto imageManager = KLImageManager::GetInstance();
 
-	ImVec2 size(16.0f, 16.0f);
+	ImVec2 size(DPI(16.0f), DPI(16.0f));
 
 	ImGuiIO& io = ImGui::GetIO();
 	ImDrawList* drawList = ImGui::GetWindowDrawList();

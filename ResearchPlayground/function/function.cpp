@@ -8,8 +8,10 @@
 #include "keyboard/keyboard.h"
 #include "resources.h"
 #include "configuration/kl_persistence.h"
+#include "configuration/macro_config.h"
 
 #include "keylink.h"
+
 
 // initial static member
 KLFunctionConfigManager* KLFunctionConfigManager::s_Instance = nullptr;
@@ -513,6 +515,20 @@ void InitDefaultConfig(KLFunctionConfig& temp_config)
 	}
 }
 
+std::string KLMacroLoopMethodStr(KLMacroLoopMethod method)
+{
+	switch (method) {
+	case LOOP_UNTIL_KEY_UP:
+		return u8"循环直到按键松开";
+	case LOOP_UNTIL_ANY_KEY_DOWN:
+		return u8"循环直到任意按键按下";
+	case LOOP_SPECIFY_COUNT:
+		return u8"循环指定次数";
+	default:
+		return u8"循环指定次数";
+	}
+}
+
 void DrawFunctionLayout()
 {
 	auto imageManager = KLImageManager::GetInstance();
@@ -523,7 +539,7 @@ void DrawFunctionLayout()
 
 	ImDrawList* dl = ImGui::GetWindowDrawList();
 
-	const float d = 32.0f * dpiScale();
+	const float d = DPI(32.0f);
 	const float padding = d / 10.0f;
 	const float rouding = 0.0f;
 
@@ -607,6 +623,91 @@ void DrawFunctionLayout()
 	ImGui::SetWindowFontScale(1);
 }
 
+KLFunction macro_function("", 0, LOOP_SPECIFY_COUNT, 1);
+
+void ResetCurrentMacroFunction(KLFunction& macroFunc)
+{
+	macro_function = macroFunc;
+}
+
+void DrawFunctionMacroLayout()
+{
+	auto macro_manager = KLMacroConfigManager::GetInstance();
+
+	ImVec2 size(DPI(200.0f), DPI(250.0f));
+	ImGuiWindowFlags macro_child_window_flags = 0;
+	ImGui::BeginChild("##MACRO_CHOOSE", size, true, macro_child_window_flags);
+	for (const auto& macro : macro_manager->m_ConfigList)
+	{
+		char label[KL_CONFIG_MAX_NAME_SIZE + 5] = "";
+		sprintf(label, "%s##FUNC_CHOOSE%d", macro.name.c_str(), macro.id);
+		if (ImGui::Selectable(label, macro_function.payload.macro.macroID == macro.id, ImGuiSelectableFlags_DontClosePopups))
+		{
+			macro_function.payload.macro.macroID = macro.id;
+		}
+	}
+	ImGui::EndChild();
+
+	ImGui::SameLine();
+	ImGui::BeginChild("##MACRO_SETTING", size, false, macro_child_window_flags);
+
+	std::unordered_map<KLMacroLoopMethod, std::string> items;
+	items[LOOP_UNTIL_KEY_UP] = KLMacroLoopMethodStr(LOOP_UNTIL_KEY_UP);
+	items[LOOP_UNTIL_ANY_KEY_DOWN] = KLMacroLoopMethodStr(LOOP_UNTIL_ANY_KEY_DOWN);
+	items[LOOP_SPECIFY_COUNT] = KLMacroLoopMethodStr(LOOP_SPECIFY_COUNT);
+
+
+	char combo_preview_value[32];
+	strcpy(combo_preview_value, items[(KLMacroLoopMethod)macro_function.payload.macro.loopType].c_str());
+
+	ImGuiComboFlags flags = 0;
+
+	ImGui::Text("loop method");
+	ImGui::SameLine();
+	ImGuiDCXAxisAlign(DPI(100.0f));
+	if (ImGui::BeginCombo("##MACRO_LOOP_METHOD", combo_preview_value, flags))
+	{
+		for (const auto& item : items)
+		{
+			bool is_selected = (macro_function.payload.macro.loopType == item.first);
+			if (ImGui::Selectable(item.second.c_str(), is_selected))
+			{
+				macro_function.payload.macro.loopType = item.first;
+			}
+			if (is_selected) ImGui::SetItemDefaultFocus();
+		}
+		ImGui::EndCombo();
+	}
+
+	ImGui::Text("loop cnt");
+	ImGui::SameLine();
+	ImGuiDCXAxisAlign(DPI(100.0f));
+	char currentLoopCntBuf[32];
+	sprintf(currentLoopCntBuf, "%d", macro_function.payload.macro.loopCount);
+	ImGui::InputText("##MACRO_LOOP_CNT", currentLoopCntBuf, 32, ImGuiInputTextFlags_CharsDecimal);
+	macro_function.payload.macro.loopCount = atoi(currentLoopCntBuf);
+
+
+	ImGuiDCXAxisAlign(DPI(100.0f));
+	if (ImGui::Button("OK"))
+	{
+		auto manager = KLFunctionConfigManager::GetInstance();
+
+		auto& functions = manager->GetCurrentConfig().layers[manager->m_CurrentLayerType];
+
+		auto kmId = KeyboardGetActiveMapID();
+		if (kmId != KM_NONE)
+		{
+			KLMacro* currentMacro = macro_manager->GetConfigByID(macro_function.payload.macro.macroID);
+			assert(currentMacro);
+
+			strcpy(macro_function.name, currentMacro->name.c_str());
+
+			functions[kmId] = macro_function;
+		}
+	}
+	ImGui::EndChild();
+}
 
 // 要和HID 值对应上
 void ShowFunctionWindow(bool* p_open)
@@ -619,9 +720,21 @@ void ShowFunctionWindow(bool* p_open)
 	ImGui::GetCurrentWindow()->DockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
 
 
-
-	DrawFunctionLayout();
-
-
+	static int e;
+	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
+	if (ImGui::BeginTabBar("FunctionSelectTab", tab_bar_flags))
+	{
+		if (ImGui::BeginTabItem("Function"))
+		{
+			DrawFunctionLayout();
+			ImGui::EndTabItem();
+		}
+		if (ImGui::BeginTabItem("Macro"))
+		{
+			DrawFunctionMacroLayout();
+			ImGui::EndTabItem();
+		}
+		ImGui::EndTabBar();
+	}
 	ImGui::End();
 }

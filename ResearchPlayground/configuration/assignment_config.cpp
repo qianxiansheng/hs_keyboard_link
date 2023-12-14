@@ -11,6 +11,7 @@
 #include "function/function.h"
 #include "resources.h"
 #include "language.h"
+#include "keylink.h"
 
 
 void InitAssignmentConfigManagerWindow()
@@ -73,7 +74,7 @@ void ShowAssignmentConfigManagerWindow(bool* p_open)
 	auto configManager = KLFunctionConfigManager::GetInstance();
 	auto imageManager = KLImageManager::GetInstance();
 
-	ImVec2 size(16.0f, 16.0f);
+	ImVec2 size(DPI(16.0f), DPI(16.0f));
 
 	ImGuiIO& io = ImGui::GetIO();
 	ImDrawList* drawList = ImGui::GetWindowDrawList();

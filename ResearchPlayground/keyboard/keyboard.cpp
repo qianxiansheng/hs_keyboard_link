@@ -569,8 +569,17 @@ void RenderModelUpdateAssignment(glm::vec3 mousePos_3DC)
 				if (kbv_draw_ctx.onhover)
 					assignment_layout_kbv_hover_cb(keyBtnView);
 
-				if (kbv_draw_ctx.mouse_down)
+				if (kbv_draw_ctx.mouse_clicked)
+				{
 					kbv_draw_ctx.active_index = keyBtnView.id;
+
+					auto& function = FindCurrentConfigFunctionByMapID(kbv_draw_ctx.active_index);
+
+					if (function.type == KL_FUNC_TYPE_MACRO)
+					{
+						ResetCurrentMacroFunction(function);
+					}
+				}
 			}
 			else
 			{
@@ -889,9 +898,9 @@ void ShowKeyboardWindow(bool* p_open)
 	}
 
 	/* Update the position of texture view */
-	kbv_draw_ctx.mouse_pos.x = io.MousePos.x - DC.CursorPos.x + (KL_KB_VIEW_TEX_X * dpiScale());
-	kbv_draw_ctx.mouse_pos.y = io.MousePos.y - DC.CursorPos.y + (KL_KB_VIEW_TEX_Y * dpiScale());
-	kbv_draw_ctx.mouse_down = io.MouseDown[0];
+	kbv_draw_ctx.mouse_pos.x = io.MousePos.x - DC.CursorPos.x + DPI(KL_KB_VIEW_TEX_X);
+	kbv_draw_ctx.mouse_pos.y = io.MousePos.y - DC.CursorPos.y + DPI(KL_KB_VIEW_TEX_Y);
+	kbv_draw_ctx.mouse_clicked = io.MouseClicked[0];
 
 	/* Convert mouse screen coordinates to world coordinates */
 	glm::vec4 viewport(0.0f, 0.0f, kbv_draw_ctx.w, kbv_draw_ctx.h);
@@ -919,7 +928,7 @@ void ShowKeyboardWindow(bool* p_open)
 	float texMapU_Max = (KL_KB_VIEW_TEX_X + KL_KB_VIEW_TEX_W) / KL_KB_VIEW_WIDTH;
 	ImGui::Image(
 		VOID_PTR_CAST(kbv_draw_ctx.texColorBuffer),				// TextureID
-		ImVec2(KL_KB_VIEW_TEX_W * dpiScale(), KL_KB_VIEW_TEX_H * dpiScale()),     // Width and Height
+		ImVec2(DPI(KL_KB_VIEW_TEX_W), DPI(KL_KB_VIEW_TEX_H)),     // Width and Height
 		ImVec2(texMapU_Min, (1.0f - texMapV_Min)), ImVec2(texMapU_Max, (1.0f - texMapV_Max))// UV mapping
 	);
 
@@ -927,7 +936,11 @@ void ShowKeyboardWindow(bool* p_open)
 
 	if (KL_LAYOUT_ASSIGNMENT == layoutManager->GetLayoutType())
 	{
-		ImVec2 size(16.0f, 16.0f);
+		ImGui::SameLine();
+
+		ImGui::BeginChild("##ASSIGNED_ACTIONS");
+
+		ImVec2 size(DPI(32.0f), DPI(32.0f));
 		if (MyButton("btn_save", size)) {
 			configManager->SaveConfig();
 
@@ -958,6 +971,8 @@ void ShowKeyboardWindow(bool* p_open)
 			KEY_MapId_t mid = KeyboardGetActiveMapID();
 			functions[mid] = FindDefaultFunctionByMapID(mid);
 		}
+
+		ImGui::EndChild();
 	}
 
 	ImGui::End();

@@ -44,6 +44,15 @@ static void AssignmentToXMLNode(const std::pair<const KEY_MapId_t, KLFunction>& 
         xmlNewPropInt(node, "type", function.type);
         xmlNewPropInt(node, "hid", function.payload.media.hid);
     }
+    else if (function.type == KL_FUNC_TYPE_MACRO) {
+        xmlNewPropInt(node, "keymapid", map_id);
+        xmlNewPropStr(node, "src", function_default.name);
+        xmlNewPropStr(node, "dst", function.name);
+        xmlNewPropInt(node, "type", function.type);
+        xmlNewPropInt(node, "loopmethod", function.payload.macro.loopType);
+        xmlNewPropInt(node, "loopcnt", function.payload.macro.loopCount);
+        xmlNewPropInt(node, "macroid", function.payload.macro.macroID);
+    }
     else
     {
         xmlNewPropInt(node, "implement", 0);
@@ -123,20 +132,70 @@ bool AssignmentConfigParseAssignment(xmlNodePtr node, std::pair<KEY_MapId_t, KLF
     if (NULL == keymapid)
         return false;
 
-    xmlChar* fid = xmlGetProp(node, BAD_CAST "fid");
-    if (NULL == fid)
+    xmlChar* type = xmlGetProp(node, BAD_CAST "type");
+    if (NULL == type)
         return false;
 
     KEY_MapId_t mid = (KEY_MapId_t)atoi((char*)keymapid);
     if (mid <= KM_NONE || KM_MAXIMUM <= mid)
         return false;
 
-    KLFunctionID functionId = (KLFunctionID)atoi((char*)fid);
-    if (functionId <= KLF_NONE || KLF_MAXIMUM <= functionId)
+
+    KLFunctionType functionType = (KLFunctionType)atoi((char*)type);
+    if (functionType < KL_FUNC_TYPE_KB || KLFUNC_TYPE_MAXIMUM <= functionType)
         return false;
 
-    pair.first = mid;
-    pair.second = FindFunctionByFunctionID(functionId);
+    switch (functionType) {
+    case KL_FUNC_TYPE_KB:
+    case KL_FUNC_TYPE_MEDIA:
+    {
+        xmlChar* fid = xmlGetProp(node, BAD_CAST "fid");
+        if (NULL == fid)
+            return false;
+        KLFunctionID functionId = (KLFunctionID)atoi((char*)fid);
+        if (functionId <= KLF_NONE || KLF_MAXIMUM <= functionId)
+            return false;
+
+        pair.first = mid;
+        pair.second = FindFunctionByFunctionID(functionId);
+        break;
+    }
+    case KL_FUNC_TYPE_MACRO:
+    {
+
+        xmlChar* dst = xmlGetProp(node, BAD_CAST "dst");
+        if (NULL == dst)
+            return false;
+        xmlChar* loopmethod = xmlGetProp(node, BAD_CAST "loopmethod");
+        if (NULL == loopmethod)
+            return false;
+        xmlChar* loopcnt = xmlGetProp(node, BAD_CAST "loopcnt");
+        if (NULL == loopcnt)
+            return false;
+        xmlChar* macroid = xmlGetProp(node, BAD_CAST "macroid");
+        if (NULL == macroid)
+            return false;
+
+        KLMacroLoopMethod loopMethod = (KLMacroLoopMethod)atoi((char*)loopmethod);
+        if (loopMethod < LOOP_UNTIL_KEY_UP || LOOP_METHOD_MAXIMUM <= loopMethod)
+            return false;
+        uint8_t macroID = (uint8_t)atoi((char*)macroid);
+        uint8_t loopCnt = (uint8_t)atoi((char*)loopcnt);
+
+        KLFunction function;
+        function.id = KLF_NONE;
+        strcpy(function.name, (char*)dst);
+        function.type = functionType;
+        function.payload.macro.macroID = macroID;
+        function.payload.macro.loopType = loopMethod;
+        function.payload.macro.loopCount = loopCnt;
+
+        pair.first = mid;
+        pair.second = function;
+
+        break;
+    }
+    }
 
     return true;
 }

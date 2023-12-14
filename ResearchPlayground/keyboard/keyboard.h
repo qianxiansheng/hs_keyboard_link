@@ -538,7 +538,7 @@ struct KeyboardGLContext
     glm::mat4 view_matrix;
     glm::mat4 model_matrix;
 
-    bool mouse_down;
+    bool mouse_clicked;
     KEY_MapId_t active_index;
 
     kbv_hover_cb onhover;

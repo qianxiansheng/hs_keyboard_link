@@ -31,7 +31,7 @@
 #define DOCKSPACE_ID "MyDockSpace"
 
 #define WINWIDTH_LIGHT_CONFIG (150.0f)
-#define WINHEIGHT_FUNCTION_LIGHT_MODIFY ((APP_HEIGHT - 60.0f) / 2.0f)
+#define WINHEIGHT_FUNCTION_LIGHT_MODIFY ((APP_HEIGHT) / 2.0f)
 
 #define KL_CONFIG_MAX_NAME_SIZE 32
 #define KL_CONFIG_MAX_NUM 99
@@ -109,7 +109,9 @@ constexpr auto SETTINGS_FILE_NAME = "settings.xml";
 /******************************************************************************************/
 
 
-
+#define ImGuiDCXAxisAlign(v) ImGui::SetCursorPos(ImVec2((v), ImGui::GetCursorPos().y))
+#define ImGuiDCYMargin(v) ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y + (v)))
+#define DPI(v) ((v) * dpiScale())
 
 
 #ifdef _WIN32

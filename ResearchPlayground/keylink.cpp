@@ -243,7 +243,7 @@ void UpdateDPI(float screen_dpi)
     ImGuiIO& io = ImGui::GetIO();
     io.FontGlobalScale = g_dpi_scale; // 适当调整缩放因子
 
-    KeyboardGLInit((int)(KL_KB_VIEW_WIDTH * dpiScale()), (int)(KL_KB_VIEW_HEIGHT * dpiScale()));
+    KeyboardGLInit((int)DPI(KL_KB_VIEW_WIDTH), (int)DPI(KL_KB_VIEW_HEIGHT));
 
     /* 调整Dock布局 */
     auto window = ImGui::FindWindowByName(WINNAME_FUNCTION);
@@ -333,7 +333,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance,
     UpdateDPI((float)GetDpiForWindow(hWnd));
 
     main_init(__argc, __argv);
-    KeyboardGLInit((int)(KL_KB_VIEW_WIDTH * dpiScale()), (int)(KL_KB_VIEW_HEIGHT * dpiScale()));
+    KeyboardGLInit((int)DPI(KL_KB_VIEW_WIDTH), (int)DPI(KL_KB_VIEW_HEIGHT));
 
     // 主消息循环
     bool done = false;

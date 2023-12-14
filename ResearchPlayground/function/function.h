@@ -1,13 +1,17 @@
 #ifndef __KL_FUNCTION_H__
 #define __KL_FUNCTION_H__
 
-#include "../pch.h"
+#include "pch.h"
 #include "keyboard/keyboard.h"
 
 #include "imgui/imgui.h"
 
+#include "configuration/macro_config.h"
+
 #include <unordered_map>
 #include <mutex>
+
+enum KLMacroLoopMethod;
 
 enum KLFunctionType
 {
@@ -16,6 +20,8 @@ enum KLFunctionType
 	KL_FUNC_TYPE_MEDIA,
 	KL_FUNC_TYPE_MACRO,
 	KL_FUNC_TYPE_CUSTM,
+
+	KLFUNC_TYPE_MAXIMUM,
 };
 
 enum KLFunctionLoopType
@@ -254,6 +260,15 @@ struct KLFunction
 		this->payload.media.__2 = 0x00;
 		this->payload.media.hid = hid;
 	}
+	KLFunction(const char* name, uint8_t macroID, KLMacroLoopMethod loopMethod, uint8_t loopCnt)
+	{
+		this->id = KLF_MAXIMUM;
+		strcpy(this->name, name);
+		this->type = KL_FUNC_TYPE_MACRO;
+		this->payload.macro.macroID = macroID;
+		this->payload.macro.loopType = loopMethod;
+		this->payload.macro.loopCount = loopCnt;
+	}
 };
 
 KLFunction& FindFunctionByFunctionID(KLFunctionID id);
@@ -261,6 +276,15 @@ KLFunctionID FindFunctionIDByMapID(KEY_MapId_t id);
 KLFunction& FindDefaultFunctionByMapID(KEY_MapId_t id);
 KLFunction& FindCurrentConfigFunctionByMapID(KEY_MapId_t mid);
 
+enum KLMacroLoopMethod
+{
+	LOOP_UNTIL_KEY_UP,
+	LOOP_UNTIL_ANY_KEY_DOWN,
+	LOOP_SPECIFY_COUNT,
+
+	LOOP_METHOD_MAXIMUM,
+};
+std::string KLMacroLoopMethodStr(KLMacroLoopMethod method);
 
 struct KLFunctionConfig
 {
@@ -317,5 +341,7 @@ private:
 void InitDefaultConfig(KLFunctionConfig& temp_config);
 
 void ShowFunctionWindow(bool* p_open);
+
+void ResetCurrentMacroFunction(KLFunction& macroFunc);
 
 #endif

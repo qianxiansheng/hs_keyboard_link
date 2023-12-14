@@ -557,9 +557,9 @@ void drv_build_func_data(KLFunction& function, uint8_t* buf)
 		buf[3] = function.payload.media.hid;
 		break;
 	case KL_FUNC_TYPE_MACRO:
-		buf[1] = 0x00;
-		buf[2] = 0x00;
-		buf[3] = 0x00;
+		buf[1] = function.payload.macro.loopType;
+		buf[2] = function.payload.macro.loopCount;
+		buf[3] = function.payload.macro.macroID;
 		break;
 	case KL_FUNC_TYPE_CUSTM:
 		buf[1] = 0x00;

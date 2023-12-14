@@ -92,14 +92,14 @@ void ShowMenuWindow(bool* p_open)
 		auto window = ImGui::FindWindowByName(WINNAME_FUNCTION);
 		if (window != NULL)
 		{
-			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, WINHEIGHT_FUNCTION_LIGHT_MODIFY * dpiScale()));
+			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, DPI(WINHEIGHT_FUNCTION_LIGHT_MODIFY)));
 			ImGui::DockBuilderFinish(window->DockId);
 		}
 		/* 调整Dock布局 */
 		window = ImGui::FindWindowByName(WINNAME_ASSIGN_CONFIG_MGR);
 		if (window != NULL)
 		{
-			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(WINWIDTH_LIGHT_CONFIG * dpiScale(), 100.0f));
+			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(DPI(WINWIDTH_LIGHT_CONFIG), 100.0f));
 			ImGui::DockBuilderFinish(window->DockId);
 		}
 	}
@@ -112,14 +112,14 @@ void ShowMenuWindow(bool* p_open)
 		auto window = ImGui::FindWindowByName(WINNAME_LIGHT_MODIFY);
 		if (window != NULL)
 		{
-			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, WINHEIGHT_FUNCTION_LIGHT_MODIFY * dpiScale()));
+			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(100.0f, DPI(WINHEIGHT_FUNCTION_LIGHT_MODIFY)));
 			ImGui::DockBuilderFinish(window->DockId);
 		}
 		/* 调整Dock布局 */
 		window = ImGui::FindWindowByName(WINNAME_LIGHT);
 		if (window != NULL)
 		{
-			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(WINWIDTH_LIGHT_CONFIG * dpiScale(), 100.0f));
+			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(DPI(WINWIDTH_LIGHT_CONFIG), 100.0f));
 			ImGui::DockBuilderFinish(window->DockId);
 		}
 	}
@@ -132,7 +132,7 @@ void ShowMenuWindow(bool* p_open)
 		auto window = ImGui::FindWindowByName(WINNAME_MACRO_CONFIG_MGR);
 		if (window != NULL)
 		{
-			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(WINWIDTH_LIGHT_CONFIG * dpiScale(), 100.0f));
+			ImGui::DockBuilderSetNodeSize(window->DockId, ImVec2(DPI(WINWIDTH_LIGHT_CONFIG ), 100.0f));
 			ImGui::DockBuilderFinish(window->DockId);
 		}
 	}

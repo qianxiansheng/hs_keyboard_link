@@ -9,6 +9,8 @@
 #include "function/function.h"
 #include "keyboard/keyboard.h"
 
+enum KLFunctionID;
+
 enum KLMacroActionType
 {
     KL_MACRO_ACTYPE_DOWN,
@@ -55,15 +57,11 @@ public:
 	void SaveConfig(const char* filename = MACROS_FILE_NAME);
 	void LoadConfig(const char* filename = MACROS_FILE_NAME);
 
-	void SetCurrentConfig(uint32_t i)
-	{
-		m_CurrentConfigIndex = i;
-	}
-	KLMacro& GetCurrentConfig()
-	{
-		return m_ConfigList[m_CurrentConfigIndex];
-	}
-
+	void SetCurrentConfig(uint32_t i);
+	KLMacro& GetCurrentConfig();
+	KLMacro* GetConfigByID(uint8_t id);
+private:
+	uint8_t FindUnusedID();
 public:
 	static KLMacroConfigManager* GetInstance()
 	{
