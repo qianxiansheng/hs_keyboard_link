@@ -58,7 +58,8 @@ void ShowMenuWindow(bool* p_open)
 		return;
 	}
 
-	ImGui::GetCurrentWindow()->DockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
+	auto dockNode = ImGui::GetCurrentWindow()->DockNode;
+	if (dockNode) dockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
 
 	auto imageManager = KLImageManager::GetInstance();
 	auto layoutManager = KLWindowLayoutManager::GetInstance();

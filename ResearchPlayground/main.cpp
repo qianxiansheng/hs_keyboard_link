@@ -634,7 +634,7 @@ static void ShowRootWindow(bool* p_open)
 
 	ShowRootWindowMenu();
 
-	utils::AlertEx(&alert_flag, "UIMSG", alert_message);
+	utils::AlertEx(&alert_flag, KLLABLEB(KLL_KEY_DIALOG_MSG, "UIMSG"), alert_message);
 
 	ImGui::End();
 

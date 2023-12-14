@@ -11,6 +11,7 @@
 #include "configuration/macro_config.h"
 
 #include "keylink.h"
+#include "language.h"
 
 
 // initial static member
@@ -519,13 +520,12 @@ std::string KLMacroLoopMethodStr(KLMacroLoopMethod method)
 {
 	switch (method) {
 	case LOOP_UNTIL_KEY_UP:
-		return u8"循环直到按键松开";
+		return KLLABLEA(KLL_KEY_LOOP_UNTIL_KEYUP);
 	case LOOP_UNTIL_ANY_KEY_DOWN:
-		return u8"循环直到任意按键按下";
+		return KLLABLEA(KLL_KEY_LOOP_UNTIL_KEYDOWN);
 	case LOOP_SPECIFY_COUNT:
-		return u8"循环指定次数";
 	default:
-		return u8"循环指定次数";
+		return KLLABLEA(KLL_KEY_LOOP_SPECIFY_COUNT);
 	}
 }
 
@@ -662,7 +662,7 @@ void DrawFunctionMacroLayout()
 
 	ImGuiComboFlags flags = 0;
 
-	ImGui::Text("loop method");
+	ImGui::Text(KLLABLEA(KLL_KEY_TRIGGER_MODE));
 	ImGui::SameLine();
 	ImGuiDCXAxisAlign(DPI(100.0f));
 	if (ImGui::BeginCombo("##MACRO_LOOP_METHOD", combo_preview_value, flags))
@@ -679,7 +679,7 @@ void DrawFunctionMacroLayout()
 		ImGui::EndCombo();
 	}
 
-	ImGui::Text("loop cnt");
+	ImGui::Text(KLLABLEA(KLL_KEY_LOOP_COUNT));
 	ImGui::SameLine();
 	ImGuiDCXAxisAlign(DPI(100.0f));
 	char currentLoopCntBuf[32];
@@ -689,7 +689,7 @@ void DrawFunctionMacroLayout()
 
 
 	ImGuiDCXAxisAlign(DPI(100.0f));
-	if (ImGui::Button("OK"))
+	if (ImGui::Button(KLLABLEB(KLL_KEY_SAVE, "MACRO_FUNC_SAVE")))
 	{
 		auto manager = KLFunctionConfigManager::GetInstance();
 
@@ -717,19 +717,21 @@ void ShowFunctionWindow(bool* p_open)
 		ImGui::End();
 		return;
 	}
-	ImGui::GetCurrentWindow()->DockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
+
+	auto dockNode = ImGui::GetCurrentWindow()->DockNode;
+	if (dockNode) dockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
 
 
 	static int e;
 	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
-	if (ImGui::BeginTabBar("FunctionSelectTab", tab_bar_flags))
+	if (ImGui::BeginTabBar("##FunctionSelectTab", tab_bar_flags))
 	{
-		if (ImGui::BeginTabItem("Function"))
+		if (ImGui::BeginTabItem(KLLABLEB(KLL_KEY_FUNCTION_KEY, "FUNCTION_COMMON")))
 		{
 			DrawFunctionLayout();
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem("Macro"))
+		if (ImGui::BeginTabItem(KLLABLEB(KLL_KEY_MACRO, "FUNCTION_MACRO")))
 		{
 			DrawFunctionMacroLayout();
 			ImGui::EndTabItem();

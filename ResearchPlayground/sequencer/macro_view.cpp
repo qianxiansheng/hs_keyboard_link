@@ -11,12 +11,13 @@
 #include "function/function.h"
 #include "configuration/macro_config.h"
 #include "resources.h"
+#include "language.h"
 
 
 void ShowMacroViewWindow(bool* p_open)
 {
 	ImGuiWindowFlags window_flags = 0;
-	if (!ImGui::Begin(WINNAME_MACRO_VIEW, p_open, window_flags)) {
+	if (!ImGui::Begin(KLLABLEB(KLL_KEY_PREVIEW, WINNAME_MACRO_VIEW), p_open, window_flags)) {
 		ImGui::End();
 		return;
 	}

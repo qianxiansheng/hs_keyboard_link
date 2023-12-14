@@ -65,12 +65,14 @@ void ShowSettingsWindow(bool* p_open)
 		ImGui::End();
 		return;
 	}
-	ImGui::GetCurrentWindow()->DockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
+
+	auto dockNode = ImGui::GetCurrentWindow()->DockNode;
+	if (dockNode) dockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
 
 	ImVec2 region = ImGui::GetContentRegionAvail();
 	ImGui::BeginChild("##DEVICE_SETTINGS", ImVec2(DPI(300.0f), region.y), true);
 	{
-		ImGui::Text(u8"设备设置");
+		ImGui::Text(KLLABLEA(KLL_KEY_DEVICE_SETTINGS));
 		/* Global Setting Device Info */
 		ImGui::SeparatorText(KLLABLEA(KLL_KEY_DEVICE_INFO));
 		char device_model[] = "-";
@@ -134,7 +136,7 @@ void ShowSettingsWindow(bool* p_open)
 
 	ImGui::BeginChild("##APPLICATION_SETTINGS", ImVec2(DPI(300.0f), region.y), true);
 	{
-		ImGui::Text(u8"应用设置");
+		ImGui::Text(KLLABLEA(KLL_KEY_PROGRAM_SETTINGS));
 		/* Global Setting Language */
 		ImGui::SeparatorText(KLLABLEA(KLL_KEY_LANGUAGE));
 		static int item_current_2 = KLLanguageManager::GetInstance()->GetLanguage();

@@ -17,6 +17,7 @@
 #include "ui_thread.h"
 #include "statusbar.h"
 #include "protocol/iap.h"
+#include "language.h"
 
 /* kb map */
 uint8_t KEY_GetMapIdByRowAndCol(uint8_t row, uint8_t col) {
@@ -479,15 +480,17 @@ bool wmouse_in_quad(glm::vec3 mouse_pos, glm::vec3 camera_pos, float* quad)
 void assignment_layout_kbv_hover_cb(KeyBtnView& view)
 {
 	ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
-	ImGui::OpenPopup("show_kbv_bind_function");
-	if (ImGui::BeginPopup("show_kbv_bind_function"))
+	ImGui::OpenPopup("SHOW_KBV_BIND_FUNCTION");
+	if (ImGui::BeginPopup("SHOW_KBV_BIND_FUNCTION"))
 	{
 		KLFunctionID fid = FindFunctionIDByMapID(view.id);
 		KLFunction defaultFunction = FindFunctionByFunctionID(fid);
 		KLFunction currentFunction = FindCurrentConfigFunctionByMapID(view.id);
 	
 		char temp_buf[64];
-		sprintf(temp_buf, " [default:%s|current:%s] ", defaultFunction.name, currentFunction.name);
+		sprintf(temp_buf, " [%s:%s|%s:%s] ", 
+			KLLABLEA(KLL_KEY_DEFAULT), defaultFunction.name, 
+			KLLABLEA(KLL_KEY_CURRENT), currentFunction.name);
 		ImGui::Text(temp_buf);
 		ImGui::EndPopup();
 	}
@@ -860,7 +863,8 @@ void ShowKeyboardWindow(bool* p_open)
 		ImGui::End();
 		return;
 	}
-	ImGui::GetCurrentWindow()->DockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
+	auto dockNode = ImGui::GetCurrentWindow()->DockNode;
+	if (dockNode) dockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
 
 	auto win = ImGui::GetCurrentWindow();
 	auto& DC = win->DC;
@@ -875,19 +879,19 @@ void ShowKeyboardWindow(bool* p_open)
 	{
 		static int e;
 		ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
-		if (ImGui::BeginTabBar("FunctionLayerTab", tab_bar_flags))
+		if (ImGui::BeginTabBar("FUNCTION_LAYER_TAB", tab_bar_flags))
 		{
-			if (ImGui::BeginTabItem("Default"))
+			if (ImGui::BeginTabItem(KLLABLEB(KLL_KEY_LAYER_DEFAULT, "LAYER_DEFAULT")))
 			{
 				e = KL_LAYER_TYPE_DEFAULT;
 				ImGui::EndTabItem();
 			}
-			if (ImGui::BeginTabItem("Fn1"))
+			if (ImGui::BeginTabItem(KLLABLEB(KLL_KEY_LAYER_FN1, "LAYER_FN1")))
 			{
 				e = KL_LAYER_TYPE_FN1;
 				ImGui::EndTabItem();
 			}
-			if (ImGui::BeginTabItem("Fn2"))
+			if (ImGui::BeginTabItem(KLLABLEB(KLL_KEY_LAYER_FN2, "LAYER_FN2")))
 			{
 				e = KL_LAYER_TYPE_FN2;
 				ImGui::EndTabItem();
@@ -895,6 +899,21 @@ void ShowKeyboardWindow(bool* p_open)
 			ImGui::EndTabBar();
 		}
 		KLFunctionConfigManager::GetInstance()->m_CurrentLayerType = (KLFunctionLayerType)e;
+	}
+	else if (KL_LAYOUT_LIGHT == layoutManager->GetLayoutType())
+	{
+		ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
+		if (ImGui::BeginTabBar("PLACEHOLDER_TAB", tab_bar_flags))
+		{
+			if (ImGui::BeginTabItem(KLLABLEB(KLL_KEY_PREVIEW, "PLACEHOLDER_TAB_ITEM")))
+			{
+				ImGui::EndTabItem();
+			}
+			ImGui::EndTabBar();
+		}
+	}
+	else
+	{
 	}
 
 	/* Update the position of texture view */
@@ -953,16 +972,16 @@ void ShowKeyboardWindow(bool* p_open)
 				
 				if (r)
 				{
-					showAlert_(u8"保存成功");
+					showAlert_(KLLABLEA(KLL_KEY_SUCCESSFUL));
 				}
 				else
 				{
-					showAlert_(u8"保存失败");
+					showAlert_(KLLABLEA(KLL_KEY_FAILED));
 				}
 			}
 			else
 			{
-				showAlert_(u8"设备未连接");
+				showAlert_(KLLABLEA(KLL_KEY_DEVICE_NOT_CONNECTED));
 			}
 		}
 		ImGui::SameLine();

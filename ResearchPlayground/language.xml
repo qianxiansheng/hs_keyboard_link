@@ -35,13 +35,36 @@
     <ENTRY type="31" value="&#x9884;&#x89C8;"/>
     <ENTRY type="32" value="&#x7B49;&#x5F85;&#x8BBE;&#x5907;&#x8FDE;&#x63A5;"/>
     <ENTRY type="33" value="&#x8BBE;&#x5907;&#x5DF2;&#x8FDE;&#x63A5;"/>
-      
 
 
-      
+    <ENTRY type="34" value="&#x8BBE;&#x5907;&#x8BBE;&#x7F6E;"/>
+    <ENTRY type="35" value="&#x5E94;&#x7528;&#x8BBE;&#x7F6E;"/>
+    <ENTRY type="36" value="&#x5FAA;&#x73AF;&#x76F4;&#x5230;&#x6309;&#x952E;&#x677E;&#x5F00;"/>
+    <ENTRY type="37" value="&#x5FAA;&#x73AF;&#x76F4;&#x5230;&#x4EFB;&#x610F;&#x6309;&#x952E;&#x6309;&#x4E0B;"/>
+    <ENTRY type="38" value="&#x5FAA;&#x73AF;&#x6307;&#x5B9A;&#x6B21;&#x6570;"/>
+    <ENTRY type="39" value="&#x6210;&#x529F;"/>
+    <ENTRY type="40" value="&#x5931;&#x8D25;"/>
+    <ENTRY type="41" value="&#x786E;&#x8BA4;"/>
+    <ENTRY type="42" value="&#x53D6;&#x6D88;"/>
+    <ENTRY type="43" value="&#x8BBE;&#x5907;&#x672A;&#x8FDE;&#x63A5;"/>
+    <ENTRY type="44" value="&#x89E6;&#x53D1;&#x65B9;&#x5F0F;"/>
+    <ENTRY type="45" value="&#x5FAA;&#x73AF;&#x6B21;&#x6570;"/>
+    <ENTRY type="46" value="&#x5F55;&#x5236;"/>
+    <ENTRY type="47" value="&#x4FDD;&#x5B58;"/>
+    <ENTRY type="48" value="&#x529F;&#x80FD;&#x6309;&#x952E;"/>
+    <ENTRY type="49" value="&#x5B8F;"/>
+    <ENTRY type="50" value="&#x9ED8;&#x8BA4;"/>
+    <ENTRY type="51" value="&#x5F53;&#x524D;"/>
+    <ENTRY type="52" value="&#x9ED8;&#x8BA4;&#x5C42;"/>
+    <ENTRY type="53" value="Fn1&#x5C42;"/>
+    <ENTRY type="54" value="Fn2&#x5C42;"/>
+
 
     <ENTRY type="100" value="&#x5F00;&#x59CB;"/>
     <ENTRY type="101" value="&#x7ED3;&#x675F;"/>
+    <ENTRY type="102" value="&#x5F00;&#x59CB;&#x5F55;&#x5236;"/>
+    <ENTRY type="103" value="&#x7ED3;&#x675F;&#x5F55;&#x5236;"/>
+    <ENTRY type="104" value="&#x4FDD;&#x5B58;"/>
     
     <ENTRY type="120" value="&#x6D88;&#x606F;"/>
     
@@ -86,11 +109,39 @@
     <ENTRY type="28" value="rename"/>
     <ENTRY type="29" value="delete"/>
     <ENTRY type="30" value="new"/>
-    <ENTRY type="31" value="preview"/>
+    <ENTRY type="31" value="Preview"/>
     <ENTRY type="32" value="Waiting for device connection"/>
     <ENTRY type="33" value="device connected"/>
+
+
+    <ENTRY type="34" value="Device Settings"/>
+    <ENTRY type="35" value="Program Setttings"/>
+    <ENTRY type="36" value="Loop until the key up"/>
+    <ENTRY type="37" value="Loop until any key down"/>
+    <ENTRY type="38" value="loop specify count"/>
+    <ENTRY type="39" value="Successful!"/>
+    <ENTRY type="40" value="Failed!"/>
+    <ENTRY type="41" value="OK"/>
+    <ENTRY type="42" value="Cancel"/>
+    <ENTRY type="43" value="Device not connected"/>
+    <ENTRY type="44" value="Trigger Mode"/>
+    <ENTRY type="45" value="Loop Count"/>
+    <ENTRY type="46" value="Recorder"/>
+    <ENTRY type="47" value="Save"/>
+    <ENTRY type="48" value="common"/>
+    <ENTRY type="49" value="macro"/>
+    <ENTRY type="50" value="Defualt"/>
+    <ENTRY type="51" value="Current"/>
+    <ENTRY type="52" value="defualt"/>
+    <ENTRY type="53" value="Fn1"/>
+    <ENTRY type="54" value="Fn2"/>
+
     
-    <ENTRY type="100" value="start"/>
+    <ENTRY type="100" value="begin"/>
+    <ENTRY type="101" value="end"/>
+    <ENTRY type="102" value="Start"/>
+    <ENTRY type="103" value="Stop"/>
+    <ENTRY type="104" value="Save"/>
     
     <ENTRY type="120" value="Message"/>
     

@@ -7,6 +7,7 @@
 #include "imgui/imgui_internal.h"
 #include "util/utils.h"
 #include "function/function.h"
+#include "language.h"
 
 #include "keylink.h"
 
@@ -188,7 +189,7 @@ void ReloadMacroConfig(KLMacro& config)
 void ShowINGSequencerWindow(bool* p_open)
 {
 	ImGuiWindowFlags window_flags = 0;
-	if (!ImGui::Begin(WINNAME_SEQUNCER, p_open, window_flags)) {
+	if (!ImGui::Begin(KLLABLEB(KLL_KEY_RECORDER, WINNAME_SEQUNCER), p_open, window_flags)) {
 		ImGui::End();
 		return;
 	}
@@ -203,14 +204,14 @@ void ShowINGSequencerWindow(bool* p_open)
 	auto configManager = KLMacroConfigManager::GetInstance();
 
 	if (!IsRecording()) {
-		if (ImGui::Button(u8"开始录制")) {
+		if (ImGui::Button(KLLABLEB(KLL_KEY_SEQ_RECORD_START, "SEQ_RECORD_START"))) {
 			EnableKeyHook(true);
 			BeginRecord();
 		}
 	}
 	else
 	{
-		if (ImGui::Button(u8"结束录制")) {
+		if (ImGui::Button(KLLABLEB(KLL_KEY_SEQ_RECORD_STOP, "SEQ_RECORD_STOP"))) {
 			EnableKeyHook(false);
 			EndRecord();
 		}
@@ -218,7 +219,7 @@ void ShowINGSequencerWindow(bool* p_open)
 
 	ImGui::SameLine();
 
-	if (ImGui::Button(u8"保存"))
+	if (ImGui::Button(KLLABLEB(KLL_KEY_SEQ_RECORD_SAVE, "SEQ_RECORD_SAVE")))
 	{
 		auto& config = configManager->GetCurrentConfig();
 

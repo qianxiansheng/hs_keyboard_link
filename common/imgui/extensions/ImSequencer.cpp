@@ -178,7 +178,7 @@ namespace ImSequencer
          //header
          draw_list->AddRectFilled(canvas_pos, ImVec2(canvas_size.x + canvas_pos.x, canvas_pos.y + ItemHeight), 0xFF3D3837, 0);
          
-         draw_list->AddText(canvas_pos + ImVec2(8.0f, 0.0f) + textStartOffset, textColor, KLLABLEA(KLL_KEY_SEQ_START_MS));
+         draw_list->AddText(canvas_pos + ImVec2(8.0f, 0.0f) + textStartOffset, textColor, KLLABLEA(KLL_KEY_SEQ_BEGIN_MS));
          draw_list->AddText(canvas_pos + ImVec2(8.0f, 0.0f) + textEndOffset, textColor, KLLABLEA(KLL_KEY_SEQ_END_MS));
          
          if (sequenceOptions & SEQUENCER_ADD)
