@@ -1,5 +1,6 @@
 #include "Logger.h"
 #include <filesystem>
+#include "util/utils.h"
 
 // 构造函数
 Logger::Logger(const std::string& logFileName) : logFileName(logFileName) {
@@ -43,7 +44,7 @@ std::string Logger::getLogLevelString(LogLevel level) {
 }
 
 // 定义全局日志对象
-Logger gLogger(LOG_FILE_NAME);
+Logger gLogger(utils::getFileAbsolutePath(LOG_FILE_NAME).c_str());
 
 void LOG0(LogLevel level, const char* file, int line, const char* format, ...)
 {

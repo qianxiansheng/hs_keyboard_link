@@ -410,6 +410,7 @@ constexpr auto SETTINGS_NODE = "SETTINGS";
 constexpr auto PARAM_NODE = "PARAM";
 
 extern bool global_setting_x_system_tray;
+extern bool global_setting_first_boot;
 
 void SettingsWrite(const char* filename)
 {
@@ -435,6 +436,13 @@ void SettingsWrite(const char* filename)
         assert(paramNode);
         xmlNewPropStr(paramNode, "name", "lang");
         xmlNewPropInt(paramNode, "value", KLLanguageManager::GetInstance()->GetLanguage());
+        xmlAddChild(root_node, paramNode);
+    }
+    {
+        xmlNodePtr paramNode = xmlNewNode(NULL, BAD_CAST PARAM_NODE);
+        assert(paramNode);
+        xmlNewPropStr(paramNode, "name", "first_boot");
+        xmlNewPropInt(paramNode, "value", global_setting_first_boot);
         xmlAddChild(root_node, paramNode);
     }
 
@@ -477,6 +485,10 @@ void SettingsRead(const char* filename)
             } else {
                 KLLanguageManager::GetInstance()->SetLanguage(KLL_TYPE_SIMPLE_CHINESE);
             }
+        }
+        if (xmlStrEqual(name, BAD_CAST "first_boot"))
+        {
+            global_setting_first_boot = atoi((char*)value);
         }
     }
 

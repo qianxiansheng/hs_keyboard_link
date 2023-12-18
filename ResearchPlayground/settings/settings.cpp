@@ -28,6 +28,7 @@ int global_setting_idle_time_idx = 0;
 bool global_setting_auto_run = false;
 bool global_setting_x_system_tray = false;
 bool global_setting_enable_sleep = false;
+bool global_setting_first_boot = true;
 
 
 void ToggleButton(const char* str_id, bool* v)

@@ -16,6 +16,7 @@
 #include <unistd.h>
 #endif
 
+static std::string g_exe_dir_path = "";
 
 // Helper to display a little (?) mark which shows a tooltip when hovered.
 // In your own code you may want to display an actual icon if you are using a merged icon fonts (see docs/FONTS.md)
@@ -206,14 +207,16 @@ std::string utils::readFileText(std::filesystem::path path)
 
 std::string utils::getFileAbsolutePath(std::string relative)
 {
-	char buffer[MAX_PATH];
-	GetModuleFileNameA(NULL, buffer, MAX_PATH);
+	if (g_exe_dir_path == "")
+	{
+		char buffer[MAX_PATH];
+		GetModuleFileNameA(NULL, buffer, MAX_PATH);
 
-	std::string executablePath(buffer);
-	std::string executableDir = executablePath.substr(0, executablePath.find_last_of("\\/"));
+		std::string executablePath(buffer);
+		g_exe_dir_path = executablePath.substr(0, executablePath.find_last_of("\\/"));
+	}
 
-
-	return (executableDir + "\\" + relative).c_str();
+	return (g_exe_dir_path + "\\" + relative).c_str();
 }
 
 uint8_t utils::htoi_4(const char c)

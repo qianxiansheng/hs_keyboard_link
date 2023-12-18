@@ -45,6 +45,8 @@ extern bool alert_flag;
 extern char alert_message[];
 extern char label_message[];
 
+extern HWND hWnd;
+
 static std::atomic_bool app_exit(false);
 
 static bool AppIsRunning()
@@ -101,6 +103,7 @@ static void SearchDeviceBootOrAPP(uint16_t bvid, uint16_t bpid, uint16_t avid, u
 
 extern MySequence mySequence;
 extern bool global_setting_x_system_tray;
+extern bool global_setting_first_boot;
 
 const ImWchar* GetGlyphRangesChineseFullAndDirection()
 {
@@ -289,6 +292,17 @@ bool main_init(int argc, char* argv[])
 	// Start Search Device
 	StartScanDevice();
 
+	// Auto Hide
+	if (global_setting_first_boot)
+	{
+		global_setting_first_boot = false;
+	}
+	else
+	{
+		//ShowWindow(hWnd, SW_HIDE);
+		//HideApplication();
+	}
+
     return true;
 }
 
@@ -310,8 +324,6 @@ static ImVec2 operator+(const ImVec2& a, const int b) {
 	return ImVec2(a.x + b, a.y + b);
 }
 #endif
-
-extern HWND hWnd;
 
 static void CustomizeTitle()
 {
