@@ -40,6 +40,7 @@ constexpr auto ASSIGNMENT_FILE_NAME = "assignment.xml";
 constexpr auto MACROS_FILE_NAME = "macros.xml";
 constexpr auto LANGUAGE_FILE_NAME = "language.xml";
 constexpr auto SETTINGS_FILE_NAME = "settings.xml";
+constexpr auto LOG_FILE_NAME = "log.txt";
 
 #define VOID_PTR_CAST(pint) reinterpret_cast<void*>(static_cast<uintptr_t>(pint))
 

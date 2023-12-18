@@ -35,6 +35,8 @@
 
 #define IMIDTEXT(name, i) ((std::string(name) + std::to_string(i)).c_str())
 
+static char imgui_ini_name[128] = "";
+
 static bool show_root_window = true;
 static bool opt_fullscreen = true;
 static bool opt_showdemowindow = false;
@@ -127,7 +129,7 @@ void BuildImGuiFont()
 	config.PixelSnapH = true;
 	config.OversampleH = 3;
 	config.OversampleV = 1;
-	io.Fonts->AddFontFromFileTTF(EN_FONT, 13.0f, &config, NULL);
+	io.Fonts->AddFontFromFileTTF(utils::getFileAbsolutePath(EN_FONT).c_str(), 13.0f, &config, NULL);
 
 	// 添加第三个字体，设置优先级为2
 	config.MergeMode = true;
@@ -251,6 +253,10 @@ bool main_init(int argc, char* argv[])
 	// Enable Dock
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+	// ImGui ini
+	strcpy(imgui_ini_name, utils::getFileAbsolutePath("imgui.ini").c_str());
+	io.IniFilename = imgui_ini_name;
 
 	// Theme
 	ImGui::StyleColorsLight();

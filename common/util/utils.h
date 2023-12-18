@@ -13,10 +13,11 @@ namespace utils {
 	void AlertEx(bool* show, const char* title, const char* text);
 	bool Prompt(bool* show, const char* title, const char* text, char* buf, size_t buf_size);
 	bool ConfirmEx(bool* show, const char* title, const char* text);
-
+	
 	void readFileData(std::filesystem::path path, void* out_data);
 	std::vector<uint8_t> readFileData(std::filesystem::path& path);
 	std::string readFileText(std::filesystem::path path);
+	std::string getFileAbsolutePath(std::string relative);
 
 	uint8_t htoi_4(const char c);
 	uint8_t htoi_8(const char* c);

@@ -79,13 +79,13 @@ std::once_flag KLImageManager::s_OnceFlag;
 KLImageManager::KLImageManager() {
     for (int i = 0; i < vector_graph_resoures_define_size; ++i)
     {
-        vectorGraphs[vector_graph_resources_define[i].name] = KLCreateVectorGraph(vector_graph_resources_define[i].file);
+        vectorGraphs[vector_graph_resources_define[i].name] = KLCreateVectorGraph(utils::getFileAbsolutePath(vector_graph_resources_define[i].file).c_str());
     }
     for (int i = 0; i < image_resources_define_size; ++i)
     {
         int width, height, channels;
         unsigned char* data = utils::load_image(
-            image_resources_define[i].file,
+            utils::getFileAbsolutePath(image_resources_define[i].file).c_str(),
             &width,
             &height,
             &channels,

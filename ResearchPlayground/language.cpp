@@ -3,6 +3,8 @@
 #include <iostream>
 #include <assert.h>
 
+#include "util/utils.h"
+
 #include "libxml/parser.h"
 
 KLLanguageManager* KLLanguageManager::s_Instance = nullptr;
@@ -47,7 +49,8 @@ bool LanguageConfigParseLanguage(xmlNodePtr node, std::unordered_map<KLLangTextK
 
 void KLLanguageManager::LoadConfig(const char* filename)
 {
-    xmlDocPtr doc = xmlParseFile(filename);
+    auto a = utils::getFileAbsolutePath(filename);
+    xmlDocPtr doc = xmlParseFile(a.c_str());
     if (!doc)
         return;
 

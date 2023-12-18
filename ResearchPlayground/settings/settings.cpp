@@ -55,7 +55,7 @@ void InitSettingsWindow()
 {
 	global_setting_auto_run = AutoRunRegisterCheck();
 
-	SettingsRead(SETTINGS_FILE_NAME);
+	SettingsRead(utils::getFileAbsolutePath(SETTINGS_FILE_NAME).c_str());
 }
 
 void ShowSettingsWindow(bool* p_open)
@@ -180,7 +180,7 @@ void ShowSettingsWindow(bool* p_open)
 	static int frame_cnt = 0;
 	if (frame_cnt++ >= 500)
 	{
-		SettingsWrite(SETTINGS_FILE_NAME);
+		SettingsWrite(utils::getFileAbsolutePath(SETTINGS_FILE_NAME).c_str());
 
 		frame_cnt = 0;
 	}

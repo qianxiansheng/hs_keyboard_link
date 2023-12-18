@@ -656,9 +656,13 @@ void KeyboardGLInit(int width, int height)
 	kbv_draw_ctx.clear_color = glm::vec4(bgcolor.x, bgcolor.y, bgcolor.z, bgcolor.w);
 
 	if (kbv_draw_ctx.shader == nullptr) 
-		kbv_draw_ctx.shader = std::make_unique<Shader>("shader/3.2.blending.vs", "shader/3.2.blending.fs");
+		kbv_draw_ctx.shader = std::make_unique<Shader>(
+			utils::getFileAbsolutePath("shader/3.2.blending.vs").c_str(), 
+			utils::getFileAbsolutePath("shader/3.2.blending.fs").c_str());
 	if (kbv_draw_ctx.shader_board == nullptr)
-		kbv_draw_ctx.shader = std::make_unique<Shader>("shader/board.vs", "shader/board.fs");
+		kbv_draw_ctx.shader = std::make_unique<Shader>(
+			utils::getFileAbsolutePath("shader/board.vs").c_str(),
+			utils::getFileAbsolutePath("shader/board.fs").c_str());
 
 	RenderModelInit();
 

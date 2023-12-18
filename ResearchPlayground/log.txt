@@ -1,0 +1,273 @@
+[2023-12-15 11:02:52] [INFO] [keylink.cpp:471] Init hInstance
+[2023-12-15 11:02:52] [INFO] [keylink.cpp:537] Init WGL
+[2023-12-15 11:02:52] [INFO] [keylink.cpp:547] GLAD Load
+[2023-12-15 11:02:52] [INFO] [keylink.cpp:571] Init ImGUI
+[2023-12-15 11:02:52] [INFO] [keylink.cpp:253] DPI update: 144.000000
+[2023-12-15 11:07:18] [INFO] [keylink.cpp:474] Init hInstance
+[2023-12-15 11:07:18] [INFO] [keylink.cpp:673] Add Notification Icon
+[2023-12-15 11:07:18] [INFO] [keylink.cpp:540] Init WGL
+[2023-12-15 11:07:19] [INFO] [keylink.cpp:550] GLAD Load
+[2023-12-15 11:07:19] [INFO] [keylink.cpp:574] Init ImGUI
+[2023-12-15 11:07:19] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-15 11:07:19] [INFO] [keylink.cpp:333] Main Loop start.
+[2023-12-15 11:07:30] [INFO] [keylink.cpp:412] Main loop over.
+[2023-12-15 11:07:30] [INFO] [keylink.cpp:687] Delete Notification Icon
+[2023-12-15 11:07:31] [INFO] [keylink.cpp:687] Delete Notification Icon
+[2023-12-15 11:11:11] [INFO] [keylink.cpp:474] Init hInstance
+[2023-12-15 11:11:11] [INFO] [keylink.cpp:673] Add Notification Icon
+[2023-12-15 11:11:11] [INFO] [keylink.cpp:540] Init WGL
+[2023-12-15 11:11:11] [INFO] [keylink.cpp:550] GLAD Load
+[2023-12-15 11:11:12] [INFO] [keylink.cpp:574] Init ImGUI
+[2023-12-15 11:11:12] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-15 11:11:12] [INFO] [keylink.cpp:333] Main Loop start.
+[2023-12-15 11:41:20] [INFO] [keylink.cpp:474] Init hInstance
+[2023-12-15 11:41:20] [INFO] [keylink.cpp:540] Init WGL
+[2023-12-15 11:41:20] [INFO] [keylink.cpp:550] GLAD Load
+[2023-12-15 11:41:20] [INFO] [keylink.cpp:574] Init ImGUI
+[2023-12-15 11:41:20] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-15 11:41:21] [INFO] [keylink.cpp:333] Main Loop start.
+[2023-12-15 11:41:26] [INFO] [keylink.cpp:412] Main loop over.
+[2023-12-15 11:41:26] [INFO] [keylink.cpp:687] Delete Notification Icon
+[2023-12-15 11:41:27] [INFO] [keylink.cpp:687] Delete Notification Icon
+[2023-12-15 11:43:43] [INFO] [keylink.cpp:304] START
+[2023-12-15 11:43:53] [INFO] [keylink.cpp:478] Init hInstance
+[2023-12-15 11:43:53] [INFO] [keylink.cpp:544] Init WGL
+[2023-12-15 11:43:53] [INFO] [keylink.cpp:554] GLAD Load
+[2023-12-15 11:43:53] [INFO] [keylink.cpp:578] Init ImGUI
+[2023-12-15 11:43:53] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-15 11:43:54] [INFO] [keylink.cpp:337] Main Loop start.
+[2023-12-15 11:43:58] [INFO] [keylink.cpp:416] Main loop over.
+[2023-12-15 11:43:58] [INFO] [keylink.cpp:691] Delete Notification Icon
+[2023-12-15 11:43:58] [INFO] [keylink.cpp:691] Delete Notification Icon
+[2023-12-15 11:44:10] [INFO] [keylink.cpp:304] START
+[2023-12-15 11:44:20] [INFO] [keylink.cpp:478] Init hInstance
+[2023-12-15 11:44:20] [INFO] [keylink.cpp:677] Add Notification Icon
+[2023-12-15 11:44:20] [INFO] [keylink.cpp:544] Init WGL
+[2023-12-15 11:44:20] [INFO] [keylink.cpp:554] GLAD Load
+[2023-12-15 11:44:20] [INFO] [keylink.cpp:578] Init ImGUI
+[2023-12-15 11:44:20] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-15 11:44:20] [INFO] [keylink.cpp:337] Main Loop start.
+[2023-12-15 11:44:28] [INFO] [keylink.cpp:416] Main loop over.
+[2023-12-15 11:44:28] [INFO] [keylink.cpp:691] Delete Notification Icon
+[2023-12-15 11:44:28] [INFO] [keylink.cpp:691] Delete Notification Icon
+[2023-12-15 11:52:50] [INFO] [keylink.cpp:304] START
+[2023-12-15 11:52:50] [INFO] [keylink.cpp:476] Init hInstance
+[2023-12-15 11:52:50] [INFO] [keylink.cpp:675] Add Notification Icon
+[2023-12-15 11:52:50] [INFO] [keylink.cpp:542] Init WGL
+[2023-12-15 11:52:50] [INFO] [keylink.cpp:552] GLAD Load
+[2023-12-15 11:52:50] [INFO] [keylink.cpp:576] Init ImGUI
+[2023-12-15 11:52:50] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-15 11:52:51] [INFO] [keylink.cpp:335] Main Loop start.
+[2023-12-15 11:53:13] [INFO] [keylink.cpp:414] Main loop over.
+[2023-12-15 11:53:13] [INFO] [keylink.cpp:689] Delete Notification Icon
+[2023-12-15 11:53:13] [INFO] [keylink.cpp:689] Delete Notification Icon
+[2023-12-15 11:53:15] [INFO] [keylink.cpp:304] START
+[2023-12-15 11:53:15] [INFO] [keylink.cpp:476] Init hInstance
+[2023-12-15 11:53:15] [INFO] [keylink.cpp:675] Add Notification Icon
+[2023-12-15 11:53:15] [INFO] [keylink.cpp:542] Init WGL
+[2023-12-15 11:53:15] [INFO] [keylink.cpp:552] GLAD Load
+[2023-12-15 11:53:15] [INFO] [keylink.cpp:576] Init ImGUI
+[2023-12-15 11:53:15] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-15 11:53:16] [INFO] [keylink.cpp:335] Main Loop start.
+[2023-12-15 11:53:43] [INFO] [keylink.cpp:414] Main loop over.
+[2023-12-15 11:53:43] [INFO] [keylink.cpp:689] Delete Notification Icon
+[2023-12-15 11:53:43] [INFO] [keylink.cpp:689] Delete Notification Icon
+[2023-12-15 13:47:13] [INFO] [keylink.cpp:517] Init hInstance
+[2023-12-15 13:47:13] [INFO] [keylink.cpp:716] Add Notification Icon
+[2023-12-15 13:47:13] [INFO] [keylink.cpp:583] Init WGL
+[2023-12-15 13:47:13] [INFO] [keylink.cpp:593] GLAD Load
+[2023-12-15 13:47:13] [INFO] [keylink.cpp:617] Init ImGUI
+[2023-12-15 13:47:13] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-15 13:47:14] [INFO] [keylink.cpp:376] Main Loop start.
+[2023-12-15 13:47:16] [INFO] [keylink.cpp:455] Main loop over.
+[2023-12-15 13:47:16] [INFO] [keylink.cpp:730] Delete Notification Icon
+[2023-12-15 13:47:16] [INFO] [keylink.cpp:730] Delete Notification Icon
+[2023-12-15 13:49:04] [INFO] [keylink.cpp:304] START
+[2023-12-15 13:49:04] [INFO] [keylink.cpp:517] Init hInstance
+[2023-12-15 13:49:04] [INFO] [keylink.cpp:716] Add Notification Icon
+[2023-12-15 13:49:04] [INFO] [keylink.cpp:583] Init WGL
+[2023-12-15 13:49:04] [INFO] [keylink.cpp:593] GLAD Load
+[2023-12-15 13:49:04] [INFO] [keylink.cpp:617] Init ImGUI
+[2023-12-15 13:49:04] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-15 13:49:05] [INFO] [keylink.cpp:376] Main Loop start.
+[2023-12-15 13:49:07] [INFO] [keylink.cpp:455] Main loop over.
+[2023-12-15 13:49:07] [INFO] [keylink.cpp:730] Delete Notification Icon
+[2023-12-15 13:49:08] [INFO] [keylink.cpp:730] Delete Notification Icon
+[2023-12-18 10:54:44] [INFO] [keylink.cpp:304] START
+[2023-12-18 10:54:44] [INFO] [keylink.cpp:716] Add Notification Icon
+[2023-12-18 10:57:52] [INFO] [keylink.cpp:304] START
+[2023-12-18 10:57:52] [INFO] [keylink.cpp:513] Init hInstance
+[2023-12-18 10:57:52] [INFO] [keylink.cpp:712] Add Notification Icon
+[2023-12-18 10:57:52] [INFO] [keylink.cpp:579] Init WGL
+[2023-12-18 10:57:52] [INFO] [keylink.cpp:589] GLAD Load
+[2023-12-18 10:57:52] [INFO] [keylink.cpp:613] Init ImGUI
+[2023-12-18 10:57:52] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-18 11:00:38] [INFO] [keylink.cpp:304] START
+[2023-12-18 11:00:38] [INFO] [keylink.cpp:513] Init hInstance
+[2023-12-18 11:00:38] [INFO] [keylink.cpp:712] Add Notification Icon
+[2023-12-18 11:00:38] [INFO] [keylink.cpp:579] Init WGL
+[2023-12-18 11:00:38] [INFO] [keylink.cpp:589] GLAD Load
+[2023-12-18 11:00:38] [INFO] [keylink.cpp:613] Init ImGUI
+[2023-12-18 11:00:38] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-18 11:03:30] [INFO] [keylink.cpp:304] START
+[2023-12-18 11:03:30] [INFO] [keylink.cpp:475] Init hInstance
+[2023-12-18 11:03:30] [INFO] [keylink.cpp:674] Add Notification Icon
+[2023-12-18 11:03:31] [INFO] [keylink.cpp:541] Init WGL
+[2023-12-18 11:03:31] [INFO] [keylink.cpp:551] GLAD Load
+[2023-12-18 11:03:31] [INFO] [keylink.cpp:575] Init ImGUI
+[2023-12-18 11:03:31] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-18 11:03:31] [INFO] [keylink.cpp:334] Main Loop start.
+[2023-12-18 11:03:33] [INFO] [keylink.cpp:413] Main loop over.
+[2023-12-18 11:03:33] [INFO] [keylink.cpp:688] Delete Notification Icon
+[2023-12-18 11:03:33] [INFO] [keylink.cpp:688] Delete Notification Icon
+[2023-12-18 11:03:35] [INFO] [keylink.cpp:304] START
+[2023-12-18 11:03:35] [INFO] [keylink.cpp:475] Init hInstance
+[2023-12-18 11:03:35] [INFO] [keylink.cpp:674] Add Notification Icon
+[2023-12-18 11:03:35] [INFO] [keylink.cpp:541] Init WGL
+[2023-12-18 11:03:35] [INFO] [keylink.cpp:551] GLAD Load
+[2023-12-18 11:03:35] [INFO] [keylink.cpp:575] Init ImGUI
+[2023-12-18 11:03:35] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-18 11:03:36] [INFO] [keylink.cpp:334] Main Loop start.
+[2023-12-18 11:03:39] [INFO] [keylink.cpp:413] Main loop over.
+[2023-12-18 11:03:39] [INFO] [keylink.cpp:688] Delete Notification Icon
+[2023-12-18 11:03:39] [INFO] [keylink.cpp:688] Delete Notification Icon
+[2023-12-18 11:13:23] [INFO] [keylink.cpp:304] START
+[2023-12-18 11:13:23] [INFO] [keylink.cpp:475] Init hInstance
+[2023-12-18 11:13:23] [INFO] [keylink.cpp:674] Add Notification Icon
+[2023-12-18 11:13:23] [INFO] [keylink.cpp:541] Init WGL
+[2023-12-18 11:13:23] [INFO] [keylink.cpp:551] GLAD Load
+[2023-12-18 11:13:23] [INFO] [keylink.cpp:575] Init ImGUI
+[2023-12-18 11:13:23] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-18 11:13:24] [INFO] [keylink.cpp:334] Main Loop start.
+[2023-12-18 11:13:26] [INFO] [keylink.cpp:413] Main loop over.
+[2023-12-18 11:13:26] [INFO] [keylink.cpp:688] Delete Notification Icon
+[2023-12-18 11:13:26] [INFO] [keylink.cpp:688] Delete Notification Icon
+[2023-12-18 11:16:19] [INFO] [keylink.cpp:304] START
+[2023-12-18 11:16:19] [INFO] [keylink.cpp:475] Init hInstance
+[2023-12-18 11:16:19] [INFO] [keylink.cpp:674] Add Notification Icon
+[2023-12-18 11:16:19] [INFO] [keylink.cpp:541] Init WGL
+[2023-12-18 11:16:19] [INFO] [keylink.cpp:551] GLAD Load
+[2023-12-18 11:16:19] [INFO] [keylink.cpp:575] Init ImGUI
+[2023-12-18 11:16:19] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-18 11:16:20] [INFO] [keylink.cpp:334] Main Loop start.
+[2023-12-18 11:16:22] [INFO] [keylink.cpp:413] Main loop over.
+[2023-12-18 11:16:22] [INFO] [keylink.cpp:688] Delete Notification Icon
+[2023-12-18 11:16:22] [INFO] [keylink.cpp:688] Delete Notification Icon
+[2023-12-18 14:11:00] [INFO] [keylink.cpp:304] START
+[2023-12-18 14:11:00] [INFO] [keylink.cpp:475] Init hInstance
+[2023-12-18 14:11:00] [INFO] [keylink.cpp:674] Add Notification Icon
+[2023-12-18 14:11:00] [INFO] [keylink.cpp:541] Init WGL
+[2023-12-18 14:11:00] [INFO] [keylink.cpp:551] GLAD Load
+[2023-12-18 14:11:00] [INFO] [keylink.cpp:575] Init ImGUI
+[2023-12-18 14:11:00] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-18 14:11:41] [INFO] [keylink.cpp:334] Main Loop start.
+[2023-12-18 14:11:43] [INFO] [keylink.cpp:413] Main loop over.
+[2023-12-18 14:11:43] [INFO] [keylink.cpp:688] Delete Notification Icon
+[2023-12-18 14:33:38] [INFO] [keylink.cpp:304] START
+[2023-12-18 14:33:38] [INFO] [keylink.cpp:475] Init hInstance
+[2023-12-18 14:33:38] [INFO] [keylink.cpp:674] Add Notification Icon
+[2023-12-18 14:33:38] [INFO] [keylink.cpp:541] Init WGL
+[2023-12-18 14:33:38] [INFO] [keylink.cpp:551] GLAD Load
+[2023-12-18 14:33:38] [INFO] [keylink.cpp:575] Init ImGUI
+[2023-12-18 14:33:38] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-18 14:33:38] [INFO] [keylink.cpp:334] Main Loop start.
+[2023-12-18 14:33:40] [INFO] [keylink.cpp:413] Main loop over.
+[2023-12-18 14:33:40] [INFO] [keylink.cpp:688] Delete Notification Icon
+[2023-12-18 14:36:28] [INFO] [keylink.cpp:304] START
+[2023-12-18 14:36:28] [INFO] [keylink.cpp:475] Init hInstance
+[2023-12-18 14:36:28] [INFO] [keylink.cpp:674] Add Notification Icon
+[2023-12-18 14:36:28] [INFO] [keylink.cpp:541] Init WGL
+[2023-12-18 14:36:28] [INFO] [keylink.cpp:551] GLAD Load
+[2023-12-18 14:36:28] [INFO] [keylink.cpp:575] Init ImGUI
+[2023-12-18 14:36:28] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-18 14:36:29] [INFO] [keylink.cpp:334] Main Loop start.
+[2023-12-18 14:36:30] [INFO] [keylink.cpp:413] Main loop over.
+[2023-12-18 14:36:30] [INFO] [keylink.cpp:688] Delete Notification Icon
+[2023-12-18 14:36:30] [INFO] [keylink.cpp:688] Delete Notification Icon
+[2023-12-18 14:38:20] [INFO] [keylink.cpp:304] START
+[2023-12-18 14:38:20] [INFO] [keylink.cpp:475] Init hInstance
+[2023-12-18 14:38:20] [INFO] [keylink.cpp:674] Add Notification Icon
+[2023-12-18 14:38:20] [INFO] [keylink.cpp:541] Init WGL
+[2023-12-18 14:38:20] [INFO] [keylink.cpp:551] GLAD Load
+[2023-12-18 14:38:20] [INFO] [keylink.cpp:575] Init ImGUI
+[2023-12-18 14:38:20] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-18 14:38:21] [INFO] [keylink.cpp:334] Main Loop start.
+[2023-12-18 14:39:06] [INFO] [keylink.cpp:304] START
+[2023-12-18 14:39:07] [INFO] [keylink.cpp:475] Init hInstance
+[2023-12-18 14:39:07] [INFO] [keylink.cpp:674] Add Notification Icon
+[2023-12-18 14:39:07] [INFO] [keylink.cpp:541] Init WGL
+[2023-12-18 14:39:07] [INFO] [keylink.cpp:551] GLAD Load
+[2023-12-18 14:39:07] [INFO] [keylink.cpp:575] Init ImGUI
+[2023-12-18 14:39:07] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-18 14:41:18] [INFO] [keylink.cpp:304] START
+[2023-12-18 14:41:18] [INFO] [keylink.cpp:475] Init hInstance
+[2023-12-18 14:41:18] [INFO] [keylink.cpp:674] Add Notification Icon
+[2023-12-18 14:41:18] [INFO] [keylink.cpp:541] Init WGL
+[2023-12-18 14:41:19] [INFO] [keylink.cpp:551] GLAD Load
+[2023-12-18 14:41:19] [INFO] [keylink.cpp:575] Init ImGUI
+[2023-12-18 14:41:19] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-18 14:42:49] [INFO] [keylink.cpp:304] START
+[2023-12-18 14:42:49] [INFO] [keylink.cpp:475] Init hInstance
+[2023-12-18 14:42:49] [INFO] [keylink.cpp:674] Add Notification Icon
+[2023-12-18 14:42:49] [INFO] [keylink.cpp:541] Init WGL
+[2023-12-18 14:42:49] [INFO] [keylink.cpp:551] GLAD Load
+[2023-12-18 14:42:49] [INFO] [keylink.cpp:575] Init ImGUI
+[2023-12-18 14:42:49] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-18 14:43:08] [INFO] [keylink.cpp:334] Main Loop start.
+[2023-12-18 14:43:12] [INFO] [keylink.cpp:413] Main loop over.
+[2023-12-18 14:43:12] [INFO] [keylink.cpp:688] Delete Notification Icon
+[2023-12-18 14:43:13] [INFO] [keylink.cpp:688] Delete Notification Icon
+[2023-12-18 14:44:13] [INFO] [keylink.cpp:304] START
+[2023-12-18 14:44:13] [INFO] [keylink.cpp:475] Init hInstance
+[2023-12-18 14:44:13] [INFO] [keylink.cpp:674] Add Notification Icon
+[2023-12-18 14:44:13] [INFO] [keylink.cpp:541] Init WGL
+[2023-12-18 14:44:13] [INFO] [keylink.cpp:551] GLAD Load
+[2023-12-18 14:44:13] [INFO] [keylink.cpp:575] Init ImGUI
+[2023-12-18 14:44:13] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-18 14:44:14] [INFO] [keylink.cpp:334] Main Loop start.
+[2023-12-18 14:44:18] [INFO] [keylink.cpp:413] Main loop over.
+[2023-12-18 14:44:18] [INFO] [keylink.cpp:688] Delete Notification Icon
+[2023-12-18 14:44:18] [INFO] [keylink.cpp:688] Delete Notification Icon
+[2023-12-18 14:47:57] [INFO] [keylink.cpp:304] START
+[2023-12-18 14:47:57] [INFO] [keylink.cpp:475] Init hInstance
+[2023-12-18 14:47:57] [INFO] [keylink.cpp:674] Add Notification Icon
+[2023-12-18 14:47:57] [INFO] [keylink.cpp:541] Init WGL
+[2023-12-18 14:47:58] [INFO] [keylink.cpp:551] GLAD Load
+[2023-12-18 14:47:58] [INFO] [keylink.cpp:575] Init ImGUI
+[2023-12-18 14:47:58] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-18 14:50:39] [INFO] [keylink.cpp:304] START
+[2023-12-18 14:50:39] [INFO] [keylink.cpp:475] Init hInstance
+[2023-12-18 14:50:39] [INFO] [keylink.cpp:674] Add Notification Icon
+[2023-12-18 14:50:39] [INFO] [keylink.cpp:541] Init WGL
+[2023-12-18 14:50:39] [INFO] [keylink.cpp:551] GLAD Load
+[2023-12-18 14:50:39] [INFO] [keylink.cpp:575] Init ImGUI
+[2023-12-18 14:50:39] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-18 14:51:56] [INFO] [keylink.cpp:304] START
+[2023-12-18 14:51:56] [INFO] [keylink.cpp:475] Init hInstance
+[2023-12-18 14:51:56] [INFO] [keylink.cpp:674] Add Notification Icon
+[2023-12-18 14:51:56] [INFO] [keylink.cpp:541] Init WGL
+[2023-12-18 14:51:56] [INFO] [keylink.cpp:551] GLAD Load
+[2023-12-18 14:51:56] [INFO] [keylink.cpp:575] Init ImGUI
+[2023-12-18 14:51:56] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-18 14:52:06] [INFO] [keylink.cpp:334] Main Loop start.
+[2023-12-18 14:52:09] [INFO] [keylink.cpp:413] Main loop over.
+[2023-12-18 14:52:09] [INFO] [keylink.cpp:688] Delete Notification Icon
+[2023-12-18 14:52:10] [INFO] [keylink.cpp:688] Delete Notification Icon
+[2023-12-18 14:54:32] [INFO] [keylink.cpp:304] START
+[2023-12-18 14:54:32] [INFO] [keylink.cpp:475] Init hInstance
+[2023-12-18 14:54:32] [INFO] [keylink.cpp:674] Add Notification Icon
+[2023-12-18 14:54:32] [INFO] [keylink.cpp:541] Init WGL
+[2023-12-18 14:54:32] [INFO] [keylink.cpp:551] GLAD Load
+[2023-12-18 14:54:32] [INFO] [keylink.cpp:575] Init ImGUI
+[2023-12-18 14:54:32] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-18 14:56:51] [INFO] [keylink.cpp:304] START
+[2023-12-18 14:56:51] [INFO] [keylink.cpp:475] Init hInstance
+[2023-12-18 14:56:51] [INFO] [keylink.cpp:674] Add Notification Icon
+[2023-12-18 14:56:51] [INFO] [keylink.cpp:541] Init WGL
+[2023-12-18 14:56:51] [INFO] [keylink.cpp:551] GLAD Load
+[2023-12-18 14:56:51] [INFO] [keylink.cpp:575] Init ImGUI
+[2023-12-18 14:56:51] [INFO] [keylink.cpp:254] DPI update: 144.000000
+[2023-12-18 14:56:52] [INFO] [keylink.cpp:334] Main Loop start.
+[2023-12-18 14:56:54] [INFO] [keylink.cpp:413] Main loop over.
+[2023-12-18 14:56:54] [INFO] [keylink.cpp:688] Delete Notification Icon
+[2023-12-18 14:56:54] [INFO] [keylink.cpp:688] Delete Notification Icon

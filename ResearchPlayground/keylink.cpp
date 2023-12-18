@@ -24,6 +24,7 @@
 #include "sequencer/ingseq.h"
 #include "keyboard/keyboard.h"
 #include "util/utils.h"
+#include "logger.h"
 
 #define MAX_LOADSTRING 100
 
@@ -213,6 +214,7 @@ LRESULT KeyProc(int code, WPARAM wParam, LPARAM lParam)
 
 void EnableKeyHook(bool enable)
 {
+    LOG_INFO("Enable Key Hook %d.", enable);
     if (g_hook_enabled == enable)
         return;
 
@@ -249,6 +251,8 @@ void UpdateWindowDockNodeHeight(const char* windowName, float height)
 
 void UpdateDPI(float screen_dpi)
 {
+    LOG_INFO("DPI update: %f", screen_dpi);
+
     g_dpi_screen = screen_dpi;
     g_dpi_scale = screen_dpi / g_dpi_fixed;
 
@@ -297,33 +301,37 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance,
     _In_ LPSTR lpCmdLine, 
     _In_ int nCmdShow)
 {
+    LOG_INFO("START");
+    try{
+    
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
-
+    
     // 初始化全局字符串
     MyRegisterClass(hInstance);
-
+    
     // 执行应用程序初始化:
     if (!InitInstance(hInstance, nCmdShow))
     {
         ::UnregisterClassW(szWindowClass, hInst);
         return FALSE;
     }
-
+    
     if (!initWGL(hWnd))
     {
         CleanupInstance();
         ::UnregisterClassW(szWindowClass, hInst);
         return FALSE;
     }
-
+    
     InitImGuiContext();
-
+    
     UpdateDPI((float)GetDpiForWindow(hWnd));
-
+    
     main_init(__argc, __argv);
     KeyboardGLInit((int)DPI(KL_KB_VIEW_WIDTH), (int)DPI(KL_KB_VIEW_HEIGHT));
-
+    
+    LOG_INFO("Main Loop start.");
     // 主消息循环
     bool done = false;
     while (!done)
@@ -353,7 +361,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance,
         }
         if (done)
             break;
-
+    
         /* Limit the FPS */
         static const int fixed_fps = 60;
         static const int fixed_frame_time = 1000000 / 60;
@@ -363,54 +371,60 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance,
         if (frameTime < fixed_frame_time)
             std::this_thread::sleep_for(std::chrono::microseconds(fixed_frame_time - frameTime));
         last = curr;
-
+    
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplWin32_NewFrame();
-
+    
         KeyboardGLDraw();
-
+    
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glViewport(0, 0, APP_WIDTH, APP_HEIGHT);
-
+    
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+    
         ImGui::NewFrame();
-
+    
         int r = main_gui();
-
+    
         // Rendering
         ImGui::Render();
         glViewport(0, 0, g_Width, g_Height);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
+    
         // Update and Render additional Platform Windows
         if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
         {
             ImGui::UpdatePlatformWindows();
             ImGui::RenderPlatformWindowsDefault();
-
+    
             // Restore the OpenGL rendering context to the main window DC, since platform windows might have changed it.
             wglMakeCurrent(g_MainWindow.hDC, g_hRC);
         }
-
+    
         // Present
         ::SwapBuffers(g_MainWindow.hDC);
     }
+    LOG_INFO("Main loop over.");
     DeleteNotificationIcon();
-
+    
     KeyboardGLDestroy();
     main_shutdown();
-
+    
     CleanupImGuiContext();
     CleanupInstance();
     ::UnregisterClassW(szWindowClass, hInst);
-
+    
+    }
+    catch (::std::exception& e) {
+        LOG_ERROR(e.what());
+    }
+    
     return (int)0;
 }
 
@@ -436,8 +450,7 @@ static ATOM MyRegisterClass(HINSTANCE hInstance)
     //wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
     wcex.hIcon = NULL;
     wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
-    //wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-    wcex.hbrBackground = NULL;
+    wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wcex.lpszMenuName = NULL;
     wcex.lpszClassName = szWindowClass;
     //wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_ICON1));
@@ -445,6 +458,7 @@ static ATOM MyRegisterClass(HINSTANCE hInstance)
 
     return RegisterClassExW(&wcex);
 }
+
 
 //
 //   函数: InitInstance(HINSTANCE, int)
@@ -458,6 +472,7 @@ static ATOM MyRegisterClass(HINSTANCE hInstance)
 //
 static BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
+    LOG_INFO("Init hInstance");
     hInst = hInstance; // 将实例句柄存储在全局变量中
 
     hWnd = CreateWindowW(szWindowClass, szTitle, WS_POPUP,
@@ -465,12 +480,6 @@ static BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
     if (!hWnd)
     {
-        return FALSE;
-    }
-
-    if (!initWGL(hWnd))
-    {
-        ::DestroyWindow(hWnd);
         return FALSE;
     }
 
@@ -529,7 +538,7 @@ static void CleanupDeviceWGL(HWND hWnd, WGL_WindowData* data)
 //
 static int initWGL(HWND hwnd)
 {
-    // Initialize OpenGL
+    LOG_INFO("Init WGL");
     if (!CreateDeviceWGL(hwnd, &g_MainWindow))
     {
         CleanupDeviceWGL(hwnd, &g_MainWindow);
@@ -539,7 +548,7 @@ static int initWGL(HWND hwnd)
     }
     wglMakeCurrent(g_MainWindow.hDC, g_hRC);
 
-    // Load glad
+    LOG_INFO("GLAD Load");
     gladLoadGL();
     return TRUE;
 }
@@ -563,6 +572,7 @@ static void CleanupWGL(HWND hwnd)
 //
 static void InitImGuiContext()
 {
+    LOG_INFO("Init ImGUI");
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -661,6 +671,7 @@ NOTIFYICONDATA nid;
 
 static BOOL AddNotificationIcon(HWND hwnd)
 {
+    LOG_INFO("Add Notification Icon");
     nid.cbSize = { sizeof(nid) };
     nid.hWnd = hwnd;
     // add the icon, setting the icon, tooltip, and callback message.
@@ -674,6 +685,7 @@ static BOOL AddNotificationIcon(HWND hwnd)
 
 static BOOL DeleteNotificationIcon()
 {
+    LOG_INFO("Delete Notification Icon");
     return Shell_NotifyIcon(NIM_DELETE, &nid);
 }
 
@@ -779,31 +791,31 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     break;
     case WM_KEYDOWN:
     {
-        float deltaTime = 0.01f;
-        if (wParam == 'W')
-        {
-            kbv_draw_ctx.camera.ProcessKeyboard(FORWARD, deltaTime);
-        }
-        else if (wParam == 'S')
-        {
-            kbv_draw_ctx.camera.ProcessKeyboard(BACKWARD, deltaTime);
-        }
-        else if (wParam == 'A')
-        {
-            kbv_draw_ctx.camera.ProcessKeyboard(LEFT, deltaTime);
-        }
-        else if (wParam == 'D')
-        {
-            kbv_draw_ctx.camera.ProcessKeyboard(RIGHT, deltaTime);
-        }
-        else if (wParam == 'Q')
-        {
-            kbv_draw_ctx.camera.ProcessKeyboard(UP, deltaTime);
-        }
-        else if (wParam == 'E')
-        {
-            kbv_draw_ctx.camera.ProcessKeyboard(DOWN, deltaTime);
-        }
+        // float deltaTime = 0.01f;
+        // if (wParam == 'W')
+        // {
+        //     kbv_draw_ctx.camera.ProcessKeyboard(FORWARD, deltaTime);
+        // }
+        // else if (wParam == 'S')
+        // {
+        //     kbv_draw_ctx.camera.ProcessKeyboard(BACKWARD, deltaTime);
+        // }
+        // else if (wParam == 'A')
+        // {
+        //     kbv_draw_ctx.camera.ProcessKeyboard(LEFT, deltaTime);
+        // }
+        // else if (wParam == 'D')
+        // {
+        //     kbv_draw_ctx.camera.ProcessKeyboard(RIGHT, deltaTime);
+        // }
+        // else if (wParam == 'Q')
+        // {
+        //     kbv_draw_ctx.camera.ProcessKeyboard(UP, deltaTime);
+        // }
+        // else if (wParam == 'E')
+        // {
+        //     kbv_draw_ctx.camera.ProcessKeyboard(DOWN, deltaTime);
+        // }
         break;
     }
     case WM_KEYUP:

@@ -204,6 +204,17 @@ std::string utils::readFileText(std::filesystem::path path)
 	return ss.str();
 }
 
+std::string utils::getFileAbsolutePath(std::string relative)
+{
+	char buffer[MAX_PATH];
+	GetModuleFileNameA(NULL, buffer, MAX_PATH);
+
+	std::string executablePath(buffer);
+	std::string executableDir = executablePath.substr(0, executablePath.find_last_of("\\/"));
+
+
+	return (executableDir + "\\" + relative).c_str();
+}
 
 uint8_t utils::htoi_4(const char c)
 {

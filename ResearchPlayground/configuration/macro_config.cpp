@@ -80,11 +80,11 @@ bool KLMacroConfigManager::RemoveConfig(const char* name)
 
 void KLMacroConfigManager::SaveConfig(const char* filename)
 {
-	MacroConfigWrite(filename);
+	MacroConfigWrite(utils::getFileAbsolutePath(filename).c_str());
 }
 void KLMacroConfigManager::LoadConfig(const char* filename)
 {
-	MacroConfigRead(filename);
+	MacroConfigRead(utils::getFileAbsolutePath(filename).c_str());
 }
 
 void KLMacroConfigManager::SetCurrentConfig(uint32_t i)

@@ -57,11 +57,11 @@ bool KLFunctionConfigManager::RemoveConfig(const char* name)
 
 void KLFunctionConfigManager::SaveConfig(const char* filename)
 {
-	AssignmentConfigWrite(filename);
+	AssignmentConfigWrite(utils::getFileAbsolutePath(filename).c_str());
 }
 void KLFunctionConfigManager::LoadConfig(const char* filename)
 {
-	AssignmentConfigRead(filename);
+	AssignmentConfigRead(utils::getFileAbsolutePath(filename).c_str());
 }
 
 KLFunctionLayout::KLFunctionLayout(KLFunctionID id, const char* name, ImVec4 param, KLFunctionLayoutFlags flagbits)
