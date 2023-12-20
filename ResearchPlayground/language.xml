@@ -58,6 +58,25 @@
     <ENTRY type="52" value="&#x9ED8;&#x8BA4;&#x5C42;"/>
     <ENTRY type="53" value="Fn1&#x5C42;"/>
     <ENTRY type="54" value="Fn2&#x5C42;"/>
+    <ENTRY type="55" value="&#x706F;&#x6548;&#x8BBE;&#x7F6E;"/>
+    
+
+    <ENTRY type="80" value="&#x968F;&#x6CE2;&#x9010;&#x6D41;-1"/>
+    <ENTRY type="81" value="&#x968F;&#x6CE2;&#x9010;&#x6D41;-2"/>
+    <ENTRY type="82" value="&#x968F;&#x6CE2;&#x9010;&#x6D41;-3"/>
+    <ENTRY type="83" value="&#x968F;&#x6CE2;&#x9010;&#x6D41;-4"/>
+    <ENTRY type="84" value="&#x5E38;&#x4EAE;&#x6A21;&#x5F0F;"/>
+    <ENTRY type="85" value="&#x547C;&#x5438;&#x6A21;&#x5F0F;"/>
+    <ENTRY type="86" value="&#x86C7;&#x5F62;&#x8DD1;&#x9A6C;"/>
+    <ENTRY type="87" value="&#x4E24;&#x5934;&#x8DD1;&#x9A6C;"/>
+    <ENTRY type="88" value="&#x6B63;&#x5F26;&#x5149;&#x6CE2;"/>
+    <ENTRY type="89" value="&#x8E0F;&#x96EA;&#x65E0;&#x75D5;"/>
+    <ENTRY type="90" value="&#x5355;&#x8272;&#x7011;&#x5E03;"/>
+    <ENTRY type="91" value="&#x7A7F;&#x63D2;&#x5BF9;&#x8DD1;"/>
+    <ENTRY type="92" value="&#x659C;&#x62C9;&#x53D8;&#x5316;"/>
+    <ENTRY type="93" value="&#x4E00;&#x89E6;&#x5373;&#x53D1;"/>
+    <ENTRY type="94" value="&#x5982;&#x5F71;&#x968F;&#x5F62;"/>
+    <ENTRY type="95" value="&#x6D9F;&#x6F2A;&#x6269;&#x6563;"/>
 
 
     <ENTRY type="100" value="&#x5F00;&#x59CB;"/>
@@ -115,7 +134,7 @@
 
 
     <ENTRY type="34" value="Device Settings"/>
-    <ENTRY type="35" value="Program Setttings"/>
+    <ENTRY type="35" value="Program Settings"/>
     <ENTRY type="36" value="Loop until the key up"/>
     <ENTRY type="37" value="Loop until any key down"/>
     <ENTRY type="38" value="loop specify count"/>
@@ -135,7 +154,24 @@
     <ENTRY type="52" value="defualt"/>
     <ENTRY type="53" value="Fn1"/>
     <ENTRY type="54" value="Fn2"/>
+    <ENTRY type="55" value="Light Settings"/>
 
+    <ENTRY type="80" value="Flowing Light 1"/>
+    <ENTRY type="81" value="Flowing Light 2"/>
+    <ENTRY type="82" value="Flowing Light 3"/>
+    <ENTRY type="83" value="Flowing Light 4"/>
+    <ENTRY type="84" value="Normal Light"/>
+    <ENTRY type="85" value="Breathing Light"/>
+    <ENTRY type="86" value="Snake-style Marquee"/>
+    <ENTRY type="87" value="Two-way Marquee"/>
+    <ENTRY type="88" value="Sinewave Light "/>
+    <ENTRY type="89" value="Leave no trace in the snow"/>
+    <ENTRY type="90" value="Waterfall Effect"/>
+    <ENTRY type="91" value="Alternating Marquee"/>
+    <ENTRY type="92" value="Oblique Marquee"/>
+    <ENTRY type="93" value="Expanding on both sides"/>
+    <ENTRY type="94" value="Shadow "/>
+    <ENTRY type="95" value="Expanding outward"/>
     
     <ENTRY type="100" value="begin"/>
     <ENTRY type="101" value="end"/>

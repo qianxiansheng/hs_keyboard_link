@@ -205,6 +205,7 @@ std::string utils::readFileText(std::filesystem::path path)
 	return ss.str();
 }
 
+#if 0
 std::string utils::getFileAbsolutePath(std::string relative)
 {
 	if (g_exe_dir_path == "")
@@ -218,6 +219,12 @@ std::string utils::getFileAbsolutePath(std::string relative)
 
 	return (g_exe_dir_path + "\\" + relative).c_str();
 }
+#else
+std::string utils::getFileAbsolutePath(std::string relative)
+{
+	return relative;
+}
+#endif
 
 uint8_t utils::htoi_4(const char c)
 {
