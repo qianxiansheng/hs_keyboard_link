@@ -20,7 +20,6 @@
 #include "menu/menu.h"
 #include "function/function.h"
 #include "light/light.h"
-#include "light/light_modify.h"
 #include "settings/settings.h"
 #include "configuration/assignment_config.h"
 #include "configuration/macro_config.h"

@@ -4,5 +4,6 @@
 #include "../pch.h"
 
 void ShowLightWindow(bool* p_open);
+void ShowLightModifyWindow(bool* p_open);
 
 #endif

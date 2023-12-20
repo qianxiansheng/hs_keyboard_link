@@ -198,7 +198,6 @@
     <ClCompile Include="language.cpp" />
     <ClCompile Include="layout.cpp" />
     <ClCompile Include="light\light.cpp" />
-    <ClCompile Include="light\light_modify.cpp" />
     <ClCompile Include="logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu\menu.cpp" />

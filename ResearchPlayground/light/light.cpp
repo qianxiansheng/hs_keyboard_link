@@ -8,25 +8,7 @@
 
 #include "language.h"
 
-const char* lights[] = {
-    KLLABLEB(KLL_KEY_LIGHT_1 , "LIGHT_SEL"),
-    KLLABLEB(KLL_KEY_LIGHT_2 , "LIGHT_SEL"),
-    KLLABLEB(KLL_KEY_LIGHT_3 , "LIGHT_SEL"),
-    KLLABLEB(KLL_KEY_LIGHT_4 , "LIGHT_SEL"),
-    KLLABLEB(KLL_KEY_LIGHT_5 , "LIGHT_SEL"),
-    KLLABLEB(KLL_KEY_LIGHT_6 , "LIGHT_SEL"),
-    KLLABLEB(KLL_KEY_LIGHT_7 , "LIGHT_SEL"),
-    KLLABLEB(KLL_KEY_LIGHT_8 , "LIGHT_SEL"),
-    KLLABLEB(KLL_KEY_LIGHT_9 , "LIGHT_SEL"),
-    KLLABLEB(KLL_KEY_LIGHT_10, "LIGHT_SEL"),
-    KLLABLEB(KLL_KEY_LIGHT_11, "LIGHT_SEL"),
-    KLLABLEB(KLL_KEY_LIGHT_12, "LIGHT_SEL"),
-    KLLABLEB(KLL_KEY_LIGHT_13, "LIGHT_SEL"),
-    KLLABLEB(KLL_KEY_LIGHT_14, "LIGHT_SEL"),
-    KLLABLEB(KLL_KEY_LIGHT_15, "LIGHT_SEL"),
-    KLLABLEB(KLL_KEY_LIGHT_16, "LIGHT_SEL"),
-};
-int lightSize = sizeof(lights) / sizeof(lights[0]);
+static int selected = -1;
 
 void ShowLightWindow(bool* p_open)
 {
@@ -41,8 +23,6 @@ void ShowLightWindow(bool* p_open)
 
 	ImGui::Text(KLLABLEA(KLL_KEY_LIGHT_SETTINGS));
 
-
-    static int selected = -1;
 #define LIGHT_SELECTABLE(kll_key, idx) if (ImGui::Selectable(KLLABLEB((kll_key), "LIGHT_SEL"), selected == (idx))) {selected = (idx);}
     LIGHT_SELECTABLE(KLL_KEY_LIGHT_1 , 1);
     LIGHT_SELECTABLE(KLL_KEY_LIGHT_2 , 2);
@@ -62,7 +42,33 @@ void ShowLightWindow(bool* p_open)
     LIGHT_SELECTABLE(KLL_KEY_LIGHT_16, 16);
 #undef LIGHT_SELECTABLE
 
+    if (ImGui::Selectable("Customize##LIGHT_SEL", selected == 17)) {
+        selected = 17; 
+    }
 
 
 	ImGui::End();
+}
+
+void ShowLightModifyWindow(bool* p_open)
+{
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoScrollbar;
+    if (!ImGui::Begin(WINNAME_LIGHT_MODIFY, p_open, window_flags)) {
+        ImGui::End();
+        return;
+    }
+
+    auto dockNode = ImGui::GetCurrentWindow()->DockNode;
+    if (dockNode) dockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
+
+
+    static int brightness = 0;
+    ImGui::SliderInt("##BRIGHTNESS", &brightness, 0, 5);
+
+    if (selected == 17)
+    {
+        ImGui::Text("Customize");
+    }
+
+    ImGui::End();
 }
