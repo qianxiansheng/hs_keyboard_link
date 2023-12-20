@@ -87,24 +87,16 @@ void ShowMenuWindow(bool* p_open)
 	{
 		selected = 1;
 		layoutManager->SetLayoutType(KL_LAYOUT_ASSIGNMENT);
-
-		UpdateWindowDockNodeHeight(WINNAME_FUNCTION, WINHEIGHT_FUNCTION_LIGHT_MODIFY);
-		UpdateWindowDockNodeWidth(WINNAME_ASSIGN_CONFIG_MGR, WINWIDTH_LIGHT_CONFIG);
 	}
 	if (MySelectImageBtn(imglight1.texID, imglight2.texID, size, selected == 2))
 	{
 		selected = 2;
 		layoutManager->SetLayoutType(KL_LAYOUT_LIGHT);
-
-		UpdateWindowDockNodeHeight(WINNAME_LIGHT_MODIFY, WINHEIGHT_FUNCTION_LIGHT_MODIFY);
-		UpdateWindowDockNodeWidth(WINNAME_LIGHT, WINWIDTH_LIGHT_CONFIG);
 	}
 	if (MySelectImageBtn(imgmacro1.texID, imgmacro2.texID, size, selected == 3))
 	{
 		selected = 3;
 		layoutManager->SetLayoutType(KL_LAYOUT_MACRO);
-
-		UpdateWindowDockNodeWidth(WINNAME_MACRO_CONFIG_MGR, WINWIDTH_LIGHT_CONFIG);
 	}
 
 

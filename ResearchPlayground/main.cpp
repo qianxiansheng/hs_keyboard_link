@@ -299,8 +299,8 @@ bool main_init(int argc, char* argv[])
 	}
 	else
 	{
-		//ShowWindow(hWnd, SW_HIDE);
-		//HideApplication();
+		ShowWindow(hWnd, SW_HIDE);
+		HideApplication();
 	}
 
     return true;
@@ -330,11 +330,11 @@ static void CustomizeTitle()
 	auto window = ImGui::GetCurrentWindow();
 	auto rect = window->Rect();
 
-	int itemHeight = (int)DPI(16.0f);
+	int itemHeight = (int)(ImGui::GetTextLineHeight() + DPI(8));
 	int itemMargin = 2;
 
 	ImGuiIO& io = ImGui::GetIO();
-	ImDrawList* draw_list = ImGui::GetWindowDrawList();
+	ImDrawList* draw_list = ImGui::GetForegroundDrawList();
 
 	ImRect regionRect = window->Rect();
 	ImRect titleRect(regionRect.Min, ImVec2(regionRect.Max.x, regionRect.Min.y + itemHeight));
@@ -347,8 +347,8 @@ static void CustomizeTitle()
 
 	static ImVec2 prevMousePos;
 
-	int minWidth = 100;
-	int minHeight = 100;
+	int minWidth = (int)DPI(100);
+	int minHeight = (int)DPI(100);
 
 	// Drag move
 	static bool isDraging = false;
@@ -604,8 +604,6 @@ static void ShowRootWindowMenu()
 {
 	if (ImGui::BeginMenuBar()) {
 
-		CustomizeTitle();
-
 		if (ImGui::BeginMenu("View")) {
 
 			ImGui::MenuItem("Demo Window", NULL, &opt_showdemowindow);
@@ -650,6 +648,8 @@ static void ShowRootWindow(bool* p_open)
 	ImGuiID dockspace_id = ImGui::GetID(DOCKSPACE_ID);
 	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_AutoHideTabBar | ImGuiDockNodeFlags_NoUndocking | ImGuiDockNodeFlags_NoResize);
 
+	CustomizeTitle();
+
 	ShowRootWindowMenu();
 
 	utils::AlertEx(&alert_flag, KLLABLEB(KLL_KEY_DIALOG_MSG, "UIMSG"), alert_message);
@@ -660,8 +660,16 @@ static void ShowRootWindow(bool* p_open)
 		ImGui::ShowDemoWindow(&opt_showdemowindow);
 	}
 
+
 	// 根据Layout显示窗口
 	auto layoutManager = KLWindowLayoutManager::GetInstance();
+
+	bool isLayoutSwitch = false;
+	if (layoutManager->isLayoutSwitch)
+	{
+		layoutManager->isLayoutSwitch = false;
+		isLayoutSwitch = true;
+	}
 
 	auto& wids = layoutManager->layouts[layoutManager->GetLayoutType()].wnames;
 	auto& wtbl = layoutManager->window_table;
@@ -673,7 +681,24 @@ static void ShowRootWindow(bool* p_open)
 			}
 		}
 	}
-	// 
+
+	if (isLayoutSwitch)
+	{
+		if (KL_LAYOUT_ASSIGNMENT == layoutManager->GetLayoutType())
+		{
+			UpdateWindowDockNodeHeight(WINNAME_FUNCTION, WINHEIGHT_FUNCTION_LIGHT_MODIFY);
+			UpdateWindowDockNodeWidth(WINNAME_ASSIGN_CONFIG_MGR, WINWIDTH_LIGHT_CONFIG);
+		}
+		else if (KL_LAYOUT_LIGHT == layoutManager->GetLayoutType())
+		{
+			UpdateWindowDockNodeHeight(WINNAME_LIGHT_MODIFY, WINHEIGHT_FUNCTION_LIGHT_MODIFY);
+			UpdateWindowDockNodeWidth(WINNAME_LIGHT, WINWIDTH_LIGHT_CONFIG);
+		}
+		else if (KL_LAYOUT_MACRO == layoutManager->GetLayoutType())
+		{
+			UpdateWindowDockNodeWidth(WINNAME_MACRO_CONFIG_MGR, WINWIDTH_LIGHT_CONFIG);
+		}
+	}
 }
 
 

@@ -165,6 +165,7 @@ void UserInputKeyUp(KLFunction& function)
 
 void ReloadMacroConfig(KLMacro& config)
 {
+	EnableKeyHook(false);
 	EndRecord();
 
 	mySequence.myItems.clear();

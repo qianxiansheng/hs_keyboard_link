@@ -287,14 +287,11 @@ float dpiScale()
 void HideApplication()
 {
     g_hidden = true;
-    printf("hidden\n");
 }
 void RestoreApplication()
 {
     g_hidden = false;
-    printf("restore\n");
 }
-
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, 
     _In_opt_ HINSTANCE hPrevInstance, 
@@ -306,7 +303,17 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance,
     
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
-    
+
+    // 创建互斥体
+    HANDLE hMutex = CreateMutex(NULL, TRUE, szWindowClass);
+
+    // 检查互斥体是否已存在
+    if (GetLastError() == ERROR_ALREADY_EXISTS) {
+        // 已经有一个实例在运行，退出程序
+        CloseHandle(hMutex);
+        return 0;
+    }
+
     // 初始化全局字符串
     MyRegisterClass(hInstance);
     
@@ -792,6 +799,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     break;
     case WM_KEYDOWN:
     {
+        // // 移动3D场景的相机
         // float deltaTime = 0.01f;
         // if (wParam == 'W')
         // {

@@ -67,6 +67,8 @@ public:
 	std::unordered_map<KLLayoutType, KLWindowLayout> layouts;
 	std::vector<KLWindowInfo> window_table;
 
+	bool isLayoutSwitch = false;
+
 	void KLRegisterLayout(KLLayoutType type, KLWindowInfo& winInfo)
 	{
 		auto it0 = std::find(window_table.begin(), window_table.end(), winInfo);
@@ -88,7 +90,11 @@ public:
 
 	void SetLayoutType(KLLayoutType type)
 	{
+		if (type == this->m_CurrentType)
+			return;
+
 		this->m_CurrentType = type;
+		this->isLayoutSwitch = true;
 	}
 	KLLayoutType GetLayoutType()
 	{
