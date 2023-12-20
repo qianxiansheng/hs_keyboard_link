@@ -6,7 +6,7 @@
 #define APP_HEIGHT			600
 #define APP_TITLE           L"Keyboard Link"
 #define EN_FONT				u8"DroidSans.ttf"
-#define ZH_FONT				u8"C:\\Windows\\Fonts\\SIMYOU.TTF"
+#define ZH_FONT				u8"C:\\Windows\\Fonts\\simhei.ttf"
 //#define DEFAULT_FONT		"DroidSans.ttf"
 
 #define KL_KB_VIEW_WIDTH	800
@@ -32,6 +32,7 @@
 
 #define WINWIDTH_LIGHT_CONFIG (150.0f)
 #define WINHEIGHT_FUNCTION_LIGHT_MODIFY ((APP_HEIGHT) / 2.0f)
+#define WINHEIGHT_STATEBAR (20.0f)
 
 #define KL_CONFIG_MAX_NAME_SIZE 32
 #define KL_CONFIG_MAX_NUM 99

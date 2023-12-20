@@ -325,13 +325,15 @@ static ImVec2 operator+(const ImVec2& a, const int b) {
 }
 #endif
 
-static void CustomizeTitle()
+static void CustomizeTitle(int menuHeight)
 {
 	auto window = ImGui::GetCurrentWindow();
 	auto rect = window->Rect();
 
-	int itemHeight = (int)(ImGui::GetTextLineHeight() + DPI(8));
-	int itemMargin = 2;
+	int itemHeight = menuHeight;
+	int itemMargin = 1;
+	int dragEdgeWidth = 3;
+	int edgeWidth = 1;
 
 	ImGuiIO& io = ImGui::GetIO();
 	ImDrawList* draw_list = ImGui::GetForegroundDrawList();
@@ -339,11 +341,11 @@ static void CustomizeTitle()
 	ImRect regionRect = window->Rect();
 	ImRect titleRect(regionRect.Min, ImVec2(regionRect.Max.x, regionRect.Min.y + itemHeight));
 
-	ImRect dragMoveRect(ImVec2(titleRect.Min.x, titleRect.Min.y + 2), titleRect.Max);
-	ImRect dragResizeVTRect(regionRect.Min, ImVec2(regionRect.Max.x, regionRect.Min.y + 2));
-	ImRect dragResizeVBRect(ImVec2(regionRect.Min.x, regionRect.Max.y - 2), regionRect.Max);
-	ImRect dragResizeHLRect(regionRect.Min, ImVec2(regionRect.Min.x + 2, regionRect.Max.y));
-	ImRect dragResizeHRRect(ImVec2(regionRect.Max.x - 2, regionRect.Min.y), regionRect.Max);
+	ImRect dragMoveRect(ImVec2(titleRect.Min.x, titleRect.Min.y + dragEdgeWidth), titleRect.Max);
+	ImRect dragResizeVTRect(regionRect.Min, ImVec2(regionRect.Max.x, regionRect.Min.y + dragEdgeWidth));
+	ImRect dragResizeVBRect(ImVec2(regionRect.Min.x, regionRect.Max.y - dragEdgeWidth), regionRect.Max);
+	ImRect dragResizeHLRect(regionRect.Min, ImVec2(regionRect.Min.x + dragEdgeWidth, regionRect.Max.y));
+	ImRect dragResizeHRRect(ImVec2(regionRect.Max.x - dragEdgeWidth, regionRect.Min.y), regionRect.Max);
 
 	static ImVec2 prevMousePos;
 
@@ -394,6 +396,7 @@ static void CustomizeTitle()
 	static bool isDragingResizeHR = false;
 	if (dragResizeHRRect.Contains(io.MousePos))
 	{
+		draw_list->AddRectFilled(dragResizeHRRect.Min, dragResizeHRRect.Max, 0x2FFFFF00);
 		ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
 		if (io.MouseClicked[0])
 		{
@@ -433,6 +436,7 @@ static void CustomizeTitle()
 	static bool isDragingResizeHL = false;
 	if (dragResizeHLRect.Contains(io.MousePos))
 	{
+		draw_list->AddRectFilled(dragResizeHLRect.Min, dragResizeHLRect.Max, 0x2FFFFF00);
 		ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
 		if (io.MouseClicked[0])
 		{
@@ -472,6 +476,7 @@ static void CustomizeTitle()
 	static bool isDragingResizeVB = false;
 	if (dragResizeVBRect.Contains(io.MousePos))
 	{
+		draw_list->AddRectFilled(dragResizeVBRect.Min, dragResizeVBRect.Max, 0x2FFFFF00);
 		ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNS);
 		if (io.MouseClicked[0])
 		{
@@ -507,10 +512,11 @@ static void CustomizeTitle()
 			isDragingResizeVB = false;
 	}
 
-	// Drag resize Vertical Bottom
+	// Drag resize Vertical Top
 	static bool isDragingResizeVT = false;
 	if (dragResizeVTRect.Contains(io.MousePos))
 	{
+		draw_list->AddRectFilled(dragResizeVTRect.Min, dragResizeVTRect.Max, 0x2FFFFF00);
 		ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNS);
 		if (io.MouseClicked[0])
 		{
@@ -573,7 +579,6 @@ static void CustomizeTitle()
 	// Close button
 	static bool btnMouseDown1 = false;
 	drawItem(ImVec2(titleRect.Max.x - itemHeight, titleRect.Min.y), 0xFF0000FF, 0xFF0000BF, 0xFF00007F, &btnMouseDown1, [&](void) {
-		
 		if (global_setting_x_system_tray) {
 			ShowWindow(hWnd, SW_HIDE);
 			HideApplication();
@@ -598,10 +603,19 @@ static void CustomizeTitle()
 		ShowWindow(hWnd, SW_MINIMIZE);
 	});
 
+	//ImRect edgeVTRect(regionRect.Min, ImVec2(regionRect.Max.x, regionRect.Min.y + edgeWidth));
+	//ImRect edgeVBRect(ImVec2(regionRect.Min.x, regionRect.Max.y - edgeWidth), regionRect.Max);
+	//ImRect edgeHLRect(regionRect.Min, ImVec2(regionRect.Min.x + edgeWidth, regionRect.Max.y));
+	//ImRect edgeHRRect(ImVec2(regionRect.Max.x - edgeWidth, regionRect.Min.y), regionRect.Max);
+	//draw_list->AddRectFilled(edgeVTRect.Min, edgeVTRect.Max, 0xFFFFFF00);
+	//draw_list->AddRectFilled(edgeVBRect.Min, edgeVBRect.Max, 0xFFFFFF00);
+	//draw_list->AddRectFilled(edgeHLRect.Min, edgeHLRect.Max, 0xFFFFFF00);
+	//draw_list->AddRectFilled(edgeHRRect.Min, edgeHRRect.Max, 0xFFFFFF00);
 }
 
 static void ShowRootWindowMenu()
 {
+	ImVec2 size;
 	if (ImGui::BeginMenuBar()) {
 
 		if (ImGui::BeginMenu("View")) {
@@ -617,8 +631,11 @@ static void ShowRootWindowMenu()
 			ImGui::EndMenu();
 		}
 
+		size = ImGui::GetItemRectSize();
+
 		ImGui::EndMenuBar();
 	}
+	CustomizeTitle(size.y);
 }
 
 static void ShowRootWindow(bool* p_open)
@@ -647,8 +664,6 @@ static void ShowRootWindow(bool* p_open)
 
 	ImGuiID dockspace_id = ImGui::GetID(DOCKSPACE_ID);
 	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_AutoHideTabBar | ImGuiDockNodeFlags_NoUndocking | ImGuiDockNodeFlags_NoResize);
-
-	CustomizeTitle();
 
 	ShowRootWindowMenu();
 
