@@ -17,7 +17,7 @@ Logger::~Logger() {
     }
 }
 // 格式化字符串并记录日志
-void Logger::log(LogLevel level, const char* file, int line, char* message) {
+void Logger::_log(LogLevel level, const char* file, int line, char* message) {
     if (logFile.is_open()) {
         // 获取当前时间
         std::time_t now = std::time(nullptr);
@@ -56,5 +56,5 @@ void LOG0(LogLevel level, const char* file, int line, const char* format, ...)
     va_end(args);
 
     std::filesystem::path p(file);
-    gLogger.log(level, p.filename().string().c_str(), line, buffer);
+    gLogger._log(level, p.filename().string().c_str(), line, buffer);
 }

@@ -18,6 +18,8 @@
 #include "statusbar.h"
 #include "protocol/iap.h"
 #include "language.h"
+#include "light/light.h"
+#include "logger.h"
 
 /* kb map */
 uint8_t KEY_GetMapIdByRowAndCol(uint8_t row, uint8_t col) {
@@ -354,6 +356,29 @@ void DrawBackgroundBoard(glm::vec3 pos, glm::vec3 shap, float margin, float thic
 	DrawKeycap(p, s, 0.0f, thickness, rgba, output);
 }
 
+void DrawSelection(glm::vec4 rgba, std::vector<float>& output)
+{
+	glm::vec3 p[8] = {
+		{0, 0, 0},
+		{1, 0, 0},
+		{1, 1, 0},
+		{0, 1, 0},
+		{0, 0, 1},
+		{1, 0, 1},
+		{1, 1, 1},
+		{0, 1, 1},
+	};
+	for (int i = 0; i < 8; ++i)
+		p[i] *= glm::vec3(1.0f, -1.0f, 1.0f);
+	
+	DrawSurfaceRect(p[0], p[1], p[2], p[3], rgba, output);
+	DrawSurfaceRect(p[4], p[5], p[6], p[7], rgba, output);
+	DrawSurfaceRect(p[0], p[1], p[5], p[4], rgba, output);
+	DrawSurfaceRect(p[1], p[2], p[6], p[5], rgba, output);
+	DrawSurfaceRect(p[2], p[3], p[7], p[6], rgba, output);
+	DrawSurfaceRect(p[3], p[0], p[4], p[7], rgba, output);
+}
+
 void RenderModelInit()
 {
 	glm::vec3 global_pos(0.0f, 0.0f, 0.0f);
@@ -387,6 +412,8 @@ void RenderModelInit()
 	}
 
 	DrawBackgroundBoard(global_pos, bbMax, 0.2f, board_thickness, BOARD_DEFAULT_COLOR, kbv_draw_ctx.BoardVertices);
+
+	DrawSelection(DEFAULT_COLOR, kbv_draw_ctx.SelectionVertices);
 }
 
 bool FunctionIsModified(KEY_MapId_t kmID)
@@ -475,7 +502,47 @@ bool wmouse_in_quad(glm::vec3 mouse_pos, glm::vec3 camera_pos, float* quad)
 
 	return intri1 || intri2;
 }
+glm::vec3 CalcInterSection()
+{
+	/* Convert mouse screen coordinates to world coordinates */
+	glm::vec4 viewport(0.0f, 0.0f, kbv_draw_ctx.w, kbv_draw_ctx.h);
+	glm::mat4 modelViewMatrix = kbv_draw_ctx.view_matrix * kbv_draw_ctx.model_matrix;
+	glm::vec3 mousePos_NDC(kbv_draw_ctx.mouse_pos.x, kbv_draw_ctx.h - kbv_draw_ctx.mouse_pos.y, 0.1f);
+	glm::vec3 mousePos_3DC = glm::unProject(mousePos_NDC, modelViewMatrix, kbv_draw_ctx.projection_matrix, viewport);
 
+	glm::vec3 dir = glm::normalize(mousePos_3DC - kbv_draw_ctx.camera.Position);
+	glm::vec3 planeN = glm::vec3(0.0f, 0.0f, 1.0f);
+	glm::vec3 planeP = glm::vec3(0.0f, 0.0f, 1.0f);
+	glm::vec3 intersection = GetIntersectWithLineAndPlane(kbv_draw_ctx.camera.Position, dir, planeN, planeP);
+
+	return intersection;
+}
+bool quad_in_selection(float* quad)
+{
+	auto& ctx = kbv_draw_ctx;
+
+	float xmin = ctx.selection_w > 0 ? ctx.selection_x : ctx.selection_x + ctx.selection_w;
+	float xmax = ctx.selection_w < 0 ? ctx.selection_x : ctx.selection_x + ctx.selection_w;
+	float ymin = ctx.selection_h > 0 ? ctx.selection_y : ctx.selection_y + ctx.selection_h;
+	float ymax = ctx.selection_h < 0 ? ctx.selection_y : ctx.selection_y + ctx.selection_h;
+
+	float x1 = quad[0], y1 = quad[1];
+	float x2 = quad[3], y2 = quad[4];
+	float x3 = quad[6], y3 = quad[7];
+	float x4 = quad[9], y4 = quad[10];
+
+	if ((xmin <= x1 && x1 <= xmax) && (ymin <= y1 && y1 <= ymax) ||
+		(xmin <= x2 && x2 <= xmax) && (ymin <= y2 && y2 <= ymax) ||
+		(xmin <= x3 && x3 <= xmax) && (ymin <= y3 && y3 <= ymax) ||
+		(xmin <= x4 && x4 <= xmax) && (ymin <= y4 && y4 <= ymax))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 
 void assignment_layout_kbv_hover_cb(KeyBtnView& view)
 {
@@ -554,11 +621,78 @@ void RenderModelUpdateLight()
 	}
 }
 
-void RenderModelUpdateAssignment(glm::vec3 mousePos_3DC)
-{
-	
-	ImGuiContext* g = ImGui::GetCurrentContext();
 
+void RenderModelUpdateLightCustomize()
+{
+	auto win = ImGui::GetCurrentWindow();
+	auto& DC = win->DC;
+	auto& io = ImGui::GetIO();
+
+	/* Update the position of texture view */
+	kbv_draw_ctx.mouse_pos.x = io.MousePos.x - DC.CursorPos.x + DPI(KL_KB_VIEW_TEX_X);
+	kbv_draw_ctx.mouse_pos.y = io.MousePos.y - DC.CursorPos.y + DPI(KL_KB_VIEW_TEX_Y);
+	kbv_draw_ctx.mouse_clicked = io.MouseClicked[0];
+
+	static bool drag = false;
+
+	ImGuiContext* g = ImGui::GetCurrentContext();
+	{
+		if (!drag && io.MouseClicked[0]) {
+			drag = true;
+			glm::vec3 intersection = CalcInterSection();
+			kbv_draw_ctx.selection_x = intersection.x;
+			kbv_draw_ctx.selection_y = intersection.y;
+			kbv_draw_ctx.selection_w = 0.0f;
+			kbv_draw_ctx.selection_h = 0.0f;
+		}
+		if (drag && io.MouseDown[0]) {
+			glm::vec3 intersection = CalcInterSection();
+			kbv_draw_ctx.selection_w = intersection.x - kbv_draw_ctx.selection_x;
+			kbv_draw_ctx.selection_h = intersection.y - kbv_draw_ctx.selection_y;
+		}
+		if (drag && io.MouseReleased[0]) {
+			drag = false;
+			kbv_draw_ctx.selection_x = 0.0f;
+			kbv_draw_ctx.selection_y = 0.0f;
+			kbv_draw_ctx.selection_w = 0.0f;
+			kbv_draw_ctx.selection_h = 0.0f;
+		}
+	}
+
+	for (auto& it : keyBtnViewList)
+	{
+		auto& keyBtnView = it.second;
+		if (quad_in_selection(keyBtnView.face_vertex))
+		{
+			keyBtnView.color = ACTIVE_COLOR;
+		}
+		else
+		{
+			keyBtnView.color = DEFAULT_COLOR;
+		}
+	}
+
+
+}
+
+void RenderModelUpdateAssignment()
+{
+	auto win = ImGui::GetCurrentWindow();
+	auto& DC = win->DC;
+	auto& io = ImGui::GetIO();
+
+	/* Update the position of texture view */
+	kbv_draw_ctx.mouse_pos.x = io.MousePos.x - DC.CursorPos.x + DPI(KL_KB_VIEW_TEX_X);
+	kbv_draw_ctx.mouse_pos.y = io.MousePos.y - DC.CursorPos.y + DPI(KL_KB_VIEW_TEX_Y);
+	kbv_draw_ctx.mouse_clicked = io.MouseClicked[0];
+
+	/* Convert mouse screen coordinates to world coordinates */
+	glm::vec4 viewport(0.0f, 0.0f, kbv_draw_ctx.w, kbv_draw_ctx.h);
+	glm::mat4 modelViewMatrix = kbv_draw_ctx.view_matrix * kbv_draw_ctx.model_matrix;
+	glm::vec3 mousePos_NDC(kbv_draw_ctx.mouse_pos.x, kbv_draw_ctx.h - kbv_draw_ctx.mouse_pos.y, 0.1f);
+	glm::vec3 mousePos_3DC = glm::unProject(mousePos_NDC, modelViewMatrix, kbv_draw_ctx.projection_matrix, viewport);
+
+	ImGuiContext* g = ImGui::GetCurrentContext();
 	if (g->HoveredWindow == g->CurrentWindow && g->ActiveIdWindow == NULL)
 	{
 		ImGui::IsItemHovered();
@@ -632,6 +766,12 @@ void KeyboardGLInit(int width, int height)
 	kbv_draw_ctx.w = width;
 	kbv_draw_ctx.h = height;
 
+	kbv_draw_ctx.selection_x = 1.0f;
+	kbv_draw_ctx.selection_y = 1.0f;
+	kbv_draw_ctx.selection_w = 5.0f;
+	kbv_draw_ctx.selection_h = 2.0f;
+
+
 	auto& style = ImGui::GetStyle();
 	ImVec4 bgcolor = style.Colors[ImGuiCol_WindowBg];
 
@@ -663,8 +803,33 @@ void KeyboardGLInit(int width, int height)
 		kbv_draw_ctx.shader = std::make_unique<Shader>(
 			utils::getFileAbsolutePath("shader/board.vs").c_str(),
 			utils::getFileAbsolutePath("shader/board.fs").c_str());
+	if (kbv_draw_ctx.shader_selection == nullptr)
+		kbv_draw_ctx.shader = std::make_unique<Shader>(
+			utils::getFileAbsolutePath("shader/selection.vs").c_str(),
+			utils::getFileAbsolutePath("shader/selection.fs").c_str());
 
 	RenderModelInit();
+
+
+	{
+		glGenVertexArrays(1, &kbv_draw_ctx.SelectionVAO);
+		glGenBuffers(1, &kbv_draw_ctx.SelectionVBO);
+
+		glBindBuffer(GL_ARRAY_BUFFER, kbv_draw_ctx.SelectionVBO);
+		glBufferData(GL_ARRAY_BUFFER, kbv_draw_ctx.SelectionVertices.size() * sizeof(float), kbv_draw_ctx.SelectionVertices.data(), GL_STREAM_DRAW);
+
+		glBindVertexArray(kbv_draw_ctx.SelectionVAO);
+
+		// position attribute
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+		// normal attribute
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(1);
+		// color attribute
+		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(6 * sizeof(float)));
+		glEnableVertexAttribArray(2);
+	}
 
 	{
 		glGenVertexArrays(1, &kbv_draw_ctx.BoardVAO);
@@ -806,6 +971,19 @@ void KeyboardGLDraw()
 		glBindVertexArray(btn.VAO);
 		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)(btn.vertices.size() / 10));
 	}
+
+	kbv_draw_ctx.shader->setVec4("color", DEFAULT_COLOR);
+
+	if (kbv_draw_ctx.selection_w != 0 && kbv_draw_ctx.selection_h != 0)
+	{
+		glm::mat4 m(1.0f);
+		m = glm::translate(m, glm::vec3(kbv_draw_ctx.selection_x, kbv_draw_ctx.selection_y, 0.0f));
+		m = glm::scale(m, glm::vec3(kbv_draw_ctx.selection_w, -kbv_draw_ctx.selection_h, 1.0f));
+		kbv_draw_ctx.shader->setMat4("model", m);
+
+		glBindVertexArray(kbv_draw_ctx.SelectionVAO);
+		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)(kbv_draw_ctx.SelectionVertices.size() / 10));
+	}
 }
 void KeyboardGLDestroy()
 {
@@ -819,6 +997,8 @@ void KeyboardGLDestroy()
 	}
 	glDeleteVertexArrays(1, &kbv_draw_ctx.BoardVAO);
 	glDeleteBuffers(1, &kbv_draw_ctx.BoardVBO);
+	glDeleteVertexArrays(1, &kbv_draw_ctx.SelectionVAO);
+	glDeleteBuffers(1, &kbv_draw_ctx.SelectionVBO);
 
 	glDeleteBuffers(1, &kbv_draw_ctx.UBO);
 
@@ -920,20 +1100,13 @@ void ShowKeyboardWindow(bool* p_open)
 	{
 	}
 
-	/* Update the position of texture view */
-	kbv_draw_ctx.mouse_pos.x = io.MousePos.x - DC.CursorPos.x + DPI(KL_KB_VIEW_TEX_X);
-	kbv_draw_ctx.mouse_pos.y = io.MousePos.y - DC.CursorPos.y + DPI(KL_KB_VIEW_TEX_Y);
-	kbv_draw_ctx.mouse_clicked = io.MouseClicked[0];
-
-	/* Convert mouse screen coordinates to world coordinates */
-	glm::vec4 viewport(0.0f, 0.0f, kbv_draw_ctx.w, kbv_draw_ctx.h);
-	glm::mat4 modelViewMatrix = kbv_draw_ctx.view_matrix * kbv_draw_ctx.model_matrix;
-	glm::vec3 mousePos_NDC(kbv_draw_ctx.mouse_pos.x, kbv_draw_ctx.h - kbv_draw_ctx.mouse_pos.y, 0.1f);
-	glm::vec3 mousePos_3DC = glm::unProject(mousePos_NDC, modelViewMatrix, kbv_draw_ctx.projection_matrix, viewport);
-
 	if (KL_LAYOUT_ASSIGNMENT == layoutManager->GetLayoutType())
 	{
-		RenderModelUpdateAssignment(mousePos_3DC);
+		RenderModelUpdateAssignment();
+	}
+	else if (KL_LAYOUT_LIGHT == layoutManager->GetLayoutType() && IsSelectCustomize())
+	{
+		RenderModelUpdateLightCustomize();
 	}
 	else if (KL_LAYOUT_LIGHT == layoutManager->GetLayoutType())
 	{

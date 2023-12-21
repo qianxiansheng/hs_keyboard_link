@@ -8,7 +8,14 @@
 
 #include "language.h"
 
+constexpr auto LIGHT_CUSTOMIZE = 17;
+
 static int selected = -1;
+
+bool IsSelectCustomize()
+{
+    return selected == LIGHT_CUSTOMIZE;
+}
 
 void ShowLightWindow(bool* p_open)
 {
@@ -42,8 +49,8 @@ void ShowLightWindow(bool* p_open)
     LIGHT_SELECTABLE(KLL_KEY_LIGHT_16, 16);
 #undef LIGHT_SELECTABLE
 
-    if (ImGui::Selectable("Customize##LIGHT_SEL", selected == 17)) {
-        selected = 17; 
+    if (ImGui::Selectable("Customize##LIGHT_SEL", selected == LIGHT_CUSTOMIZE)) {
+        selected = LIGHT_CUSTOMIZE;
     }
 
 
@@ -65,7 +72,7 @@ void ShowLightModifyWindow(bool* p_open)
     static int brightness = 0;
     ImGui::SliderInt("##BRIGHTNESS", &brightness, 0, 5);
 
-    if (selected == 17)
+    if (selected == LIGHT_CUSTOMIZE)
     {
         ImGui::Text("Customize");
     }

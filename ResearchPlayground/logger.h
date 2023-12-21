@@ -26,7 +26,7 @@ public:
     ~Logger();
 
     // 格式化字符串并记录日志
-    void log(LogLevel level, const char* file, int line, char* message);
+    void _log(LogLevel level, const char* file, int line, char* message);
 
 private:
     // 获取日志级别的字符串表示

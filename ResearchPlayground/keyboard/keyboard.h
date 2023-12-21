@@ -20,6 +20,7 @@
 #define MODIFIED_ACTIVE_COLOR glm::vec4(1.0f, 0.0f, 1.0f, 0.5f)
 #define DEFAULT_COLOR glm::vec4(0.7f, 0.7f, 0.7f, 0.5f)
 #define BOARD_DEFAULT_COLOR glm::vec4(0.0f, 0.0f, 0.0f, 0.8f)
+#define SELECTION_COLOR glm::vec4(0.7f, 0.7f, 0.7f, 0.2f)
 
 #define SECTOR 180.0f
 #define KEY_DEPTH 90.0f
@@ -518,11 +519,23 @@ struct KeyboardGLContext
 
     std::unique_ptr<Shader> shader;
     std::unique_ptr<Shader> shader_board;
+    std::unique_ptr<Shader> shader_selection;
 
     Camera camera;
     glm::vec2 mouse_pos;
 
     glm::vec4 clear_color;
+
+    /* selection */
+    float selection_x = 0.0f;
+    float selection_y = 0.0f;
+    float selection_w = 0.0f;
+    float selection_h = 0.0f;
+
+    /* selection */
+    std::vector<float> SelectionVertices;
+    GLuint SelectionVAO;
+    GLuint SelectionVBO;
 
     /* background board */
     std::vector<float> BoardVertices;
