@@ -213,6 +213,9 @@ void ShowMacroConfigManagerWindow(bool* p_open)
 	ImGuiIO& io = ImGui::GetIO();
 	ImDrawList* drawList = ImGui::GetWindowDrawList();
 
+	ImGui::Text(KLLABLEA(KLL_KEY_MACRO_MANAGER));
+	ImGui::Separator();
+
 	static bool show_new = false;
 	static bool show_rename = false;
 	static bool show_del_confirm = false;

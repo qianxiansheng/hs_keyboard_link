@@ -216,7 +216,6 @@
     <ClInclude Include="keyboard\keyboard.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="sequencer\ingseq.h" />
     <ClInclude Include="settings\program_setting.h" />
     <ClInclude Include="settings\settings.h" />
   </ItemGroup>

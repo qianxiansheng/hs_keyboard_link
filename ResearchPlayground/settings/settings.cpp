@@ -70,6 +70,9 @@ void ShowSettingsWindow(bool* p_open)
 	auto dockNode = ImGui::GetCurrentWindow()->DockNode;
 	if (dockNode) dockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
 
+	ImGui::Text(KLLABLEA(KLL_KEY_GLOBAL_SETTINGS));
+	ImGui::Separator();
+
 	ImVec2 region = ImGui::GetContentRegionAvail();
 	ImGui::BeginChild("##DEVICE_SETTINGS", ImVec2(DPI(300.0f), region.y), true);
 	{

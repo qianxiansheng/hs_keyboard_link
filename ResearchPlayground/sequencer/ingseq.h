@@ -52,4 +52,3 @@ void ReloadMacroConfig(KLMacro& config);
 void UserInputKeyDown(KLFunction& function);
 void UserInputKeyUp(KLFunction& function);
 
-void ShowINGSequencerWindow(bool* p_open);

@@ -164,9 +164,6 @@
     <ClInclude Include="keyboard\keyboard.h">
       <Filter>头文件\keyboard</Filter>
     </ClInclude>
-    <ClInclude Include="sequencer\ingseq.h">
-      <Filter>源文件\sequencer</Filter>
-    </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>

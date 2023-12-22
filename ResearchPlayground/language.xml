@@ -59,6 +59,13 @@
     <ENTRY type="53" value="Fn1&#x5C42;"/>
     <ENTRY type="54" value="Fn2&#x5C42;"/>
     <ENTRY type="55" value="&#x706F;&#x6548;&#x8BBE;&#x7F6E;"/>
+    <ENTRY type="56" value="&#x5168;&#x5C40;&#x8BBE;&#x7F6E;"/>
+    <ENTRY type="57" value="&#x6309;&#x952E;&#x6307;&#x6D3E;"/>
+    <ENTRY type="58" value="&#x7BA1;&#x7406;&#x5B8F;"/>
+    <ENTRY type="59" value="&#x901F;&#x5EA6;"/>
+    <ENTRY type="60" value="&#x4EAE;&#x5EA6;"/>
+    <ENTRY type="61" value="&#x81EA;&#x5B9A;&#x4E49;&#x706F;&#x6548;"/>
+
     
 
     <ENTRY type="80" value="&#x968F;&#x6CE2;&#x9010;&#x6D41;-1"/>
@@ -155,6 +162,12 @@
     <ENTRY type="53" value="Fn1"/>
     <ENTRY type="54" value="Fn2"/>
     <ENTRY type="55" value="Light Settings"/>
+    <ENTRY type="56" value="Global Settings"/>
+    <ENTRY type="57" value="Key Assignment"/>
+    <ENTRY type="58" value="Manage Macro"/>
+    <ENTRY type="59" value="Speed"/>
+    <ENTRY type="60" value="Brightness"/>
+    <ENTRY type="61" value="Customize"/>
 
     <ENTRY type="80" value="Flowing Light 1"/>
     <ENTRY type="81" value="Flowing Light 2"/>

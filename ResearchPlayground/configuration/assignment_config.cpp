@@ -81,6 +81,9 @@ void ShowAssignmentConfigManagerWindow(bool* p_open)
 	ImGuiIO& io = ImGui::GetIO();
 	ImDrawList* drawList = ImGui::GetWindowDrawList();
 
+	ImGui::Text(KLLABLEA(KLL_KEY_ASSIGNMENT));
+	ImGui::Separator();
+
 	static bool show_new = false;
 	static bool show_rename = false;
 	static bool show_del_confirm = false;

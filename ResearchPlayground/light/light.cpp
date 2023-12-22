@@ -10,6 +10,7 @@
 
 #include "language.h"
 #include <unordered_map>
+#include "keylink.h"
 
 constexpr auto LIGHT_CUSTOMIZE = 17;
 
@@ -34,6 +35,7 @@ void ShowLightWindow(bool* p_open)
     if (dockNode) dockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
 
 	ImGui::Text(KLLABLEA(KLL_KEY_LIGHT_SETTINGS));
+    ImGui::Separator();
 
 #define LIGHT_SELECTABLE(kll_key, idx) if (ImGui::Selectable(KLLABLEB((kll_key), "LIGHT_SEL"), selected == (idx))) {selected = (idx);}
     LIGHT_SELECTABLE(KLL_KEY_LIGHT_1 , 1);
@@ -54,7 +56,7 @@ void ShowLightWindow(bool* p_open)
     LIGHT_SELECTABLE(KLL_KEY_LIGHT_16, 16);
 #undef LIGHT_SELECTABLE
 
-    if (ImGui::Selectable("Customize##LIGHT_SEL", selected == LIGHT_CUSTOMIZE)) {
+    if (ImGui::Selectable(KLLABLEB(KLL_KEY_CUSTOMIZE_LIGHT, "LIGHT_SEL"), selected == LIGHT_CUSTOMIZE)) {
         selected = LIGHT_CUSTOMIZE;
     }
 
@@ -73,13 +75,23 @@ void ShowLightModifyWindow(bool* p_open)
     auto dockNode = ImGui::GetCurrentWindow()->DockNode;
     if (dockNode) dockNode->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
 
+    float al1 = DPI(100.0f);
 
     static int brightness = 0;
-    ImGui::SliderInt("##BRIGHTNESS", &brightness, 0, 5);
+    ImGui::Text(KLLABLEA(KLL_KEY_BRIGHTNESS));
+    ImGui::SameLine();
+    ImGuiDCXAxisAlign(al1);
+    ImGui::SliderInt("##LIGHT_BRIGHTNESS", &brightness, 0, 4);
 
-    if (selected == LIGHT_CUSTOMIZE)
+    static int speed = 0;
+    ImGui::Text(KLLABLEA(KLL_KEY_SPEED));
+    ImGui::SameLine();
+    ImGuiDCXAxisAlign(al1);
+    ImGui::SliderInt("##LIGHT_SPEED", &speed, 0, 4);
+
+    if (ImGui::Button(KLLABLEB(KLL_KEY_SAVE, "APPLY_LIGHT_SETTINGS")))
     {
-        ImGui::Text("Customize");
+
     }
 
     ImGui::End();

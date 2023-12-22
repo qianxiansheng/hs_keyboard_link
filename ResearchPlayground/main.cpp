@@ -147,7 +147,6 @@ void BuildLayoutManager()
 {
 	KLWindowInfo menu_win_info(WINNAME_MENU, ShowMenuWindow);
 	KLWindowInfo kbod_win_info(WINNAME_KEYBOARD, ShowKeyboardWindow);
-	KLWindowInfo sequ_win_info(WINNAME_SEQUNCER, ShowINGSequencerWindow);
 	KLWindowInfo func_win_info(WINNAME_FUNCTION, ShowFunctionWindow);
 	KLWindowInfo sett_win_info(WINNAME_SETTINGS, ShowSettingsWindow);
 	KLWindowInfo stat_win_info(WINNAME_STATEBAR, ShowStatusBarWindow);
@@ -181,7 +180,6 @@ void BuildLayoutManager()
 
 	// macro
 	layoutManager->KLRegisterLayout(KL_LAYOUT_MACRO, menu_win_info);
-	layoutManager->KLRegisterLayout(KL_LAYOUT_MACRO, sequ_win_info);
 	layoutManager->KLRegisterLayout(KL_LAYOUT_MACRO, macro_view_win_info);
 	layoutManager->KLRegisterLayout(KL_LAYOUT_MACRO, macro_cfg_mgr_win_info);
 	layoutManager->KLRegisterLayout(KL_LAYOUT_MACRO, stat_win_info);
