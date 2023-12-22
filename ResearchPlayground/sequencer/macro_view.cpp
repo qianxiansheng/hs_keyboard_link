@@ -251,6 +251,12 @@ void ShowMacroViewWindow(bool* p_open)
 		}
 		if (ImGui::BeginTabItem(KLLABLEB(KLL_KEY_RECORDER, "MACRO_VIEW_SEQUENCER")))
 		{
+			static bool x_first_open = true;
+			if (x_first_open) {
+				auto configManager = KLMacroConfigManager::GetInstance();
+				ReloadMacroConfig(configManager->GetCurrentConfig());
+				x_first_open = false;
+			}
 			ShowSequencerTab();
 			ImGui::EndTabItem();
 		}
