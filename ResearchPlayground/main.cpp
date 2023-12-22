@@ -254,6 +254,9 @@ bool main_init(int argc, char* argv[])
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
+	ImGuiStyle& style = ImGui::GetStyle();
+	//style.Colors[ImGuiCol_MenuBarBg] = ImVec4();
+
 	// ImGui ini
 	strcpy(imgui_ini_name, utils::getFileAbsolutePath("imgui.ini").c_str());
 	io.IniFilename = imgui_ini_name;
@@ -331,6 +334,7 @@ static void CustomizeTitle(int menuHeight)
 	int itemMargin = 1;
 	int dragEdgeWidth = 3;
 	int edgeWidth = 1;
+	int triSize = 50;
 
 	ImGuiIO& io = ImGui::GetIO();
 	ImDrawList* draw_list = ImGui::GetForegroundDrawList();
@@ -343,10 +347,11 @@ static void CustomizeTitle(int menuHeight)
 	ImRect dragResizeVBRect(ImVec2(regionRect.Min.x, regionRect.Max.y - dragEdgeWidth), regionRect.Max);
 	ImRect dragResizeHLRect(regionRect.Min, ImVec2(regionRect.Min.x + dragEdgeWidth, regionRect.Max.y));
 	ImRect dragResizeHRRect(ImVec2(regionRect.Max.x - dragEdgeWidth, regionRect.Min.y), regionRect.Max);
+	ImRect dragResizeTriRect(ImVec2(regionRect.Max.x - triSize, regionRect.Max.y - triSize), regionRect.Max);
 
 	static ImVec2 prevMousePos;
 
-	int minWidth = (int)DPI(100);
+	int minWidth = (int)DPI(150);
 	int minHeight = (int)DPI(100);
 
 	// Drag move
@@ -489,7 +494,7 @@ static void CustomizeTitle(int menuHeight)
 		RECT windowRect;
 		GetWindowRect(hWnd, &windowRect);
 
-		int diff = (windowRect.bottom - windowRect.top + deltaY) - minWidth;
+		int diff = (windowRect.bottom - windowRect.top + deltaY) - minHeight;
 
 		if (diff < 0)
 			deltaY -= diff;
@@ -501,7 +506,7 @@ static void CustomizeTitle(int menuHeight)
 			windowRect.bottom - windowRect.top + deltaY, TRUE);
 
 		if (diff < 0)
-			prevMousePos.x = (float)windowRect.bottom + deltaY;
+			prevMousePos.y = (float)windowRect.bottom + deltaY;
 		else
 			prevMousePos = io.MousePos;
 
@@ -529,7 +534,7 @@ static void CustomizeTitle(int menuHeight)
 		RECT windowRect;
 		GetWindowRect(hWnd, &windowRect);
 
-		int diff = (windowRect.bottom - windowRect.top - deltaY) - minWidth;
+		int diff = (windowRect.bottom - windowRect.top - deltaY) - minHeight;
 
 		if (diff < 0)
 			deltaY += diff;
@@ -541,13 +546,63 @@ static void CustomizeTitle(int menuHeight)
 			windowRect.bottom - windowRect.top - deltaY, TRUE);
 
 		if (diff < 0)
-			prevMousePos.x = (float)windowRect.bottom - deltaY;
+			prevMousePos.y = (float)windowRect.top + deltaY;
 		else
 			prevMousePos = io.MousePos;
 
 		if (io.MouseReleased[0])
 			isDragingResizeVT = false;
 	}
+
+	ImVec2 p1(dragResizeTriRect.Max.x, dragResizeTriRect.Min.y);
+	ImVec2 p2(dragResizeTriRect.Max.x, dragResizeTriRect.Max.y);
+	ImVec2 p3(dragResizeTriRect.Min.x, dragResizeTriRect.Max.y);
+	static bool isDragingResizeTri = false;
+	if (dragResizeTriRect.Contains(io.MousePos)) {
+		draw_list->AddTriangleFilled(p1, p2, p3, 0x2FFFFF00);
+		ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNWSE);
+		if (io.MouseClicked[0])
+		{
+			isDragingResizeTri = true;
+			prevMousePos = io.MousePos;
+		}
+	}
+	if (isDragingResizeTri) {
+		draw_list->AddTriangleFilled(p1, p2, p3, 0xFFFFFF00);
+		ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNWSE);
+		int deltaX = (int)(io.MousePos.x - prevMousePos.x);
+		int deltaY = (int)(io.MousePos.y - prevMousePos.y);
+		RECT windowRect;
+		GetWindowRect(hWnd, &windowRect);
+
+		int diffX = (windowRect.right - windowRect.left + deltaX) - minWidth;
+		int diffY = (windowRect.bottom - windowRect.top + deltaY) - minHeight;
+
+		if (diffX < 0)
+			deltaX -= diffX;
+		if (diffY < 0)
+			deltaY -= diffY;
+
+		MoveWindow(hWnd,
+			windowRect.left,
+			windowRect.top,
+			windowRect.right - windowRect.left + deltaX,
+			windowRect.bottom - windowRect.top + deltaY, TRUE);
+
+		if (diffX < 0)
+			prevMousePos.x = (float)windowRect.right + deltaX;
+		else
+			prevMousePos.x = io.MousePos.x;
+
+		if (diffY < 0)
+			prevMousePos.y = (float)windowRect.bottom + deltaY;
+		else
+			prevMousePos.y = io.MousePos.y;
+
+		if (io.MouseReleased[0])
+			isDragingResizeTri = false;
+	}
+
 
 	// Draw button
 	auto drawItem = [&](ImVec2&& pos, ImU32 col, ImU32 col2, ImU32 col3, bool* click_status, const std::function<void(void)>& func) {
@@ -600,18 +655,48 @@ static void CustomizeTitle(int menuHeight)
 		ShowWindow(hWnd, SW_MINIMIZE);
 	});
 
-	//ImRect edgeVTRect(regionRect.Min, ImVec2(regionRect.Max.x, regionRect.Min.y + edgeWidth));
-	//ImRect edgeVBRect(ImVec2(regionRect.Min.x, regionRect.Max.y - edgeWidth), regionRect.Max);
-	//ImRect edgeHLRect(regionRect.Min, ImVec2(regionRect.Min.x + edgeWidth, regionRect.Max.y));
-	//ImRect edgeHRRect(ImVec2(regionRect.Max.x - edgeWidth, regionRect.Min.y), regionRect.Max);
-	//draw_list->AddRectFilled(edgeVTRect.Min, edgeVTRect.Max, 0xFFFFFF00);
-	//draw_list->AddRectFilled(edgeVBRect.Min, edgeVBRect.Max, 0xFFFFFF00);
-	//draw_list->AddRectFilled(edgeHLRect.Min, edgeHLRect.Max, 0xFFFFFF00);
-	//draw_list->AddRectFilled(edgeHRRect.Min, edgeHRRect.Max, 0xFFFFFF00);
+	ImGuiStyle& style = ImGui::GetStyle();
+	ImVec4 menuBarBg = style.Colors[ImGuiCol_MenuBarBg];
+	ImU32 color = ImGui::ColorConvertFloat4ToU32(menuBarBg);
+
+	ImRect edgeVTRect(regionRect.Min, ImVec2(regionRect.Max.x, regionRect.Min.y + edgeWidth));
+	ImRect edgeVBRect(ImVec2(regionRect.Min.x, regionRect.Max.y - edgeWidth), regionRect.Max);
+	ImRect edgeHLRect(regionRect.Min, ImVec2(regionRect.Min.x + edgeWidth, regionRect.Max.y));
+	ImRect edgeHRRect(ImVec2(regionRect.Max.x - edgeWidth, regionRect.Min.y), regionRect.Max);
+	draw_list->AddRectFilled(edgeVTRect.Min, edgeVTRect.Max, color);
+	draw_list->AddRectFilled(edgeVBRect.Min, edgeVBRect.Max, color);
+	draw_list->AddRectFilled(edgeHLRect.Min, edgeHLRect.Max, color);
+	draw_list->AddRectFilled(edgeHRRect.Min, edgeHRRect.Max, color);
+}
+
+static void UpdateMenuBarColor()
+{
+	static int frame_cnt = 0;
+	static double H = 0;
+	const double delta = 1.0 / 360.0;
+	const double S = 0.5;
+	const double V = 0.5;
+	const int frame_threshold = 1;
+	frame_cnt++;
+
+	if (frame_cnt > frame_threshold)
+	{
+		frame_cnt = 0;
+		ImVec4 color = {0, 0, 0, 1};
+		ImGui::ColorConvertHSVtoRGB(H, S, V, color.x, color.y, color.z);
+		ImGuiStyle& style = ImGui::GetStyle();
+		style.Colors[ImGuiCol_MenuBarBg] = color;
+
+		H += delta;
+		if (H >= 1.0)
+			H = 0.0;
+	}
 }
 
 static void ShowRootWindowMenu()
 {
+	UpdateMenuBarColor();
+
 	ImVec2 size;
 	if (ImGui::BeginMenuBar()) {
 

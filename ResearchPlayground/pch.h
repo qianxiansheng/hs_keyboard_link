@@ -108,6 +108,7 @@ constexpr auto LOG_FILE_NAME = "log.txt";
 #define IAP_PACK_ERROR "PACK ERROR"
 
 #define DRV_PING_TIMEOUT 1000
+#define DRV_MACRO_ACTION_SIZE 3
 /******************************************************************************************/
 
 

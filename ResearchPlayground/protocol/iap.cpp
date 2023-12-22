@@ -1,7 +1,13 @@
 #include "iap.h"
 #include <mutex>
 
+#include "function/function.h"
+#include "light/light.h"
 
+#include "logger.h"
+
+
+static char hexbuffer[IAP_USB_HID_REPORT_SIZE * 2 + 1];
 static uint8_t hid_report_buf[IAP_USB_HID_REPORT_SIZE] = { IAP_USB_HID_REPORT_ID };
 static uint8_t businessFlashWriteBuf[IAP_PRO_BUSINESS_FLASH_WRITE_BUF_MAX_SIZE] = { 0 };
 static uint8_t businessAckBuf[IAP_PRO_BUSINESS_ACK_MAX_SIZE] = { 0 };
@@ -50,6 +56,9 @@ int hid_set_report(hid_device* dev, uint8_t* data, uint32_t size)
 	if (hid_report_buf + 1 != data)
 		memcpy(hid_report_buf + 1, data, size);
 
+	utils::Hex2String(hid_report_buf, (unsigned char*)hexbuffer, IAP_USB_HID_REPORT_SIZE);
+	LOG_INFO("hid set report: %s", hexbuffer);
+
 	return hid_write(dev, hid_report_buf, IAP_USB_HID_REPORT_SIZE);
 }
 int hid_get_report(hid_device* dev, uint8_t* data, uint32_t size, int timeout)
@@ -59,6 +68,9 @@ int hid_get_report(hid_device* dev, uint8_t* data, uint32_t size, int timeout)
 	int r = hid_read_timeout(dev, hid_report_buf, IAP_USB_HID_REPORT_SIZE, timeout);
 	if (data != hid_report_buf + 1)
 		memcpy(data, hid_report_buf + 1, size);
+
+	utils::Hex2String(hid_report_buf, (unsigned char*)hexbuffer, IAP_USB_HID_REPORT_SIZE);
+	LOG_INFO("hid get report: %s", hexbuffer);
 
 	return r;
 }
@@ -509,6 +521,7 @@ void iap_run_switch_boot(IAPContext& ctx)
 bool drv_ping(const HIDDevice& dev)
 {
 	std::lock_guard<std::mutex> guard(transferMutex);
+	LOG_INFO("DRV_CMD_PING");
 
 	uint8_t buf[1 + 2 + 2] = { 0 };
 	uint16_t i = 0;
@@ -599,6 +612,7 @@ void drv_build_func_map_data(uint8_t* buf)
 bool drv_set_func_map(const HIDDevice& dev)
 {
 	std::lock_guard<std::mutex> guard(transferMutex);
+	LOG_INFO("DRV_CMD_SET_FUNC_MAP");
 
 	auto manager = KLFunctionConfigManager::GetInstance();
 
@@ -636,8 +650,138 @@ bool drv_set_func_map(const HIDDevice& dev)
 	return false;
 }
 
+bool drv_set_macro(const HIDDevice& dev, KLMacro& macro)
+{
+	std::lock_guard<std::mutex> guard(transferMutex);
+	LOG_INFO("DRV_CMD_SET_MACRO");
 
+	uint16_t payloadLen = 1 + DRV_MACRO_ACTION_SIZE * (macro.actions.size() + 1);
+	uint16_t messageLen = 1 + 2 + payloadLen + 2;
 
+	std::vector<uint8_t> buf(messageLen);
+	uint16_t i = 0;
+	buf[i++] = DRV_CMD_SET_MACRO;							// CMD
+	buf[i++] = payloadLen & 0xFF;							// LENGTH
+	buf[i++] = payloadLen >> 8;
+	buf[i++] = macro.id;
+
+	for (const auto& action : macro.actions)
+	{
+		KLFunction& func = FindFunctionByFunctionID(action.fid);
+		uint8_t hid = 0;
+		switch (func.type) {
+		case KL_FUNC_TYPE_KB:    hid = func.payload.kb.hid;      break;
+		case KL_FUNC_TYPE_MEDIA: hid = func.payload.media.hid;   break;
+		}
+		buf[i++] = ((action.type == KL_MACRO_ACTYPE_UP ? 1 : 0) << 7) | ((action.delay >> 8) & 0x7F);
+		buf[i++] = (action.delay & 0xFF);
+		buf[i++] = hid;
+	}
+	// The last hid:0
+	buf[i++] = 0;
+	buf[i++] = 0;
+	buf[i++] = 0;
+	uint16_t crc = utils::crc16_modbus(buf.data(), i);
+	buf[i++] = crc & 0xFF;										// CRC
+	buf[i++] = crc >> 8;
+
+	try {
+		iap_business(dev, buf.data(), i);
+		try {
+			iap_business_read(dev, businessAckBuf, sizeof(businessAckBuf), DRV_PING_TIMEOUT);
+		}
+		catch (::recv_transfer_exception) {
+			return true;
+		}
+		catch (::timeout_exception) {
+			return false;
+		}
+		uint8_t ackCode = (iap_business_ack_code_e)businessAckBuf[1];
+		return true;
+	}
+	catch (std::exception) {
+		return false;
+	}
+}
+
+extern std::unordered_map<KEY_MapId_t, bool> customize_table;
+void drv_build_light_map_data(uint8_t* buf)
+{
+	int i = 0;
+	int n = 0;
+	uint8_t temp = 0;
+	uint32_t j, k;
+	for (j = 0; j < KEY_ROW_NUM; ++j)
+	{
+		for (k = 0; k < KB_COL_NUM; ++k)
+		{
+			KEY_MapId_t kmId = (KEY_MapId_t)usr_key_map[j][k];
+
+			auto it = customize_table.find(kmId);
+			if (it != customize_table.end() && it->second)
+			{
+				temp |= 1 << (7 - n);
+			}
+
+			if (++n == 8)
+			{
+				n = 0;
+				buf[i++] = temp;
+				temp = 0;
+			}
+		}
+	}
+	if (n != 0)
+	{
+		buf[i++] = temp;
+	}
+	assert(i == 14);
+}
+
+bool drv_set_light(const HIDDevice& dev, uint8_t mode, uint8_t brightness, uint8_t speed)
+{
+	std::lock_guard<std::mutex> guard(transferMutex);
+	LOG_INFO("DRV_CMD_SET_LIGHT_MODE");
+
+	bool isCustomize = (mode == LIGHT_CUSTOMIZE);
+	uint16_t payloadLen = isCustomize ? (3 + 14) : 3;
+	uint16_t messageLen = 1 + 2 + payloadLen + 2;
+
+	std::vector<uint8_t> buf(messageLen);
+	uint16_t i = 0;
+	buf[i++] = DRV_CMD_SET_LIGHT_MODE;							// CMD
+	buf[i++] = payloadLen & 0xFF;							// LENGTH
+	buf[i++] = payloadLen >> 8;
+	buf[i++] = mode;
+	buf[i++] = brightness;
+	buf[i++] = speed;
+	if (isCustomize)
+	{
+		drv_build_light_map_data(buf.data() + i);
+		i += 14;
+	}
+	uint16_t crc = utils::crc16_modbus(buf.data(), i);
+	buf[i++] = crc & 0xFF;										// CRC
+	buf[i++] = crc >> 8;
+
+	try {
+		iap_business(dev, buf.data(), i);
+		try {
+			iap_business_read(dev, businessAckBuf, sizeof(businessAckBuf), DRV_PING_TIMEOUT);
+		}
+		catch (::recv_transfer_exception) {
+			return true;
+		}
+		catch (::timeout_exception) {
+			return false;
+		}
+		uint8_t ackCode = (iap_business_ack_code_e)businessAckBuf[1];
+		return true;
+	}
+	catch (std::exception) {
+		return false;
+	}
+}
 
 
 

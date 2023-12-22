@@ -54,6 +54,8 @@ enum kldrv_cmd_e
 {
 	DRV_CMD_PING = 0xD0,
 	DRV_CMD_SET_FUNC_MAP = 0xD4,
+	DRV_CMD_SET_MACRO = 0xE1,
+	DRV_CMD_SET_LIGHT_MODE = 0xE8,
 };
 
 enum iap_transfer_ctrl_flag_bit
@@ -160,3 +162,7 @@ void stop_ongoing_transfer();
 bool drv_ping(const HIDDevice& dev);
 
 bool drv_set_func_map(const HIDDevice& dev);
+
+bool drv_set_macro(const HIDDevice& dev, KLMacro& macro);
+
+bool drv_set_light(const HIDDevice& dev, uint8_t mode, uint8_t brightness, uint8_t speed);

@@ -20,7 +20,7 @@ enum KLMacroActionType
 struct KLMacroAction
 {
     KLMacroActionType type;
-    uint32_t delay;
+    uint16_t delay;
     KLFunctionID fid;
 
 	KLMacroAction(KLMacroActionType _type, uint16_t _delay, KLFunctionID _fid) 

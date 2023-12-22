@@ -4,6 +4,7 @@
 #include "../pch.h"
 
 
+#define LIGHT_CUSTOMIZE 18
 
 bool IsSelectCustomize();
 
