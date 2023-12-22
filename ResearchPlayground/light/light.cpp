@@ -6,9 +6,14 @@
 #include "imgui/imgui_internal.h"
 #include "util/utils.h"
 
+#include "keyboard/keyboard.h"
+
 #include "language.h"
+#include <unordered_map>
 
 constexpr auto LIGHT_CUSTOMIZE = 17;
+
+std::unordered_map<KEY_MapId_t, bool> customize_table;
 
 static int selected = -1;
 

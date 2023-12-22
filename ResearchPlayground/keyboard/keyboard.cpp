@@ -502,13 +502,18 @@ bool wmouse_in_quad(glm::vec3 mouse_pos, glm::vec3 camera_pos, float* quad)
 
 	return intri1 || intri2;
 }
-glm::vec3 CalcInterSection()
+glm::vec3 GetMousePos3DC()
 {
 	/* Convert mouse screen coordinates to world coordinates */
 	glm::vec4 viewport(0.0f, 0.0f, kbv_draw_ctx.w, kbv_draw_ctx.h);
 	glm::mat4 modelViewMatrix = kbv_draw_ctx.view_matrix * kbv_draw_ctx.model_matrix;
 	glm::vec3 mousePos_NDC(kbv_draw_ctx.mouse_pos.x, kbv_draw_ctx.h - kbv_draw_ctx.mouse_pos.y, 0.1f);
 	glm::vec3 mousePos_3DC = glm::unProject(mousePos_NDC, modelViewMatrix, kbv_draw_ctx.projection_matrix, viewport);
+	return mousePos_3DC;
+}
+glm::vec3 CalcInterSection()
+{
+	glm::vec3 mousePos_3DC = GetMousePos3DC();
 
 	glm::vec3 dir = glm::normalize(mousePos_3DC - kbv_draw_ctx.camera.Position);
 	glm::vec3 planeN = glm::vec3(0.0f, 0.0f, 1.0f);
@@ -531,10 +536,21 @@ bool quad_in_selection(float* quad)
 	float x3 = quad[6], y3 = quad[7];
 	float x4 = quad[9], y4 = quad[10];
 
+	float x5 = (x1 + x2) / 2, y5 = (y1 + y2) / 2;
+	float x6 = (x2 + x3) / 2, y6 = (y2 + y3) / 2;
+	float x7 = (x3 + x4) / 2, y7 = (y3 + y4) / 2;
+	float x8 = (x4 + x1) / 2, y8 = (y4 + y1) / 2;
+	float x9 = (x5 + x7) / 2, y9 = (y5 + y7) / 2;
+
 	if ((xmin <= x1 && x1 <= xmax) && (ymin <= y1 && y1 <= ymax) ||
 		(xmin <= x2 && x2 <= xmax) && (ymin <= y2 && y2 <= ymax) ||
 		(xmin <= x3 && x3 <= xmax) && (ymin <= y3 && y3 <= ymax) ||
-		(xmin <= x4 && x4 <= xmax) && (ymin <= y4 && y4 <= ymax))
+		(xmin <= x4 && x4 <= xmax) && (ymin <= y4 && y4 <= ymax) ||
+		(xmin <= x5 && x5 <= xmax) && (ymin <= y5 && y5 <= ymax) ||
+		(xmin <= x6 && x6 <= xmax) && (ymin <= y6 && y6 <= ymax) ||
+		(xmin <= x7 && x7 <= xmax) && (ymin <= y7 && y7 <= ymax) ||
+		(xmin <= x8 && x8 <= xmax) && (ymin <= y8 && y8 <= ymax) ||
+		(xmin <= x9 && x9 <= xmax) && (ymin <= y9 && y9 <= ymax))
 	{
 		return true;
 	}
@@ -622,6 +638,7 @@ void RenderModelUpdateLight()
 }
 
 
+extern std::unordered_map<KEY_MapId_t, bool> customize_table;
 void RenderModelUpdateLightCustomize()
 {
 	auto win = ImGui::GetCurrentWindow();
@@ -652,6 +669,48 @@ void RenderModelUpdateLightCustomize()
 		}
 		if (drag && io.MouseReleased[0]) {
 			drag = false;
+
+			if (kbv_draw_ctx.selection_w == 0.0f && kbv_draw_ctx.selection_h == 0.0f)
+			{
+				glm::vec3 mousePos_3DC = GetMousePos3DC();
+
+				/* click */
+				for (auto& kbv : keyBtnViewList) {
+					auto& keyBtnView = kbv.second;
+					if (wmouse_in_quad(mousePos_3DC, kbv_draw_ctx.camera.Position, keyBtnView.face_vertex)) {
+						auto it = customize_table.find(keyBtnView.id);
+						if (it == customize_table.end())
+							customize_table[keyBtnView.id] = true;
+						else
+							it->second = !it->second;
+					}
+				}
+			}
+			else
+			{
+				/* selection */
+				bool enable = false;
+				std::vector<KeyBtnView*> selected;
+
+				for (auto& kbv : keyBtnViewList) {
+					auto& keyBtnView = kbv.second;
+					if (quad_in_selection(keyBtnView.face_vertex))
+						selected.push_back(&keyBtnView);
+				}
+				
+				for (auto& kbv : selected) {
+					auto it = customize_table.find(kbv->id);
+					if (it == customize_table.end() || !it->second) {
+						enable = true;
+						break;
+					}
+				}
+
+				for (auto& kbv : selected) {
+					customize_table[kbv->id] = enable;
+				}
+			}
+
 			kbv_draw_ctx.selection_x = 0.0f;
 			kbv_draw_ctx.selection_y = 0.0f;
 			kbv_draw_ctx.selection_w = 0.0f;
@@ -659,12 +718,25 @@ void RenderModelUpdateLightCustomize()
 		}
 	}
 
-	for (auto& it : keyBtnViewList)
+	for (auto& kbv : keyBtnViewList)
 	{
-		auto& keyBtnView = it.second;
-		if (quad_in_selection(keyBtnView.face_vertex))
+		auto& keyBtnView = kbv.second;
+
+		auto it = customize_table.find(keyBtnView.id);
+		bool active = it != customize_table.end() && it->second;
+		bool hover = quad_in_selection(keyBtnView.face_vertex);
+
+		if (active && hover)
+		{
+			keyBtnView.color = MODIFIED_ACTIVE_COLOR;
+		}
+		else if (active)
 		{
 			keyBtnView.color = ACTIVE_COLOR;
+		}
+		else if (hover)
+		{
+			keyBtnView.color = HOVER_COLOR;
 		}
 		else
 		{
@@ -766,12 +838,6 @@ void KeyboardGLInit(int width, int height)
 	kbv_draw_ctx.w = width;
 	kbv_draw_ctx.h = height;
 
-	kbv_draw_ctx.selection_x = 1.0f;
-	kbv_draw_ctx.selection_y = 1.0f;
-	kbv_draw_ctx.selection_w = 5.0f;
-	kbv_draw_ctx.selection_h = 2.0f;
-
-
 	auto& style = ImGui::GetStyle();
 	ImVec4 bgcolor = style.Colors[ImGuiCol_WindowBg];
 
@@ -809,8 +875,6 @@ void KeyboardGLInit(int width, int height)
 			utils::getFileAbsolutePath("shader/selection.fs").c_str());
 
 	RenderModelInit();
-
-
 	{
 		glGenVertexArrays(1, &kbv_draw_ctx.SelectionVAO);
 		glGenBuffers(1, &kbv_draw_ctx.SelectionVBO);
@@ -951,11 +1015,13 @@ void KeyboardGLDraw()
 	kbv_draw_ctx.shader->setMat4("view", kbv_draw_ctx.view_matrix);
 
 
+	/* Draw Board */
 	kbv_draw_ctx.shader->setVec4("color", BOARD_DEFAULT_COLOR);
 
 	glBindVertexArray(kbv_draw_ctx.BoardVAO);
 	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)(kbv_draw_ctx.BoardVertices.size() / 10));
 
+	/* Draw Key */
 	for (auto& it : keyBtnViewList)
 	{
 		KeyBtnView& btn = it.second;	// render the cube
@@ -963,17 +1029,19 @@ void KeyboardGLDraw()
 		glm::vec4 lightColor(btn.color.r, btn.color.g, btn.color.b, 1.0f);
 		kbv_draw_ctx.shader->setVec4("color", lightColor);
 
+		/* Draw Light */
 		glBindVertexArray(btn.LightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)(btn.LightVertices.size() / 10));
 
 		kbv_draw_ctx.shader->setVec4("color", btn.color);
-		
+
+		/* Draw KeyCap */
 		glBindVertexArray(btn.VAO);
 		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)(btn.vertices.size() / 10));
 	}
 
+	/* Draw Selection */
 	kbv_draw_ctx.shader->setVec4("color", DEFAULT_COLOR);
-
 	if (kbv_draw_ctx.selection_w != 0 && kbv_draw_ctx.selection_h != 0)
 	{
 		glm::mat4 m(1.0f);
