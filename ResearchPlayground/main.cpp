@@ -31,6 +31,7 @@
 #include "keylink.h"
 
 #include "protocol/iap.h"
+#include "logger.h"
 
 #define IMIDTEXT(name, i) ((std::string(name) + std::to_string(i)).c_str())
 
@@ -98,11 +99,31 @@ static void SearchDeviceBootOrAPP(uint16_t bvid, uint16_t bpid, uint16_t avid, u
 	}
 }
 
-
+extern Logger gLogger;
 
 extern MySequence mySequence;
 extern bool global_setting_x_system_tray;
 extern bool global_setting_first_boot;
+
+void ParseArg(int argc, char* argv[])
+{
+	for (int i = 1; i < argc; ++i)
+	{
+		std::string cmd = argv[i];
+
+		if (cmd[0] == '-') {
+			size_t idx = cmd.find('=');
+			std::string name = cmd.substr(1, (idx - 1));
+			std::string value = cmd.substr(idx + 1, (cmd.size() - (idx + 1)));
+
+			if (name == "level") {
+				if (value == "INFO") gLogger.level = LOG_LEVEL_INFO;
+				if (value == "DEBUG") gLogger.level = LOG_LEVEL_DEBUG;
+				if (value == "ERROR") gLogger.level = LOG_LEVEL_ERROR;
+			}
+		}
+	}
+}
 
 const ImWchar* GetGlyphRangesChineseFullAndDirection()
 {
@@ -250,6 +271,8 @@ void StartScanDevice()
 
 bool main_init(int argc, char* argv[])
 {
+	ParseArg(argc, argv);
+
 	// Enable Dock
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;

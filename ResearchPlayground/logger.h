@@ -19,6 +19,8 @@ enum LogLevel {
 // 定义日志类
 class Logger {
 public:
+    LogLevel level;
+
     // 构造函数
     Logger(const std::string& logFileName);
 

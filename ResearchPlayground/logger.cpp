@@ -3,7 +3,7 @@
 #include "util/utils.h"
 
 // 构造函数
-Logger::Logger(const std::string& logFileName) : logFileName(logFileName) {
+Logger::Logger(const std::string& logFileName) : logFileName(logFileName), level(LOG_LEVEL_ERROR) {
     logFile.open(logFileName, std::ios::app);  // 以追加方式打开文件
     if (!logFile.is_open()) {
         std::cerr << "Error: Unable to open log file " << logFileName << std::endl;
@@ -48,6 +48,9 @@ Logger gLogger(utils::getFileAbsolutePath(LOG_FILE_NAME).c_str());
 
 void LOG0(LogLevel level, const char* file, int line, const char* format, ...)
 {
+    if (level < gLogger.level)
+        return;
+
     // 使用可变参数列表进行格式化字符串
     va_list args;
     va_start(args, format);
